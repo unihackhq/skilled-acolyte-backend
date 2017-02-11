@@ -13,4 +13,4 @@ yarn run dev
 ```
 
 # License
-See the [LICENSE](LICENSE.md).
+See the [LICENSE](LICENSE).
