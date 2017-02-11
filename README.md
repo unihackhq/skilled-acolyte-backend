@@ -7,5 +7,10 @@ A hackathon management system with the following features:
 * team management
 * push notifications
 
+# Development
+```Bash
+yarn run dev
+```
+
 # License
 See the [LICENSE](LICENSE.md).

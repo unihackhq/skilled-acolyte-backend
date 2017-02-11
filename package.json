@@ -1,0 +1,40 @@
+{
+  "name": "skilled-acolyte-backend",
+  "version": "1.0.0",
+  "description": "A hackathon management system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm-run-all lint",
+    "lint": "eslint .",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unihackhq/skilled-acolyte-backend.git"
+  },
+  "keywords": [
+    "hackathons",
+    "management",
+    "api"
+  ],
+  "author": "Hugo Müller-Downing, Josh Parnham, Terence Huynh, Robert Koch, Daniel Sykes-Turner, Erfan Norozi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unihackhq/skilled-acolyte-backend/issues"
+  },
+  "homepage": "https://github.com/unihackhq/skilled-acolyte-backend#readme",
+  "dependencies": {
+    "eslint-config-airbnb-base": "^11.1.0",
+    "hapi": "^16.1.0",
+    "hapi-auth-jwt2": "^7.2.4",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.1",
+    "pg": "^6.1.2",
+    "sequelize": "^3.30.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb-base": "^11.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
