@@ -23,6 +23,12 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+/*
+ * Relations
+**/
+
+db.User.belongsTo(db.Team);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
