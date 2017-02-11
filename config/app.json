@@ -1,0 +1,11 @@
+{
+  "default": {
+    "host": "localhost",
+    "port": "3000",
+    "version": "1.0.0",
+    "url_version": "1"
+  },
+  "ci": {},
+  "staging": {},
+  "production": {}
+}
