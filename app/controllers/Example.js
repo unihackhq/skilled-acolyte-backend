@@ -1,3 +1,3 @@
 exports.exampleController = {
-  handler: (req, res) => res('Hi there, friend! 👋'),
+  handler: (req, res) => res({ response: 'Hi there, friend! 👋' }),
 };
