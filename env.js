@@ -1,5 +1,5 @@
 exports.API_HOST = 'localhost';
-exports.API_PORT = "3000";
+exports.API_PORT = '3000';
 exports.API_VERSION = '1.0.0';
 exports.API_URL_VERSION = '1';
 exports.TESTING = process.env.TESTING === true || process.env.TESTING === 'true';
