@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "A hackathon management system.",
   "main": "index.js",
+  "engines": {
+    "node": "7.4.0"
+  },
   "scripts": {
     "test": "npm-run-all lint",
     "lint": "eslint .",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "now-start": "node index.js"
   },
   "repository": {
     "type": "git",
