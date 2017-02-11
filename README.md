@@ -2,7 +2,7 @@
 A hackathon management system with the following features:
 * payment processing
 * authentication
-* booking/ticket reigstration
+* booking/ticket registration
 * ticket transferring
 * team management
 * push notifications
