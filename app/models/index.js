@@ -3,7 +3,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const env = require('../../env');
 
-const sequelize = new Sequelize(env.PG_DATABASE, env.PG_USER, env.PG_PASSWORD, {
+const sequelize = new Sequelize(env.DATABASE_URL, {
   host: env.PG_HOST,
   dialect: 'postgres',
 });
