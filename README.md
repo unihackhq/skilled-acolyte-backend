@@ -9,7 +9,12 @@ A hackathon management system with the following features:
 
 # Development
 ```Bash
-yarn run dev
+docker-compose up
+```
+
+# Production
+```Bash
+docker-compose -f docker-compose.prod.yml up
 ```
 
 # License
