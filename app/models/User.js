@@ -11,11 +11,15 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
   lastName: DataTypes.STRING,
   email: DataTypes.STRING,
   authType: DataTypes.STRING,
+  dateOfBirth: DataTypes.DATEONLY,
+  gender: DataTypes.STRING,
+  mobile: DataTypes.STRING,
+
+  // Authentication Information
   authId: {
     type: DataTypes.BIGINT,
     unique: true,
   },
-  photoUrl: DataTypes.STRING,
   accessToken: DataTypes.STRING,
 
   // We do not delete accounts for data integrity. We deactivate accounts if no

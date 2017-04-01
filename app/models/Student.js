@@ -12,8 +12,30 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  dietaryReq: DataTypes.STRING,
-  photoUrl: DataTypes.STRING,
+  studyLevel: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  degree: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  dietaryReq: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  medicalReq: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  shirtSize: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  photoUrl: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 }, {
   timestamps: true,
 });
