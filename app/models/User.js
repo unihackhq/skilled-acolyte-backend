@@ -1,8 +1,6 @@
 /*
- authType defines the authentication method used (e.g. Facebook).
- authId defines the unique Id given by the authentication method (e.g. Facebook Id)
-**/
-
+ * Represents a User of the application.
+ */
 module.exports = (sequelize, DataTypes) => sequelize.define('User', {
   id: {
     primaryKey: true,
