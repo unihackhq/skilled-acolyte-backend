@@ -35,7 +35,8 @@
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.1",
     "pg": "^6.1.2",
-    "sequelize": "^3.30.2"
+    "sequelize": "^3.30.2",
+    "boom": "^4.3.1"
   },
   "devDependencies": {
     "eslint": "^3.15.0",
