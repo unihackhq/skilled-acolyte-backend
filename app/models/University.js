@@ -8,4 +8,5 @@ module.exports = (sequelize, DataTypes) => sequelize.define('University', {
     defaultValue: DataTypes.UUIDV4,
   },
   name: DataTypes.STRING,
+  country: DataTypes.STRING,
 });

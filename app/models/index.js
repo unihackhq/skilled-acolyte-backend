@@ -28,8 +28,8 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // Each student is a user (though not every user is a student). Each student
 // also belongs to a University.
-db.Student.belongsTo(db.User);
-db.Student.belongsTo(db.University);
+db.Student.belongsTo(db.User, { foreignKey: 'id', targetKey: 'id' });
+db.Student.belongsTo(db.University, { foreignKey: 'university', targetKey: 'id' });
 
 // Each ticket belongs to a student - either as the original or current ticket
 // holder
@@ -42,8 +42,8 @@ db.Event.hasMany(db.Team, { as: 'Teams' });
 
 // A team can have many students. A student can be in many teams. Hene the
 // Belongs to Many association.
-db.Team.hasMany(db.Student, { through: 'TeamAssignment' });
-db.Student.hasMany(db.Team, { through: 'TeamAssignment' });
+db.Team.belongsToMany(db.Student, { through: 'TeamAssignment' });
+db.Student.belongsToMany(db.Team, { through: 'TeamAssignment' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
   },
   photoUrl: DataTypes.STRING,
   accessToken: DataTypes.STRING,
+
+  // We do not delete accounts for data integrity. We deactivate accounts if no
+  // longer used.
+  deactivated: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 }, {
   timestamps: true,
 });
