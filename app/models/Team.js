@@ -1,3 +1,6 @@
+/*
+ * Represents a Team. A team is associated to an event, and contains many users.
+ */
 module.exports = (sequelize, DataTypes) => sequelize.define('Team', {
   id: {
     primaryKey: true,
@@ -6,5 +9,8 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Team', {
   },
   name: DataTypes.STRING,
   description: DataTypes.STRING,
-  photoUrl: DataTypes.STRING,
+  photoUrl: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 });
