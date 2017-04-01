@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Ticket', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  eventbriteOrder: DataTypes.INTEGER,
+  eventbriteOrder: DataTypes.STRING,
   ticketType: DataTypes.STRING,
   transferred: {
     type: DataTypes.BOOLEAN,

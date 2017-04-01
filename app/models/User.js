@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
   },
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
-  email: DataTypes.STRING,
+  email: DataTypes.STRING(512),
   authType: DataTypes.STRING,
   dateOfBirth: DataTypes.DATEONLY,
   gender: DataTypes.STRING,

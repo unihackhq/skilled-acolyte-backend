@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     defaultValue: DataTypes.UUIDV4,
   },
   studyLevel: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   degree: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(512),
     allowNull: true,
   },
   dietaryReq: {
@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     allowNull: true,
   },
   shirtSize: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   photoUrl: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(512),
     allowNull: true,
   },
 }, {
