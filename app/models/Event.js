@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
   eventbriteLink: DataTypes.STRING,
   location: DataTypes.STRING,
   logoUrl: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
 });

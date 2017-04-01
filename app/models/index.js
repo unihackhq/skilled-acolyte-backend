@@ -28,8 +28,14 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // Each student is a user (though not every user is a student). Each student
 // also belongs to a University.
-db.Student.belongsTo(db.User, { foreignKey: 'id', targetKey: 'id' });
-db.Student.belongsTo(db.University, { foreignKey: 'university', targetKey: 'id' });
+db.Student.belongsTo(db.User, {
+  foreignKey: 'id',
+  targetKey: 'id',
+});
+db.Student.belongsTo(db.University, {
+  foreignKey: 'university',
+  targetKey: 'id',
+});
 
 // Each ticket belongs to a student - either as the original or current ticket
 // holder
