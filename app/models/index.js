@@ -23,11 +23,27 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-/*
- * Relations
-**/
+// =============================================================================
+// ASSOCIATION DEFINITIONS
+// =============================================================================
+// Each student is a user (though not every user is a student). Each student
+// also belongs to a University.
+db.Student.belongsTo(db.User);
+db.Student.belongsTo(db.University);
 
-db.User.belongsTo(db.Team);
+// Each ticket belongs to a student - either as the original or current ticket
+// holder
+db.Ticket.belongsTo(db.Student, { as: 'originalStudent' });
+db.Ticket.belongsTo(db.Student, { as: 'currentStudent' });
+
+// An event can have as many teams. A team can only 'belong' to an event. Hence
+// the use of a One-to-many association.
+db.Event.hasMany(db.Team, { as: 'Teams' });
+
+// A team can have many students. A student can be in many teams. Hene the
+// Belongs to Many association.
+db.Team.hasMany(db.Student, { through: 'TeamAssignment' });
+db.Student.hasMany(db.Team, { through: 'TeamAssignment' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
