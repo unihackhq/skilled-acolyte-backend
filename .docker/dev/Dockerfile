@@ -10,8 +10,6 @@ COPY ./env.js          /usr/src/app/
 COPY ./package.json    /usr/src/app/
 COPY ./index.js        /usr/src/app/
 
-RUN ls
+RUN npm install > /dev/null
 
-RUN npm install
-
-CMD [ "npm", "run", "docker-start" ]
+CMD [ "npm", "run", "docker-dev" ]
