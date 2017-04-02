@@ -1,5 +1,5 @@
-const Example = require('./controllers/Example');
+const controllers = require('./controllers');
 
 module.exports = [
-  { method: 'GET', path: '/api/v1/test', config: Example.exampleController },
+  { method: 'GET', path: '/api/v1/test', config: controllers.Example.get },
 ];
