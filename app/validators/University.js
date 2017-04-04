@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-module.exports = {
+exports.payload = {
   name: Joi.string().required()
     .label('University Name')
     .error(new Error('University Name is required.')),
