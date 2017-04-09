@@ -2,6 +2,8 @@ const Boom = require('boom');
 const models = require('../models');
 const validators = require('../validators');
 
+const NOT_FOUND_ERROR = 'Cannot find university with that id';
+
 // [GET] /university
 exports.index = {
   handler: (req, res) => {
@@ -17,7 +19,7 @@ exports.get = {
     models.University.findById(id)
       .then((result) => {
         if (!result) {
-          return res(Boom.notFound('Cannot find a university with that id'));
+          return res(Boom.notFound(NOT_FOUND_ERROR));
         }
         return res(result);
       });
@@ -51,7 +53,7 @@ exports.put = {
     models.University.findById(id)
       .then((university) => {
         if (!university) {
-          return res(Boom.notFound('Cannot find a university with that id'));
+          return res(Boom.notFound(NOT_FOUND_ERROR));
         }
 
         return university.updateAttributes(payload)
@@ -68,8 +70,26 @@ exports.put = {
 exports.delete = {
   handler: (req, res) => {
     const id = req.params.id;
-    console.log(id);
-    res(id);
+
+    models.University.findById(id)
+      .then((university) => {
+        if (!university) {
+          return res(Boom.notFound(NOT_FOUND_ERROR));
+        }
+
+        return university.destroy({
+          where: { id },
+        }).then((result) => {
+          if (!result) {
+            return res(Boom.internal('An internal server error has occured'));
+          }
+
+          return res({
+            status: 'Success',
+            message: 'University has been deleted',
+          });
+        });
+      });
   },
   validate: {
     payload: validators.University.payload,
