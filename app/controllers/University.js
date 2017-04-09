@@ -7,7 +7,13 @@ const NOT_FOUND_ERROR = 'Cannot find university with that id';
 // [GET] /university
 exports.index = {
   handler: (req, res) => {
-    const id = req.params.id;
+    models.University.findAll()
+      .then((result) => {
+        res({
+          status: 'Success',
+          data: result,
+        });
+      });
   },
 };
 
