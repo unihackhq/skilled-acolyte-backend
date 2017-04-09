@@ -17,17 +17,13 @@ exports.get = {
     models.University.findById(id)
       .then((result) => {
         if (!result) {
-          return res(Boom.notFound('There is no university with that ID.'));
+          return res(Boom.notFound('Cannot find a university with that id'));
         }
-
-        return res({
-          id: result.id,
-          name: result.name,
-          country: result.country,
-          createdAt: result.createdAt,
-          lastUpdated: result.updatedAt,
-        });
+        return res(result);
       });
+  },
+  validate: {
+    params: validators.Generic.uuid,
   },
 };
 
@@ -37,19 +33,9 @@ exports.post = {
     const payload = req.payload;
     console.log(payload);
 
-    models.University.create(payload)
-      .then((result) => {
-        const response = {
-          id: result.id,
-          name: result.name,
-          country: result.country,
-        };
-        return res(response);
-      })
-      .catch((err) => {
-        console.error(err);
-        return res(Boom.badImplementation());
-      });
+    return models.University.create(payload)
+      .then((result) => { res(result); })
+      .catch(() => { res(Boom.badImplementation()); });
   },
   validate: {
     payload: validators.University.payload,
@@ -61,11 +47,20 @@ exports.put = {
   handler: (req, res) => {
     const id = req.params.id;
     const payload = req.payload;
-    console.log(payload);
-    res(payload);
+
+    models.University.findById(id)
+      .then((university) => {
+        if (!university) {
+          return res(Boom.notFound('Cannot find a university with that id'));
+        }
+
+        return university.updateAttributes(payload)
+          .then((result) => { res(result); });
+      });
   },
   validate: {
     payload: validators.University.payload,
+    params: validators.Generic.uuid,
   },
 };
 
@@ -78,5 +73,6 @@ exports.delete = {
   },
   validate: {
     payload: validators.University.payload,
+    params: validators.Generic.uuid,
   },
 };
