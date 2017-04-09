@@ -1,4 +1,7 @@
 # Skilled Acolyte
+
+[![Build Status](https://travis-ci.org/unihackhq/skilled-acolyte-backend.svg?branch=develop)](https://travis-ci.org/unihackhq/skilled-acolyte-backend)
+
 A hackathon management system with the following features:
 * payment processing
 * authentication
@@ -9,7 +12,12 @@ A hackathon management system with the following features:
 
 # Development
 ```Bash
-yarn run dev
+docker-compose up
+```
+
+# Production
+```Bash
+docker-compose -f docker-compose.prod.yml up
 ```
 
 # License
