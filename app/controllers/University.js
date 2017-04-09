@@ -81,7 +81,7 @@ exports.delete = {
           where: { id },
         }).then((result) => {
           if (!result) {
-            return res(Boom.internal('An internal server error has occured'));
+            return res(Boom.internal('Unable to delete university'));
           }
 
           return res({
