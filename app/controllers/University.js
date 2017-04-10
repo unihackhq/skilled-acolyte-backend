@@ -5,7 +5,7 @@ const validators = require('../validators');
 const responses = require('../responses');
 
 // [GET] /university
-exports.index = {
+exports.getAllUniversities = {
   handler: (req, res) => {
     University.findAll()
       .then((result) => {
@@ -18,7 +18,7 @@ exports.index = {
 };
 
 // [GET] /university/{id}
-exports.get = {
+exports.getUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
 
@@ -38,7 +38,7 @@ exports.get = {
 };
 
 // [POST] /university
-exports.post = {
+exports.createUniversity = {
   handler: (req, res) => {
     const payload = req.payload;
     return University.create(payload)
@@ -51,7 +51,7 @@ exports.post = {
 };
 
 // [PUT] /university/{id}
-exports.put = {
+exports.updateUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
     const payload = req.payload;
@@ -75,7 +75,7 @@ exports.put = {
 };
 
 // [DELETE] /university/{id}
-exports.delete = {
+exports.deleteUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
 
