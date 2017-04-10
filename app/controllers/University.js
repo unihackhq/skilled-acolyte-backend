@@ -1,13 +1,13 @@
-const Boom = require('boom');
-const models = require('../models');
-const validators = require('../validators');
+const Joi = require('joi');
 
-const NOT_FOUND_ERROR = 'Cannot find university with that id';
+const University = require('../models').University;
+const validators = require('../validators');
+const responses = require('../responses');
 
 // [GET] /university
 exports.index = {
   handler: (req, res) => {
-    models.University.findAll()
+    University.findAll()
       .then((result) => {
         res({
           status: 'Success',
@@ -22,16 +22,18 @@ exports.get = {
   handler: (req, res) => {
     const id = req.params.id;
 
-    models.University.findById(id)
+    University.findById(id)
       .then((result) => {
         if (!result) {
-          return res(Boom.notFound(NOT_FOUND_ERROR));
+          return res(responses.notFound('university'));
         }
         return res(result);
       });
   },
   validate: {
-    params: validators.Generic.uuid,
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
   },
 };
 
@@ -39,11 +41,9 @@ exports.get = {
 exports.post = {
   handler: (req, res) => {
     const payload = req.payload;
-    console.log(payload);
-
-    return models.University.create(payload)
+    return University.create(payload)
       .then((result) => { res(result); })
-      .catch(() => { res(Boom.badImplementation()); });
+      .catch(() => { res(responses.internalError('create', 'university')); });
   },
   validate: {
     payload: validators.University.payload,
@@ -56,10 +56,10 @@ exports.put = {
     const id = req.params.id;
     const payload = req.payload;
 
-    models.University.findById(id)
+    University.findById(id)
       .then((university) => {
         if (!university) {
-          return res(Boom.notFound(NOT_FOUND_ERROR));
+          return res(responses.notFound('university'));
         }
 
         return university.updateAttributes(payload)
@@ -68,7 +68,9 @@ exports.put = {
   },
   validate: {
     payload: validators.University.payload,
-    params: validators.Generic.uuid,
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
   },
 };
 
@@ -77,28 +79,27 @@ exports.delete = {
   handler: (req, res) => {
     const id = req.params.id;
 
-    models.University.findById(id)
+    University.findById(id)
       .then((university) => {
         if (!university) {
-          return res(Boom.notFound(NOT_FOUND_ERROR));
+          return res(responses.notFound('university'));
         }
 
         return university.destroy({
           where: { id },
         }).then((result) => {
           if (!result) {
-            return res(Boom.internal('Unable to delete university'));
+            return res(responses.internalError('delete', 'university'));
           }
 
-          return res({
-            status: 'Success',
-            message: 'University has been deleted',
-          });
+          return res(responses.successDelete('university'));
         });
       });
   },
   validate: {
     payload: validators.University.payload,
-    params: validators.Generic.uuid,
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
   },
 };
