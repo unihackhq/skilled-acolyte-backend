@@ -6,5 +6,5 @@ exports.payload = {
   endDate: Joi.date().error(new Error('endDate needs to be in dateform')),
   eventbriteLink: Joi.string().uri(),
   location: Joi.string(),
-  logoUrl: Joi.string().uri()
+  logoUrl: Joi.string().uri(),
 };
