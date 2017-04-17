@@ -9,9 +9,9 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/universities/{id}', config: controllers.University.updateUniversityById },
   { method: 'DELETE', path: '/api/v1/universities/{id}', config: controllers.University.deleteUniversityById },
 
-  { method: 'GET',    path: '/api/v1/events',       config: controllers.Events.getAllEvents     },
-  { method: 'POST',   path: '/api/v1/events',       config: controllers.Events.createEvent      },
-  { method: 'GET',    path: '/api/v1/events/{id}',  config: controllers.Events.getEventById     },
-  { method: 'PUT',    path: '/api/v1/events/{id}',  config: controllers.Events.updateEventById  },
-  { method: 'DELETE', path: '/api/v1/events/{id}',  config: controllers.Events.deleteEventById  }
+  { method: 'GET',    path: '/api/v1/events',       config: controllers.Event.getAllEvents     },
+  { method: 'POST',   path: '/api/v1/events',       config: controllers.Event.createEvent      },
+  { method: 'GET',    path: '/api/v1/events/{id}',  config: controllers.Event.getEventById     },
+  { method: 'PUT',    path: '/api/v1/events/{id}',  config: controllers.Event.updateEventById  },
+  { method: 'DELETE', path: '/api/v1/events/{id}',  config: controllers.Event.deleteEventById  }
 ];
