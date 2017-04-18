@@ -20,4 +20,10 @@ module.exports = [
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
   { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
   { method: 'DELETE', path: '/api/v1/students/{id}', config: controllers.Student.deleteStudentById },
+
+  { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },
+  { method: 'POST', path: '/api/v1/users', config: controllers.User.createUser },
+  { method: 'GET', path: '/api/v1/users/{id}', config: controllers.User.getUserById },
+  { method: 'PUT', path: '/api/v1/users/{id}', config: controllers.User.updateUserById },
+  { method: 'DELETE', path: '/api/v1/users/{id}', config: controllers.User.deleteUserById },
 ];
