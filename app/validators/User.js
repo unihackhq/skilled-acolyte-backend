@@ -10,5 +10,5 @@ exports.payload = {
   mobile: Joi.number(),
   authId: Joi.number(),
   accessToken: Joi.string().token(),
-  deactivated: Joi.boolean()
+  deactivated: Joi.boolean(),
 };
