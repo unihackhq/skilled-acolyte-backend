@@ -30,13 +30,16 @@
   },
   "homepage": "https://github.com/unihackhq/skilled-acolyte-backend#readme",
   "dependencies": {
+    "boom": "^4.3.1",
     "eslint-config-airbnb-base": "^11.1.0",
     "hapi": "^16.1.0",
     "hapi-auth-jwt2": "^7.2.4",
+    "joi": "^10.3.4",
     "konfig": "^0.2.1",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.1",
     "pg": "^6.1.2",
+    "require-directory": "^2.1.1",
     "sequelize": "^3.30.2"
   },
   "devDependencies": {
