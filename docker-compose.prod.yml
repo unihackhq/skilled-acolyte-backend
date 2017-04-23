@@ -19,7 +19,7 @@ services:
       DB_PASSWORD: 'supersecret'
       NODE_ENV: 'docker'
   db:
-    image: postgres
+    image: postgres:9.6
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: always
