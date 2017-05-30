@@ -27,6 +27,7 @@ exports.getUserById = {
         if (!result) {
           return res(responses.notFound('user'));
         }
+
         return res(result);
       });
   },
@@ -63,7 +64,13 @@ exports.updateUserById = {
         }
 
         return user.updateAttributes(payload)
-          .then((result) => { res(result); });
+          .then((result) => {
+            if (!result) {
+              return res(responses.internalError('update', 'user'));
+            }
+
+            return res(result);
+          });
       });
   },
   validate: {
@@ -79,25 +86,26 @@ exports.deleteUserById = {
   handler: (req, res) => {
     const id = req.params.id;
 
+    // Soft delete
     User.findById(id)
       .then((user) => {
         if (!user) {
           return res(responses.notFound('user'));
         }
 
-        return user.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.internalError('delete', 'user'));
-          }
+        return user.updateAttributes({
+          deactivated: true,
+        })
+          .then((result) => {
+            if (!result) {
+              return res(responses.internalError('delete', 'user'));
+            }
 
-          return res(responses.successDelete('user'));
-        });
+            return res(responses.successDelete('user'));
+          });
       });
   },
   validate: {
-    payload: validators.User.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
     },
