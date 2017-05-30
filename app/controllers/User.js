@@ -79,15 +79,19 @@ exports.deleteUserById = {
   handler: (req, res) => {
     const id = req.params.id;
 
-    User.destroy({
-      where: { id },
-    })
-      .then((result) => {
-        if (result === 0) {
+    // Soft delete
+    User.findById(id)
+      .then((user) => {
+        if (!user) {
           return res(responses.notFound('user'));
         }
 
-        return res(responses.successDelete('user'));
+        return user.updateAttributes({
+          deactivated: true
+        })
+          .then((result) => {
+            return res(responses.successDelete('user'));
+          });
       });
   },
   validate: {
