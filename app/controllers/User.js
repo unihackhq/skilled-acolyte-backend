@@ -28,7 +28,7 @@ exports.getUserById = {
           return res(responses.notFound('user'));
         }
 
-        res(result);
+        return res(result);
       });
   },
   validate: {
@@ -63,13 +63,13 @@ exports.updateUserById = {
           return res(responses.notFound('user'));
         }
 
-        user.updateAttributes(payload)
+        return user.updateAttributes(payload)
           .then((result) => {
             if (!result) {
               return res(responses.internalError('update', 'user'));
             }
 
-            res(result);
+            return res(result);
           });
       });
   },

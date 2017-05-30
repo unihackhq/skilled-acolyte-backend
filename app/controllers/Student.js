@@ -68,7 +68,7 @@ exports.updateStudentById = {
               return res(responses.internalError('update', 'student'));
             }
 
-            res(result);
+            return res(result);
           });
       });
   },
