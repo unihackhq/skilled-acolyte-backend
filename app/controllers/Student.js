@@ -69,7 +69,7 @@ exports.updateStudentById = {
   validate: {
     payload: validators.Student.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -78,28 +78,20 @@ exports.updateStudentById = {
 exports.deleteStudentById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Student.findById(id)
-      .then((student) => {
-        if (!student) {
+    Student.destroy({
+      where: { id },
+    })
+      .then((result) => {
+        if (result === 0) {
           return res(responses.notFound('student'));
         }
 
-        return student.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.internalError('delete', 'student'));
-          }
-
-          return res(responses.successDelete('student'));
-        });
+        return res(responses.successDelete('student'));
       });
   },
   validate: {
-    payload: validators.Student.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };

@@ -79,25 +79,18 @@ exports.deleteUserById = {
   handler: (req, res) => {
     const id = req.params.id;
 
-    User.findById(id)
-      .then((user) => {
-        if (!user) {
+    User.destroy({
+      where: { id },
+    })
+      .then((result) => {
+        if (result === 0) {
           return res(responses.notFound('user'));
         }
 
-        return user.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.internalError('delete', 'user'));
-          }
-
-          return res(responses.successDelete('user'));
-        });
+        return res(responses.successDelete('user'));
       });
   },
   validate: {
-    payload: validators.User.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
     },
