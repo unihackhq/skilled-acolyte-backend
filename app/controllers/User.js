@@ -87,11 +87,9 @@ exports.deleteUserById = {
         }
 
         return user.updateAttributes({
-          deactivated: true
+          deactivated: true,
         })
-          .then((result) => {
-            return res(responses.successDelete('user'));
-          });
+          .then(() => res(responses.successDelete('user')));
       });
   },
   validate: {
