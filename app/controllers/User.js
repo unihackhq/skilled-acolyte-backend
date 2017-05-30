@@ -27,7 +27,8 @@ exports.getUserById = {
         if (!result) {
           return res(responses.notFound('user'));
         }
-        return res(result);
+
+        res(result);
       });
   },
   validate: {
@@ -62,8 +63,14 @@ exports.updateUserById = {
           return res(responses.notFound('user'));
         }
 
-        return user.updateAttributes(payload)
-          .then((result) => { res(result); });
+        user.updateAttributes(payload)
+          .then((result) => {
+            if (!result) {
+              return res(responses.internalError('update', 'user'));
+            }
+
+            res(result);
+          });
       });
   },
   validate: {
@@ -89,7 +96,13 @@ exports.deleteUserById = {
         return user.updateAttributes({
           deactivated: true,
         })
-          .then(() => res(responses.successDelete('user')));
+          .then((result) => {
+            if (!result) {
+              return res(responses.internalError('delete', 'user'));
+            }
+
+            return res(responses.successDelete('user'));
+          });
       });
   },
   validate: {

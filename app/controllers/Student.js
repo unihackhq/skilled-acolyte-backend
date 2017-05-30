@@ -63,7 +63,13 @@ exports.updateStudentById = {
         }
 
         return student.updateAttributes(payload)
-          .then((result) => { res(result); });
+          .then((result) => {
+            if (!result) {
+              return res(responses.internalError('update', 'student'));
+            }
+
+            res(result);
+          });
       });
   },
   validate: {
