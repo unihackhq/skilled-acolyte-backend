@@ -1,8 +1,7 @@
 const ebHelper = require('../helpers/eventbrite');
 
 module.exports = {
-  prepopulateEvent: (eventId) => {
-    return ebHelper.apiGET(`/events/${eventId}/?expand=venue`)
+  prepopulateEvent: eventId => ebHelper.apiGET(`/events/${eventId}/?expand=venue`)
       .then((data) => {
         console.log('Successfully getting data from event ', eventId, '.');
 
@@ -17,6 +16,5 @@ module.exports = {
         };
 
         return payload;
-      });
-  },
+      }),
 };

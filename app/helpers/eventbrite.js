@@ -30,10 +30,6 @@ module.exports = {
     }
     return barcode.substring(BC_ORDER_END_POS, BC_ATTENDEE_END_POS);
   },
-  apiGET: (endpoint, headers = {}) => {
-    return restTemplate(API_URL + endpoint, 'GET', Object.assign(headers, authHeaders))
-  },
-  apiPOST: (endpoint, headers = {}) => {
-    return restTemplate(API_URL + endpoint, 'POST', Object.assign(headers, authHeaders));
-  },
+  apiGET: (endpoint, headers = {}) => restTemplate(API_URL + endpoint, 'GET', Object.assign(headers, authHeaders)),
+  apiPOST: (endpoint, headers = {}) => restTemplate(API_URL + endpoint, 'POST', Object.assign(headers, authHeaders)),
 };
