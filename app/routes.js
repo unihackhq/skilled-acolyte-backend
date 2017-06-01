@@ -15,6 +15,17 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/events/{id}', config: controllers.Event.updateEventById },
   { method: 'DELETE', path: '/api/v1/events/{id}', config: controllers.Event.deleteEventById },
 
+  { method: 'GET', path: '/api/v1/students', config: controllers.Student.getAllStudents },
+  { method: 'POST', path: '/api/v1/students', config: controllers.Student.createStudent },
+  { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
+  { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
+
+  { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },
+  { method: 'POST', path: '/api/v1/users', config: controllers.User.createUser },
+  { method: 'GET', path: '/api/v1/users/{id}', config: controllers.User.getUserById },
+  { method: 'PUT', path: '/api/v1/users/{id}', config: controllers.User.updateUserById },
+  { method: 'DELETE', path: '/api/v1/users/{id}', config: controllers.User.deleteUserById },
+
   { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
 
 ];
