@@ -10,6 +10,9 @@ module.exports = {
   API_VERSION: APP.version,
   API_URL_VERSION: APP.url_version,
 
+  // Keys
+  EVENTBRITE_AUTH: APP.eventbrite_oauth,
+
   // PG Information
   PG_HOST: DB.host,
   PG_PORT: DB.port,

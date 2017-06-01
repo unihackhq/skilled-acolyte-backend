@@ -14,4 +14,7 @@ module.exports = [
   { method: 'GET', path: '/api/v1/events/{id}', config: controllers.Event.getEventById },
   { method: 'PUT', path: '/api/v1/events/{id}', config: controllers.Event.updateEventById },
   { method: 'DELETE', path: '/api/v1/events/{id}', config: controllers.Event.deleteEventById },
+
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
+
 ];
