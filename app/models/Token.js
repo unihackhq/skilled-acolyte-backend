@@ -7,16 +7,14 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Token', {
     defaultValue: DataTypes.UUIDV4,
   },
   userId: DataTypes.UUID,
-  valid: { 
+  valid: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
   expiry: {
     type: DataTypes.DATE,
-    defaultValue: () => {
-      return new Date(Date.now() + FIFTEEN_MINUTES);
-    }
-  }
+    defaultValue: () => new Date(Date.now() + FIFTEEN_MINUTES),
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });

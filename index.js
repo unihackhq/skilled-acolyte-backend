@@ -24,7 +24,7 @@ app.register([
   app.auth.strategy('jwt', 'jwt', {
     key: env.JWT_KEY,
     validateFunc: validate,
-    verifyOptions: { algorithms: ['HS256'] }
+    verifyOptions: { algorithms: ['HS256'] },
   });
 
   // Register the routes, stored in routes.js
