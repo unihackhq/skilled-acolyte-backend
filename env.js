@@ -10,6 +10,9 @@ module.exports = {
   API_VERSION: APP.version,
   API_URL_VERSION: APP.url_version,
 
+  // JWT
+  JWT_KEY: APP.JWT_KEY,
+
   // PG Information
   PG_HOST: DB.host,
   PG_PORT: DB.port,
@@ -17,6 +20,9 @@ module.exports = {
   PG_PASSWORD: DB.password,
   PG_DATABASE: DB.database,
   DATABASE_URL: `postgres://${DB.username}:${DB.password}@${DB.host}:${DB.port}/${DB.database}`,
+
+  // Email
+  POSTMARK_CLIENT_KEY: APP.POSTMARK_CLIENT_KEY,
 
   // ENV Information
   TESTING: process.env.TESTING === true || process.env.TESTING === 'true',
