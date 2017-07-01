@@ -1,4 +1,4 @@
-const FIFTEEN_MINUTES = 900; // 15 minutes in seconds
+const FIFTEEN_MINUTES = 900000; // 15 minutes in ms
 
 module.exports = (sequelize, DataTypes) => sequelize.define('Token', {
   id: {
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Token', {
   expiry: {
     type: DataTypes.DATE,
     defaultValue: () => {
-      return new Date() + FIFTEEN_MINUTES
+      return new Date(Date.now() + FIFTEEN_MINUTES);
     }
   }
 }, {

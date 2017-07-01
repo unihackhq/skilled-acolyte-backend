@@ -20,8 +20,11 @@ services:
       DB_USERNAME: 'postgres'
       DB_PASSWORD: 'supersecret'
       NODE_ENV: 'dev'
+      POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
   db:
     image: postgres:9.6
+    ports:
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: always
