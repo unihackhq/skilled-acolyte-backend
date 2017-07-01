@@ -3,13 +3,13 @@ const Event = require('../models').Event;
 const responses = require('../responses');
 const ebService = require('../services/eventbrite');
 
-// [POST] /prepopulate/event/eventID
+// [POST] /prepopulate/event
 exports.prepoulateEvent = {
   handler: (req, res) => {
     const payload = req.payload;
-    ebService.prepopulateEvent(payload.eventId)
-      .then((event) => {
-        Event.create(event)
+    ebService.getEvent(payload.eventId)
+      .then((data) => {
+        Event.create(data)
           .then((result) => { res(result); })
           .catch(() => { res(responses.internalError('create', 'event')); });
       });

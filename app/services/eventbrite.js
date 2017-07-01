@@ -1,30 +1,34 @@
-const axios = require('axios');
-const env = require('../../env');
+const client = require('../clients/eventbrite');
 
-const api = axios.create({
-  baseURL: 'https://www.eventbriteapi.com/v3',
-  timeout: 10000,
-  headers: { Authorization: `Bearer ${env.EVENTBRITE_AUTH}` },
-});
+exports.prepopulateEvent = (eventId) => {
+  client.getEvent(eventId)
+    .then((data) => {
+      return {
+        name: data.name.text,
+        startDate: data.start.utc,
+        endDate: data.end.utc,
+        timezone: data.start.timezone,
+        eventbriteId: data.id,
+        eventbriteLink: data.url,
+        location: data.venue.address.localized_address_display,
+      };
+    });
+};
 
-module.exports = {
-  prepopulateEvent: (eventId) => {
-    return api.get(`/events/${eventId}/?expand=venue`)
-      .then((response) => {
-        const data = response.data;
-        const payload = {
-          name: data.name.text,
-          startDate: data.start.utc,
-          endDate: data.end.utc,
-          timezone: data.start.timezone,
-          eventbriteId: data.id,
-          eventbriteLink: data.url,
-          location: data.venue.address.localized_address_display,
-        };
-        return payload;
-      })
-      .catch((error) => {
-        console.log('Error returned: ', error.message);
-      });
-  },
+exports.prepoulateAttendee = (eventId, attendeeId) => {
+  client.getAttendee(eventId, attendeeId)
+    .then((data) => {
+      return {
+        user: {
+          firstName: data.profile.first_name,
+          lastName: data.profile.lastName,
+          preferredName: data.profile.first_name,
+          email: data.profile.email,
+          authType: 'app',
+          dateOfBirth: data.profile.birth_date,
+          gender: data.profile.gender,
+          mobile: data.profile.cell_phone,
+        },
+      };
+    });
 };
