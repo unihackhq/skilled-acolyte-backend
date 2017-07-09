@@ -3,6 +3,9 @@ const controllers = require('./controllers');
 module.exports = [
   { method: 'GET', path: '/api/v1/test', config: controllers.Example.get },
 
+  { method: 'POST', path: '/api/v1/token', config: controllers.Token.validate },
+  { method: 'GET', path: '/api/v1/token/{email}', config: controllers.Token.request },
+
   { method: 'GET', path: '/api/v1/universities', config: controllers.University.getAllUniversities },
   { method: 'POST', path: '/api/v1/universities', config: controllers.University.createUniversity },
   { method: 'GET', path: '/api/v1/universities/{id}', config: controllers.University.getUniversityById },
