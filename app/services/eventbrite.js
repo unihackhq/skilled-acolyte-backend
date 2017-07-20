@@ -14,21 +14,3 @@ exports.prepopulateEvent = (eventId) => {
       };
     });
 };
-
-exports.prepoulateAttendee = (eventId, attendeeId) => {
-  client.getAttendee(eventId, attendeeId)
-    .then((data) => {
-      return {
-        user: {
-          firstName: data.profile.first_name,
-          lastName: data.profile.lastName,
-          preferredName: data.profile.first_name,
-          email: data.profile.email,
-          authType: 'app',
-          dateOfBirth: data.profile.birth_date,
-          gender: data.profile.gender,
-          mobile: data.profile.cell_phone,
-        },
-      };
-    });
-};

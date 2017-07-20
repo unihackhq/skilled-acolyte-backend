@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const Event = require('../models').Event;
 const responses = require('../responses');
-const ebService = require('../services/eventbrite');
+const ebService = require('../services/Eventbrite');
 
 // [POST] /prepopulate/event
 exports.prepoulateEvent = {

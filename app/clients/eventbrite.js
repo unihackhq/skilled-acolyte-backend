@@ -26,3 +26,10 @@ exports.getAttendee = (eventId, attendeeId) => {
       console.log('Error returned: ', error.message);
     });
 };
+
+exports.getAttendees = (eventId) => {
+  return api.get(`/events/${eventId}/attendees`)
+    .then((response) => {
+      return response.data;
+    });
+};
