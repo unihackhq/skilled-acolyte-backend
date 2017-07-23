@@ -12,6 +12,13 @@
     "username": "#{process.env.DB_USER}",
     "password": "#{process.env.DB_PASSWORD}"
   },
+  "dev": {
+    "host": "#{process.env.DB_HOST}",
+    "port": "#{process.env.DB_PORT}",
+    "username": "#{process.env.DB_USERNAME}",
+    "password": "#{process.env.DB_PASSWORD}",
+    "database": "skilled_acolyte_db_dev"
+  },
   "docker": {
     "host": "#{process.env.DB_HOST}",
     "port": "#{process.env.DB_PORT}",

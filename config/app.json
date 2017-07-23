@@ -3,9 +3,17 @@
     "host": "localhost",
     "port": "3000",
     "version": "1.0.0",
-    "url_version": "1"
+    "url_version": "1",
+    "POSTMARK_CLIENT_KEY": "#{process.env.POSTMARK_CLIENT_KEY}",
+    "JWT_KEY": "this-is-secret"
   },
   "docker": {
+    "host": "0.0.0.0",
+    "port": "3000",
+    "version": "1.0.0",
+    "url_version": "1"
+  },
+  "dev": {
     "host": "0.0.0.0",
     "port": "3000",
     "version": "1.0.0",
