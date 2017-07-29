@@ -48,9 +48,22 @@ db.Event.hasMany(db.Team, { as: 'Teams' });
 
 // A team can have many students. A student can be in many teams. Hene the
 // Belongs to Many association.
-db.Team.belongsToMany(db.Student, { through: 'TeamAssignment' });
-db.Student.belongsToMany(db.Team, { through: 'TeamAssignment' });
+db.Team.belongsToMany(db.Student, {
+  through: {
+    model: db.TeamAssignment,
+    unique: false,
+  },
+  foreignKey: 'studentId',
+});
+db.Student.belongsToMany(db.Team, {
+  through: {
+    model: db.TeamAssignment,
+    unique: false,
+  },
+  foreignKey: 'teamId',
+});
 
+// Define Sequelize objects
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
