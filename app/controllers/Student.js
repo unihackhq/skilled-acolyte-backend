@@ -1,19 +1,20 @@
 const Joi = require('joi');
 
 const Student = require('../models').Student;
+const StudentService = require('../services/StudentService');
 const validators = require('../validators');
 const responses = require('../responses');
 
 // [GET] /student
 exports.getAllStudents = {
   handler: (req, res) => {
-    Student.findAll()
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result,
-        });
+    StudentService.listAll((err, results) => {
+      if (err) responses.internalError('list all', 'students');
+      res({
+        status: 'Success',
+        results,
       });
+    });
   },
 };
 

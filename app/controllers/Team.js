@@ -1,19 +1,16 @@
 const Joi = require('joi');
 
-const Team = require('../models').Team;
+const TeamService = require('../services/TeamService');
+const SkilledError = require('../errors');
 const validators = require('../validators');
-const responses = require('../responses');
 
 // [GET] /team
 exports.getAllTeams = {
   handler: (req, res) => {
-    Team.findAll()
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result,
-        });
-      });
+    TeamService.listAll((err, results) => {
+      if (err) return res(SkilledError.handler(err));
+      return res({ status: 'Success', results });
+    });
   },
 };
 
@@ -21,14 +18,10 @@ exports.getAllTeams = {
 exports.getTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Team.findById(id)
-      .then((result) => {
-        if (!result) {
-          return res(responses.notFound('team'));
-        }
-        return res(result);
-      });
+    TeamService.getTeam(id, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res({ result });
+    });
   },
   validate: {
     params: {
@@ -41,9 +34,10 @@ exports.getTeamById = {
 exports.createTeam = {
   handler: (req, res) => {
     const payload = req.payload;
-    return Team.create(payload)
-      .then((result) => { res(result); })
-      .catch(() => { res(responses.internalError('create', 'team')); });
+    TeamService.createTeam(payload, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Team.payload,
@@ -55,16 +49,10 @@ exports.updateTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
     const payload = req.payload;
-
-    Team.findById(id)
-      .then((team) => {
-        if (!team) {
-          return res(responses.notFound('team'));
-        }
-
-        return team.updateAttributes(payload)
-          .then((result) => { res(result); });
-      });
+    TeamService.updateTeam(id, payload, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Team.payload,
@@ -78,23 +66,10 @@ exports.updateTeamById = {
 exports.deleteTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Team.findById(id)
-      .then((team) => {
-        if (!team) {
-          return res(responses.notFound('team'));
-        }
-
-        return team.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.internalError('delete', 'team'));
-          }
-
-          return res(responses.successDelete('team'));
-        });
-      });
+    TeamService.deleteTeam(id, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Team.payload,
