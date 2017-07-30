@@ -34,4 +34,6 @@ module.exports = [
   { method: 'GET', path: '/api/v1/teams/{id}', config: controllers.Team.getTeamById },
   { method: 'PUT', path: '/api/v1/teams/{id}', config: controllers.Team.updateTeamById },
   { method: 'DELETE', path: '/api/v1/teams/{id}', config: controllers.Team.deleteTeamById },
+  { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
+  { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
 ];

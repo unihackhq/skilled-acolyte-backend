@@ -28,9 +28,10 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // Each student is a user (though not every user is a student). Each student
 // also belongs to a University.
-db.Student.belongsTo(db.User, {
+db.Student.hasOne(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
+  as: 'userInformation',
 });
 
 // Each ticket belongs to a student - either as the original or current ticket
@@ -47,19 +48,60 @@ db.Event.hasMany(db.Team, { as: 'Teams' });
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
+    scope: {
+      invited: false,
+    },
     unique: false,
   },
-  foreignKey: 'studentId',
-  as: 'students',
+  foreignKey: 'teamId',
+  as: 'members',
 });
+db.Team.belongsToMany(db.Student, {
+  through: {
+    model: db.TeamAssignment,
+    scope: {
+      invited: true,
+    },
+    unique: false,
+  },
+  foreignKey: 'teamId',
+  as: 'invited',
+});
+
 db.Student.belongsToMany(db.Team, {
   through: {
     model: db.TeamAssignment,
     unique: false,
   },
-  foreignKey: 'teamId',
+  foreignKey: 'studentId',
   as: 'teams',
 });
+
+
+// =============================================================================
+// SCOPES
+// =============================================================================
+// This reduces displaying the User Information to name and email when displaying
+// Student record.
+db.Student.addScope('defaultScope', {
+  include: [
+    {
+      model: db.User,
+      as: 'userInformation',
+      attributes: ['firstName', 'lastName', 'preferredName', 'email'],
+    },
+  ],
+}, { override: true });
+
+// This masks users who are
+db.User.addScope('defaultScope', {
+  where: {
+    deactivated: false,
+  },
+  attributes: {
+    exclude: ['authId', 'accessToken'],
+  },
+}, { override: true });
 
 // Define Sequelize objects
 db.sequelize = sequelize;

@@ -20,7 +20,7 @@ exports.listAll = (callback) => {
 };
 
 exports.getStudent = (id, callback) => {
-  Student.findbyId(id)
+  Student.findById(id)
     .then((result) => {
       if (!result) return callback(Error.notFound.modelNotFound(MODEL_NAME));
       return callback(null, result);

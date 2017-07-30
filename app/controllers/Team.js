@@ -20,7 +20,7 @@ exports.getTeamById = {
     const id = req.params.id;
     TeamService.getTeam(id, (err, result) => {
       if (err) return res(SkilledError.handler(err));
-      return res({ result });
+      return res(result);
     });
   },
   validate: {
@@ -115,12 +115,16 @@ exports.getTeamInvitesById = {
 exports.createTeamInvite = {
   handler: (req, res) => {
     const id = req.params.id;
-    TeamService.inviteTeamMember(id, personId, (err, result) => {
+    const userId = req.payload.userId;
+    TeamService.inviteTeamMember(id, userId, (err, result) => {
       if (err) return res(SkilledError.handler(err));
       return res(result);
     });
   },
   validate: {
+    payload: {
+      userId: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid user id')),
+    },
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
     },
