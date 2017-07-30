@@ -1,3 +1,5 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
+
 const Student = require('../models').Student;
 const User = require('../models').User;
 const Error = require('../errors');
