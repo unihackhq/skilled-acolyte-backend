@@ -1,19 +1,15 @@
 const Joi = require('joi');
 
-const Student = require('../models').Student;
 const StudentService = require('../services/StudentService');
+const SkilledError = require('../errors');
 const validators = require('../validators');
-const responses = require('../responses');
 
 // [GET] /student
 exports.getAllStudents = {
   handler: (req, res) => {
     StudentService.listAll((err, results) => {
-      if (err) responses.internalError('list all', 'students');
-      res({
-        status: 'Success',
-        results,
-      });
+      if (err) return res(SkilledError.handler(err));
+      return res({ status: 'Success', results });
     });
   },
 };
@@ -22,14 +18,10 @@ exports.getAllStudents = {
 exports.getStudentById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Student.findById(id)
-      .then((result) => {
-        if (!result) {
-          return res(responses.notFound('student'));
-        }
-        return res(result);
-      });
+    StudentService.getStudent(id, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res({ result });
+    });
   },
   validate: {
     params: {
@@ -42,9 +34,10 @@ exports.getStudentById = {
 exports.createStudent = {
   handler: (req, res) => {
     const payload = req.payload;
-    return Student.create(payload)
-      .then((result) => { res(result); })
-      .catch(() => { res(responses.internalError('create', 'Student')); });
+    StudentService.createStudent(payload, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Student.payload,
@@ -57,21 +50,10 @@ exports.updateStudentById = {
     const id = req.params.id;
     const payload = req.payload;
 
-    Student.findById(id)
-      .then((student) => {
-        if (!student) {
-          return res(responses.notFound('student'));
-        }
-
-        return student.updateAttributes(payload)
-          .then((result) => {
-            if (!result) {
-              return res(responses.internalError('update', 'student'));
-            }
-
-            return res(result);
-          });
-      });
+    StudentService.updateStudent(id, payload, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Student.payload,

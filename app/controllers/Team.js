@@ -4,7 +4,7 @@ const TeamService = require('../services/TeamService');
 const SkilledError = require('../errors');
 const validators = require('../validators');
 
-// [GET] /team
+// [GET] /teams
 exports.getAllTeams = {
   handler: (req, res) => {
     TeamService.listAll((err, results) => {
@@ -14,7 +14,7 @@ exports.getAllTeams = {
   },
 };
 
-// [GET] /team/{id}
+// [GET] /teams/{id}
 exports.getTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
@@ -30,7 +30,7 @@ exports.getTeamById = {
   },
 };
 
-// [POST] /team
+// [POST] /teams
 exports.createTeam = {
   handler: (req, res) => {
     const payload = req.payload;
@@ -44,7 +44,7 @@ exports.createTeam = {
   },
 };
 
-// [PUT] /team/{id}
+// [PUT] /teams/{id}
 exports.updateTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
@@ -62,7 +62,7 @@ exports.updateTeamById = {
   },
 };
 
-// [DELETE] /team/{id}
+// [DELETE] /teams/{id}
 exports.deleteTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
@@ -73,6 +73,54 @@ exports.deleteTeamById = {
   },
   validate: {
     payload: validators.Team.payload,
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
+  },
+};
+
+// [GET] /teams/{id}/people
+exports.getTeamInvitesById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    TeamService.getTeamMembers(id, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
+  },
+};
+
+// [GET] /teams/{id}/invites
+exports.getTeamInvitesById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    TeamService.getTeamMemberInvites(id, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+    },
+  },
+};
+
+// [POST] /teams/{id}/invites
+exports.createTeamInvite = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    TeamService.inviteTeamMember(id, personId, (err, result) => {
+      if (err) return res(SkilledError.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
     },

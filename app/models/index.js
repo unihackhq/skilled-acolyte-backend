@@ -54,6 +54,7 @@ db.Team.belongsToMany(db.Student, {
     unique: false,
   },
   foreignKey: 'studentId',
+  as: 'students',
 });
 db.Student.belongsToMany(db.Team, {
   through: {
@@ -61,6 +62,7 @@ db.Student.belongsToMany(db.Team, {
     unique: false,
   },
   foreignKey: 'teamId',
+  as: 'teams',
 });
 
 // Define Sequelize objects
