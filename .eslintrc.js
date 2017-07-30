@@ -5,6 +5,8 @@ module.exports = {
     ],
     "rules": {
       "no-console": 0,
-      "global-require": 0
+      "global-require": 0,
+      "arrow-body-style": 0,
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
     }
 };

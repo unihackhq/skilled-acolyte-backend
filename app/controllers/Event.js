@@ -43,7 +43,7 @@ exports.createEvent = {
     const payload = req.payload;
     return Event.create(payload)
       .then((result) => { res(result); })
-      .catch(() => { res(responses.internalError('create', 'event')); });
+      .catch(() => { res(responses.invalid('create', 'event')); });
   },
   validate: {
     payload: validators.Event.payload,
@@ -89,7 +89,7 @@ exports.deleteEventById = {
           where: { id },
         }).then((result) => {
           if (!result) {
-            return res(responses.internalError('delete', 'event'));
+            return res(responses.invalid('delete', 'event'));
           }
 
           return res(responses.successDelete('event'));

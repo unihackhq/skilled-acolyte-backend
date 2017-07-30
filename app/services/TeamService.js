@@ -22,7 +22,7 @@ exports.getTeam = (id, callback) => {
 exports.createTeam = (payload, callback) => {
   Team.create(payload)
     .then(result => callback(null, result))
-    .catch(() => callback(Error.internalError.failedToCreate(MODEL_NAME)));
+    .catch(() => callback(Error.invalid.failedToCreate(MODEL_NAME)));
 };
 
 exports.updateTeam = (id, payload, callback) => {
@@ -41,7 +41,7 @@ exports.deleteTeam = (id, callback) => {
       if (!team) return callback(Error.notFound.modelNotFound(MODEL_NAME));
       return team.destroy({ where: { id } })
         .then((result) => {
-          if (!result) return callback(Error.internalError.failedToDelete(MODEL_NAME));
+          if (!result) return callback(Error.invalid.failedToDelete(MODEL_NAME));
           return callback(null, Response.successDelete(MODEL_NAME));
         });
     })

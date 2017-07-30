@@ -43,7 +43,7 @@ exports.createUniversity = {
     const payload = req.payload;
     return University.create(payload)
       .then((result) => { res(result); })
-      .catch(() => { res(responses.internalError('create', 'university')); });
+      .catch(() => { res(responses.invalid('create', 'university')); });
   },
   validate: {
     payload: validators.University.payload,
@@ -89,7 +89,7 @@ exports.deleteUniversityById = {
           where: { id },
         }).then((result) => {
           if (!result) {
-            return res(responses.internalError('delete', 'university'));
+            return res(responses.invalid('delete', 'university'));
           }
 
           return res(responses.successDelete('university'));

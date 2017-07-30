@@ -22,26 +22,27 @@ exports.notFound = {
   modelNotFound,
 };
 
-// Define Internal Errors
+// Define Invalid Errors
 
-const INTERNAL_ERROR_NAME = 'internalError';
+const INVALID_ERROR_NAME = 'invalidError';
+const isInvalidError = err => err && err.errorName === INVALID_ERROR_NAME;
 
 const failedToCreate = (modelName = 'object') => {
   const message = `Failed to create ${modelName}`;
-  return new ErrorTemplate(INTERNAL_ERROR_NAME, 20001, message);
+  return new ErrorTemplate(INVALID_ERROR_NAME, 20001, message);
 };
 
 const failedToUpdate = (modelName = 'object') => {
   const message = `Failed to update ${modelName}`;
-  return new ErrorTemplate(INTERNAL_ERROR_NAME, 20002, message);
+  return new ErrorTemplate(INVALID_ERROR_NAME, 20002, message);
 };
 
 const failedToDelete = (modelName = 'object') => {
   const message = `Failed to create ${modelName}`;
-  return new ErrorTemplate(INTERNAL_ERROR_NAME, 20003, message);
+  return new ErrorTemplate(INVALID_ERROR_NAME, 20003, message);
 };
 
-exports.internalError = {
+exports.invalid = {
   failedToCreate,
   failedToUpdate,
   failedToDelete,
@@ -52,7 +53,11 @@ exports.handler = (err) => {
     const boomErr = Boom.notFound(err.message);
     boomErr.output.payload.errorCode = err.errorCode;
     return boomErr;
+  } else if (isInvalidError(err)) {
+    const boomErr = Boom.badRequest(err.message);
+    boomErr.output.payload.errorCode = err.errorCode;
+    return boomErr;
   }
 
-  return Boom.badImplementation(err.message || err);
+  return Boom.badImplementation(err.message);
 };

@@ -22,7 +22,7 @@ exports.getUser = (id, callback) => {
 exports.createUser = (payload, callback) => {
   User.create(payload)
     .then(result => callback(null, result))
-    .catch(() => callback(Error.internalError.failedToCreate(MODEL_NAME)));
+    .catch(() => callback(Error.invalid.failedToCreate(MODEL_NAME)));
 };
 
 exports.updateUser = (id, payload, callback) => {
@@ -43,7 +43,7 @@ exports.deleteUser = (id, callback) => {
       // Soft delete
       return user.updateAttributes({ deactivated: true })
         .then((result) => {
-          if (!result) return callback(Error.internalError.failedToDelete(MODEL_NAME));
+          if (!result) return callback(Error.invalid.failedToDelete(MODEL_NAME));
           return callback(null, Response.successDelete(MODEL_NAME));
         });
     })

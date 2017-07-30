@@ -1,4 +1,5 @@
 const Student = require('../models').Student;
+const User = require('../models').User;
 const Error = require('../errors');
 const Response = require('../responses');
 
@@ -25,10 +26,50 @@ exports.getStudent = (id, callback) => {
     .catch(error => callback(error));
 };
 
-exports.createStudent = (payload, callback) => {
-  Student.create(payload)
-    .then(result => callback(null, result))
-    .catch(() => callback(Error.internalError.failedToCreate(MODEL_NAME)));
+exports.createStudent = (data, callback) => {
+  const CreateUserPromise = (payload) => {
+    let id;
+    const userId = payload.id;
+    const userObj = payload.user;
+
+    return new Promise((resolve, reject) => {
+      if (userId) {
+        console.log('Identified User ID, bypassing CreateUserPromise');
+        id = userId;
+        return resolve({ id, payload });
+      }
+      return User.create(userObj)
+        .then((result) => {
+          id = result.id;
+          return resolve({ id, payload });
+        })
+        .catch(() => {
+          return reject(Error.invalid.failedToCreate('user (through student)'));
+        });
+    });
+  };
+
+  const CreateStudentPromise = ({ id, payload }) => {
+    return new Promise((resolve, reject) => {
+      payload.id = id;
+      return Student.create(payload)
+        .then((result) => {
+          return resolve(result);
+        })
+        .catch(() => {
+          return reject(Error.invalid.failedToCreate(MODEL_NAME));
+        });
+    });
+  };
+
+  CreateUserPromise(data)
+    .then(CreateStudentPromise)
+    .then((result) => {
+      callback(null, result);
+    })
+    .catch((error) => {
+      callback(error);
+    });
 };
 
 exports.updateStudent = (id, payload, callback) => {
@@ -47,7 +88,7 @@ exports.deleteStudent = (id, callback) => {
       if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
       return student.destroy({ where: { id } })
         .then((result) => {
-          if (!result) return callback(Error.internalError.failedToDelete(MODEL_NAME));
+          if (!result) return callback(Error.invalid.failedToDelete(MODEL_NAME));
           return callback(null, Response.successDelete(MODEL_NAME));
         });
     })
