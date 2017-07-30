@@ -1,4 +1,4 @@
-const { Team, User, Sequelize } = require('../models');
+const { Team } = require('../models');
 const Error = require('../errors');
 const Response = require('../responses');
 
@@ -49,8 +49,16 @@ exports.deleteTeam = (id, callback) => {
 };
 
 exports.getTeamMembers = (id, callback) => {
-
-}
+  Team.findById(id)
+    .then((team) => {
+      if (!team) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      return team.getMembers()
+        .then((results) => {
+          return callback(null, results);
+        });
+    })
+    .catch(error => callback(error));
+};
 
 exports.getTeamMemberInvites = (id, callback) => {
   Team.findById(id)
@@ -71,7 +79,9 @@ exports.inviteTeamMember = (teamId, studentId, callback) => {
       return team.setInvited(studentId, { invited: true })
         .then((result) => {
           const invitedResult = result[0][0];
-          if (!invitedResult || invitedResult === 1) return callback(Error.invalid.failedToCreate('invite'));
+          if (!invitedResult || invitedResult === 1) {
+            return callback(Error.invalid.failedToCreate('invite'));
+          }
           return callback(null, invitedResult);
         });
     });

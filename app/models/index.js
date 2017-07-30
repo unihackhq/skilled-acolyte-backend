@@ -45,6 +45,7 @@ db.Event.hasMany(db.Team, { as: 'Teams' });
 
 // A team can have many students. A student can be in many teams. Hene the
 // Belongs to Many association.
+// PART A: Members and Teams
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
@@ -56,6 +57,18 @@ db.Team.belongsToMany(db.Student, {
   foreignKey: 'teamId',
   as: 'members',
 });
+db.Student.belongsToMany(db.Team, {
+  through: {
+    model: db.TeamAssignment,
+    scope: {
+      invited: false,
+    },
+    unique: false,
+  },
+  foreignKey: 'studentId',
+  as: 'teams',
+});
+// PART B: Invitations Logic
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
@@ -67,16 +80,17 @@ db.Team.belongsToMany(db.Student, {
   foreignKey: 'teamId',
   as: 'invited',
 });
-
 db.Student.belongsToMany(db.Team, {
   through: {
     model: db.TeamAssignment,
+    scope: {
+      invited: true,
+    },
     unique: false,
   },
   foreignKey: 'studentId',
   as: 'teams',
 });
-
 
 // =============================================================================
 // SCOPES

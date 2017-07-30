@@ -80,7 +80,7 @@ exports.deleteTeamById = {
 };
 
 // [GET] /teams/{id}/people
-exports.getTeamInvitesById = {
+exports.getTeamMembers = {
   handler: (req, res) => {
     const id = req.params.id;
     TeamService.getTeamMembers(id, (err, result) => {
