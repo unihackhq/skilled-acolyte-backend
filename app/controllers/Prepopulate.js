@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const Boom = require('boom');
 const Event = require('../models').Event;
 const responses = require('../responses');
 const ebService = require('../services/Eventbrite');
@@ -14,7 +15,7 @@ exports.prepoulateEvent = {
           .catch(() => { res(responses.internalError('create', 'event')); });
       })
       .catch((error) => {
-        // print essential error info (also the response if it's http error)
+        // print error (also the response if it's http error)
         console.log(error.message, error.stack, error.response);
         res(responses.internalError('create', 'event'));
       });
@@ -25,3 +26,38 @@ exports.prepoulateEvent = {
     },
   },
 };
+
+// [POST] /prepopulate/attendees
+exports.prepoulateAttendees = {
+  handler: (req, res) => {
+    const payload = req.payload;
+
+    Event.findOne({
+      where: {
+        eventbriteId: payload.eventId
+      }
+    })
+      .then(event => {
+        if (!event) {
+          return res(Boom.badRequest('You must import the event first!'));
+        }
+
+        ebService.prepopulateStudents(payload.eventId)
+          .then((data) => {
+            res(data);
+          })
+          .catch((error) => {
+            // print error (also the response if it's http error)
+            console.log(error.message, error.stack, error.response);
+            res(responses.internalError('create', 'event'));
+          });
+      });
+
+  },
+  validate: {
+    payload: {
+      eventId: Joi.string().required(),
+    },
+  },
+};
+
