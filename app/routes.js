@@ -29,6 +29,11 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/users/{id}', config: controllers.User.updateUserById },
   { method: 'DELETE', path: '/api/v1/users/{id}', config: controllers.User.deleteUserById },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
+  { method: 'GET', path: '/api/v1/teams', config: controllers.Team.getAllTeams },
+  { method: 'POST', path: '/api/v1/teams', config: controllers.Team.createTeam },
+  { method: 'GET', path: '/api/v1/teams/{id}', config: controllers.Team.getTeamById },
+  { method: 'PUT', path: '/api/v1/teams/{id}', config: controllers.Team.updateTeamById },
+  { method: 'DELETE', path: '/api/v1/teams/{id}', config: controllers.Team.deleteTeamById },
 
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
 ];
