@@ -37,12 +37,12 @@ exports.prepoulateAttendees = {
         eventbriteId: payload.eventId
       }
     })
-      .then(event => {
+      .then((event) => {
         if (!event) {
           return res(Boom.badRequest('You must import the event first!'));
         }
 
-        ebService.prepopulateStudents(payload.eventId)
+        return ebService.prepopulateStudents(payload.eventId)
           .then((data) => {
             res(data);
           })
@@ -52,7 +52,6 @@ exports.prepoulateAttendees = {
             res(responses.internalError('create', 'event'));
           });
       });
-
   },
   validate: {
     payload: {
