@@ -21,6 +21,7 @@ services:
       DB_PASSWORD: 'supersecret'
       NODE_ENV: 'dev'
       POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
+      EVENTBRITE_TOKEN: $EVENTBRITE_TOKEN
   db:
     image: postgres:9.6
     ports:

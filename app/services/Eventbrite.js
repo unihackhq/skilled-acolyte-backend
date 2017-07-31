@@ -1,7 +1,7 @@
 const client = require('../clients/eventbrite');
 
 exports.prepopulateEvent = (eventId) => {
-  client.getEvent(eventId)
+  return client.getEvent(eventId)
     .then((data) => {
       return {
         name: data.name.text,

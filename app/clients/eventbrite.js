@@ -4,32 +4,22 @@ const env = require('../../env');
 const api = axios.create({
   baseURL: 'https://www.eventbriteapi.com/v3',
   timeout: 10000,
-  headers: { Authorization: `Bearer ${env.EVENTBRITE_AUTH}` },
+  headers: { Authorization: `Bearer ${env.EVENTBRITE_TOKEN}` },
 });
 
+const call = (url) => {
+  return api.get(url)
+    .then(response => response.data);
+};
+
 exports.getEvent = (eventId) => {
-  return api.get(`/events/${eventId}/?expand=venue`)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log('Error returned: ', error.message);
-    });
+  return call(`/events/${eventId}/?expand=venue`);
 };
 
 exports.getAttendee = (eventId, attendeeId) => {
-  return api.get(`/events/${eventId}/attendees/${attendeeId}/`)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log('Error returned: ', error.message);
-    });
+  return call(`/events/${eventId}/attendees/${attendeeId}/`);
 };
 
 exports.getAttendees = (eventId) => {
-  return api.get(`/events/${eventId}/attendees`)
-    .then((response) => {
-      return response.data;
-    });
+  return call(`/events/${eventId}/attendees`);
 };
