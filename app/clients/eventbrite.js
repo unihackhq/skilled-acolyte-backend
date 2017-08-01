@@ -21,14 +21,14 @@ exports.getAttendee = (eventId, attendeeId) => {
 };
 
 const getMoreAttendees = (eventId, data) => {
-  // if (data.pagination.has_more_items) {
-  //   return call(`/events/${eventId}/attendees?continuation=${data.pagination.continuation}`)
-  //     // call this function again to get more attendees if this isn't the last page
-  //     .then(data => getMoreAttendees(eventId, data))
-  //     // concat the attendees from prev call with attendees
-  //     // from the current call (all the calls after it)
-  //     .then(newAttendees => data.attendees.concat(newAttendees));
-  // }
+  if (data.pagination.has_more_items) {
+    return call(`/events/${eventId}/attendees?continuation=${data.pagination.continuation}`)
+      // call this function again to get more attendees if this isn't the last page
+      .then(response => getMoreAttendees(eventId, response))
+      // concat the attendees from prev call with attendees
+      // from the current call (all the calls after it)
+      .then(newAttendees => data.attendees.concat(newAttendees));
+  }
   return data.attendees;
 };
 

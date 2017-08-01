@@ -1,6 +1,8 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Event = require('../models').Event;
+const Student = require('../models').Student;
+const User = require('../models').User;
 const responses = require('../responses');
 const ebService = require('../services/Eventbrite');
 
@@ -43,8 +45,15 @@ exports.prepoulateAttendees = {
         }
 
         return ebService.prepopulateStudents(payload.eventId)
-          .then((data) => {
-            res(data);
+          .then((students) => {
+            User.bulkCreate(students)
+              .then((users) => {
+                return students.map((student, i) => Object.assign(student, { id: users[i].id }));
+              })
+              .then((studentsWithId) => {
+                Student.bulkCreate(studentsWithId)
+                  .then(() => res({ status: 'Success' }));
+              });
           })
           .catch((error) => {
             // print error (also the response if it's http error)
@@ -59,4 +68,3 @@ exports.prepoulateAttendees = {
     },
   },
 };
-

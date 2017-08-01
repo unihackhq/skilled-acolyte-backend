@@ -50,5 +50,5 @@ const mapAttendeeToStudent = (attendee) => {
 exports.prepopulateStudents = (eventId) => {
   return client.getAttendees(eventId)
     .then(attendees => attendees.map(attendee => mapAttendeeToStudent(attendee)))
-    .then(attendees => Promise.all(attendees))
+    .then(attendees => Promise.all(attendees));
 };
