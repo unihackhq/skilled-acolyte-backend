@@ -1,8 +1,22 @@
 const Joi = require('joi');
 
 const Student = require('../models').Student;
+const User = require('../models').User;
 const validators = require('../validators');
 const responses = require('../responses');
+
+// [GET] /student_directory
+exports.getStudentDirectory = {
+  handler: (req, res) => {
+    Student.findAll({ include: [{ model: User }] })
+      .then((result) => {
+        res({
+          status: 'Success',
+          data: result.map(({ id, User: { firstName, lastName } }) => ({ id, name: `${firstName} ${lastName}` })),
+        });
+      });
+  },
+};
 
 // [GET] /student
 exports.getAllStudents = {

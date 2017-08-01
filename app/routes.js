@@ -18,6 +18,7 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/events/{id}', config: controllers.Event.updateEventById },
   { method: 'DELETE', path: '/api/v1/events/{id}', config: controllers.Event.deleteEventById },
 
+  { method: 'GET', path: '/api/v1/student_directory', config: controllers.Student.getStudentDirectory },
   { method: 'GET', path: '/api/v1/students', config: controllers.Student.getAllStudents },
   { method: 'POST', path: '/api/v1/students', config: controllers.Student.createStudent },
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
