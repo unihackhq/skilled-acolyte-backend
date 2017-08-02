@@ -10,10 +10,21 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
 
   },
   name: DataTypes.STRING,
+  location: DataTypes.STRING,
   startDate: DataTypes.DATE,
   endDate: DataTypes.DATE,
-  eventbriteLink: DataTypes.STRING,
-  location: DataTypes.STRING,
+  timezone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  eventbriteId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  eventbriteLink: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   logoUrl: {
     type: DataTypes.STRING(512),
     allowNull: true,

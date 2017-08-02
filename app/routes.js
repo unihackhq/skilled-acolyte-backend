@@ -18,6 +18,7 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/events/{id}', config: controllers.Event.updateEventById },
   { method: 'DELETE', path: '/api/v1/events/{id}', config: controllers.Event.deleteEventById },
 
+  { method: 'GET', path: '/api/v1/student_directory', config: controllers.Student.getStudentDirectory },
   { method: 'GET', path: '/api/v1/students', config: controllers.Student.getAllStudents },
   { method: 'POST', path: '/api/v1/students', config: controllers.Student.createStudent },
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
@@ -37,4 +38,7 @@ module.exports = [
   { method: 'GET', path: '/api/v1/teams/{id}/members', config: controllers.Team.getTeamMembers },
   { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
   { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
+
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
+  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepoulateAttendees },
 ];

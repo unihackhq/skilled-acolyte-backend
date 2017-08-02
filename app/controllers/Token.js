@@ -37,7 +37,7 @@ exports.validate = {
             const jwt = createToken({ userId: user.id });
             // Create JWT here
             return res({ token: jwt });
-          }),
+          })
       )
       .catch((err) => {
         console.log(err);
