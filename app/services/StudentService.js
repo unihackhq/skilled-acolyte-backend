@@ -35,8 +35,8 @@ exports.createStudent = (data, callback) => {
 
       return User.create(userObj)
         .then((result) => {
-          const response = Object.assign(student, { user: result.get({ plain: true }) });
-          return resolve(response);
+          student.user = result.get({ plain: true });
+          return resolve(student);
         })
         .catch((err) => {
           console.log(err);
