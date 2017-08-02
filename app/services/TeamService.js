@@ -54,7 +54,7 @@ exports.getTeamMembers = (id, callback) => {
   Team.findById(id)
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return team.getMembers()
+      return team.getMembers({ joinTableAttributes: [] })
         .then((results) => {
           return callback(null, results);
         });
@@ -66,7 +66,7 @@ exports.getTeamMemberInvites = (id, callback) => {
   Team.findById(id)
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return team.getInvited()
+      return team.getInvited({ joinTableAttributes: [] })
         .then((results) => {
           return callback(null, results);
         });

@@ -6,6 +6,8 @@ const User = require('../models').User;
 const responses = require('../responses');
 const ebService = require('../services/Eventbrite');
 
+// TODO: Remove Responses and rationalise errors into one class (errors.js)
+
 // [POST] /prepopulate/event
 exports.prepoulateEvent = {
   handler: (req, res) => {

@@ -106,3 +106,27 @@ exports.getStudentDirectory = (callback) => {
     })
     .catch(error => callback(error));
 };
+
+exports.getStudentTeams = (id, callback) => {
+  Student.findById(id)
+    .then((student) => {
+      if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      return student.getTeams({ joinTableAttributes: ['invited'] })
+        .then((results) => {
+          return callback(null, results);
+        });
+    })
+    .catch(error => callback(error));
+};
+
+exports.getStudentInvites = (id, callback) => {
+  Student.findById(id)
+    .then((student) => {
+      if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      return student.getInvites({ joinTableAttributes: ['invited'] })
+        .then((results) => {
+          return callback(null, results);
+        });
+    })
+    .catch(error => callback(error));
+};

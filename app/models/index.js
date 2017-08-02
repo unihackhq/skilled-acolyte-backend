@@ -5,7 +5,7 @@ const env = require('../../env');
 
 const sequelize = new Sequelize(env.DATABASE_URL, {
   host: env.PG_HOST,
-  dialect: 'postgres',
+  dialect: 'postgres'
 });
 const db = {};
 
@@ -31,7 +31,11 @@ Object.keys(db).forEach((modelName) => {
 db.Student.hasOne(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
-  as: 'user',
+  as: 'user'
+});
+db.Student.belongsTo(db.University, {
+  foreignKey: 'university',
+  targetKey: 'id'
 });
 
 // Each ticket belongs to a student - either as the original or current ticket
@@ -50,12 +54,12 @@ db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
     scope: {
-      invited: false,
+      invited: false
     },
-    unique: false,
+    unique: false
   },
   foreignKey: 'teamId',
-  as: 'members',
+  as: 'members'
 });
 db.Student.belongsToMany(db.Team, {
   through: {
@@ -63,33 +67,33 @@ db.Student.belongsToMany(db.Team, {
     scope: {
       invited: false,
     },
-    unique: false,
+    unique: false
   },
   foreignKey: 'studentId',
-  as: 'teams',
+  as: 'teams'
 });
 // PART B: Invitations Logic
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
     scope: {
-      invited: true,
+      invited: true
     },
-    unique: false,
+    unique: false
   },
   foreignKey: 'teamId',
-  as: 'invited',
+  as: 'invited'
 });
 db.Student.belongsToMany(db.Team, {
   through: {
     model: db.TeamAssignment,
     scope: {
-      invited: true,
+      invited: true
     },
-    unique: false,
+    unique: false
   },
   foreignKey: 'studentId',
-  as: 'teams',
+  as: 'invites'
 });
 
 // =============================================================================
@@ -101,7 +105,7 @@ db.Student.addScope('defaultScope', {
   include: [
     {
       model: db.User,
-      as: 'userInformation',
+      as: 'user',
       attributes: ['firstName', 'lastName', 'preferredName', 'email'],
     },
   ],

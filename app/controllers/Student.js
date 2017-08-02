@@ -72,3 +72,35 @@ exports.updateStudentById = {
     },
   },
 };
+
+// [GET] /student/{id}/teams
+exports.getStudentTeamsById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    StudentService.getStudentTeams(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [GET] /student/{id}/invites
+exports.getStudentInvitesById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    StudentService.getStudentInvites(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
