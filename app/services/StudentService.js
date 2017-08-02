@@ -98,3 +98,11 @@ exports.deleteStudent = (id, callback) => {
     })
     .catch(error => callback(error));
 };
+
+exports.getStudentDirectory = (callback) => {
+  Student.findAll({ include: [{ model: User }] })
+    .then((result) => {
+      callback(null, result);
+    })
+    .catch(error => callback(error));
+};

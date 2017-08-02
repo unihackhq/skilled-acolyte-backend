@@ -7,7 +7,7 @@ module.exports = {
       "no-console": 0,
       "global-require": 0,
       "arrow-body-style": 0,
-      "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
       "comma-dangle": 0
     }
 };
