@@ -21,8 +21,9 @@ module.exports = {
   PG_DATABASE: DB.database,
   DATABASE_URL: `postgres://${DB.username}:${DB.password}@${DB.host}:${DB.port}/${DB.database}`,
 
-  // Email
+  // Keys
   POSTMARK_CLIENT_KEY: APP.POSTMARK_CLIENT_KEY,
+  EVENTBRITE_TOKEN: APP.EVENTBRITE_TOKEN,
 
   // ENV Information
   TESTING: process.env.TESTING === true || process.env.TESTING === 'true',

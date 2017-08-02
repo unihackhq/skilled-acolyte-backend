@@ -20,8 +20,12 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
   authId: {
     type: DataTypes.BIGINT,
     unique: true,
+    allowNull: true,
   },
-  accessToken: DataTypes.STRING,
+  accessToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 
   // We do not delete accounts for data integrity. We deactivate accounts if no
   // longer used.

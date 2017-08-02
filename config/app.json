@@ -4,6 +4,7 @@
     "port": "3000",
     "version": "1.0.0",
     "url_version": "1",
+    "EVENTBRITE_TOKEN": "#{process.env.EVENTBRITE_TOKEN}",
     "POSTMARK_CLIENT_KEY": "#{process.env.POSTMARK_CLIENT_KEY}",
     "JWT_KEY": "this-is-secret"
   },
