@@ -38,7 +38,8 @@ exports.createStudent = (data, callback) => {
           const response = Object.assign(student, { user: result.get({ plain: true }) });
           return resolve(response);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           return reject(Error.invalid.failedToCreate('user (through student)'));
         });
     });
@@ -51,7 +52,8 @@ exports.createStudent = (data, callback) => {
           const id = result.id;
           return resolve({ id, payload, student: result.get({ plain: true }) });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           return reject(Error.invalid.failedToCreate(MODEL_NAME));
         });
     });
