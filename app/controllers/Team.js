@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
 const TeamService = require('../services/TeamService');
-const SkilledError = require('../errors');
+const Errors = require('../errors');
 const validators = require('../validators');
 
 // [GET] /teams
 exports.getAllTeams = {
   handler: (req, res) => {
     TeamService.listAll((err, results) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res({ status: 'Success', results });
     });
   },
@@ -19,7 +19,7 @@ exports.getTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
     TeamService.getTeam(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -35,7 +35,7 @@ exports.createTeam = {
   handler: (req, res) => {
     const payload = req.payload;
     TeamService.createTeam(payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -50,7 +50,7 @@ exports.updateTeamById = {
     const id = req.params.id;
     const payload = req.payload;
     TeamService.updateTeam(id, payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -67,7 +67,7 @@ exports.deleteTeamById = {
   handler: (req, res) => {
     const id = req.params.id;
     TeamService.deleteTeam(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -84,7 +84,7 @@ exports.getTeamMembers = {
   handler: (req, res) => {
     const id = req.params.id;
     TeamService.getTeamMembers(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -100,7 +100,7 @@ exports.getTeamInvitesById = {
   handler: (req, res) => {
     const id = req.params.id;
     TeamService.getTeamMemberInvites(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -117,7 +117,7 @@ exports.createTeamInvite = {
     const id = req.params.id;
     const userId = req.payload.userId;
     TeamService.inviteTeamMember(id, userId, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },

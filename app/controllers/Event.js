@@ -1,19 +1,16 @@
 const Joi = require('joi');
 
-const Event = require('../models').Event;
+const EventService = require('../services/EventService');
+const Errors = require('../errors');
 const validators = require('../validators');
-const responses = require('../responses');
 
 // [GET] /events
 exports.getAllEvents = {
   handler: (req, res) => {
-    Event.findAll()
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result,
-        });
-      });
+    EventService.listAll((err, results) => {
+      if (err) return res(Errors.handler(err));
+      return res({ status: 'Success', results });
+    });
   },
 };
 
@@ -21,14 +18,10 @@ exports.getAllEvents = {
 exports.getEventById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Event.findById(id)
-      .then((result) => {
-        if (!result) {
-          return res(responses.notFound('event'));
-        }
-        return res(result);
-      });
+    EventService.getEvent(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     params: {
@@ -41,9 +34,10 @@ exports.getEventById = {
 exports.createEvent = {
   handler: (req, res) => {
     const payload = req.payload;
-    return Event.create(payload)
-      .then((result) => { res(result); })
-      .catch(() => { res(responses.invalid('create', 'event')); });
+    EventService.createEvent(payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Event.payload,
@@ -55,16 +49,10 @@ exports.updateEventById = {
   handler: (req, res) => {
     const id = req.params.id;
     const payload = req.payload;
-
-    Event.findById(id)
-      .then((event) => {
-        if (!event) {
-          return res(responses.notFound('event'));
-        }
-
-        return event.updateAttributes(payload)
-          .then((result) => { res(result); });
-      });
+    EventService.updateEvent(id, payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Event.payload,
@@ -78,23 +66,10 @@ exports.updateEventById = {
 exports.deleteEventById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Event.findById(id)
-      .then((event) => {
-        if (!event) {
-          return res(responses.notFound('event'));
-        }
-
-        return event.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.invalid('delete', 'event'));
-          }
-
-          return res(responses.successDelete('event'));
-        });
-      });
+    EventService.deleteEvent(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.Event.payload,

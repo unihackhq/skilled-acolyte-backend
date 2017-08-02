@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
 const UserService = require('../services/UserService');
-const SkilledError = require('../errors');
+const Errors = require('../errors');
 const validators = require('../validators');
 
 // [GET] /user
 exports.getAllUsers = {
   handler: (req, res) => {
     UserService.listAll((err, results) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res({ status: 'Success', results });
     });
   },
@@ -19,7 +19,7 @@ exports.getUserById = {
   handler: (req, res) => {
     const id = req.params.id;
     UserService.getUser(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -35,7 +35,7 @@ exports.createUser = {
   handler: (req, res) => {
     const payload = req.payload;
     UserService.createUser(payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -51,7 +51,7 @@ exports.updateUserById = {
     const payload = req.payload;
 
     UserService.updateUser(id, payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -68,7 +68,7 @@ exports.deleteUserById = {
   handler: (req, res) => {
     const id = req.params.id;
     UserService.deleteUser(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },

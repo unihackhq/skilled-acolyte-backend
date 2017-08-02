@@ -1,19 +1,16 @@
 const Joi = require('joi');
 
-const University = require('../models').University;
+const UniversityService = require('../services/UniversityService');
+const Errors = require('../errors');
 const validators = require('../validators');
-const responses = require('../responses');
 
 // [GET] /university
 exports.getAllUniversities = {
   handler: (req, res) => {
-    University.findAll()
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result,
-        });
-      });
+    UniversityService.listAll((err, results) => {
+      if (err) return res(Errors.handler(err));
+      return res({ status: 'Success', results });
+    });
   },
 };
 
@@ -21,14 +18,10 @@ exports.getAllUniversities = {
 exports.getUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    University.findById(id)
-      .then((result) => {
-        if (!result) {
-          return res(responses.notFound('university'));
-        }
-        return res(result);
-      });
+    UniversityService.getUniversity(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     params: {
@@ -41,9 +34,10 @@ exports.getUniversityById = {
 exports.createUniversity = {
   handler: (req, res) => {
     const payload = req.payload;
-    return University.create(payload)
-      .then((result) => { res(result); })
-      .catch(() => { res(responses.invalid('create', 'university')); });
+    UniversityService.createUniversity(payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.University.payload,
@@ -55,16 +49,10 @@ exports.updateUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
     const payload = req.payload;
-
-    University.findById(id)
-      .then((university) => {
-        if (!university) {
-          return res(responses.notFound('university'));
-        }
-
-        return university.updateAttributes(payload)
-          .then((result) => { res(result); });
-      });
+    UniversityService.updateUniversity(id, payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.University.payload,
@@ -78,23 +66,10 @@ exports.updateUniversityById = {
 exports.deleteUniversityById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    University.findById(id)
-      .then((university) => {
-        if (!university) {
-          return res(responses.notFound('university'));
-        }
-
-        return university.destroy({
-          where: { id },
-        }).then((result) => {
-          if (!result) {
-            return res(responses.invalid('delete', 'university'));
-          }
-
-          return res(responses.successDelete('university'));
-        });
-      });
+    UniversityService.deleteUniversity(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     payload: validators.University.payload,

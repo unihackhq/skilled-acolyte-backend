@@ -8,46 +8,36 @@ function ErrorTemplate(errorName, errorCode, message) {
 
 ErrorTemplate.prototype = Error.prototype;
 
-// Define Not Found Errors
-
 const NOT_FOUND_ERROR_NAME = 'notFoundError';
+const INVALID_ERROR_NAME = 'invalidError';
+
 const isNotFoundError = err => err && err.errorName === NOT_FOUND_ERROR_NAME;
+const isInvalidError = err => err && err.errorName === INVALID_ERROR_NAME;
 
-const modelNotFound = (modelName = 'object') => {
-  const message = `Could not find requested ${modelName}`;
-  return new ErrorTemplate(NOT_FOUND_ERROR_NAME, '10001', message);
-};
-
+// Define Not Found Errors
 exports.notFound = {
-  modelNotFound,
+  modelNotFound: (modelName = 'object') => {
+    return new ErrorTemplate(NOT_FOUND_ERROR_NAME, '10001', `Could not find requested ${modelName}`);
+  },
 };
 
 // Define Invalid Errors
-
-const INVALID_ERROR_NAME = 'invalidError';
-const isInvalidError = err => err && err.errorName === INVALID_ERROR_NAME;
-
-const failedToCreate = (modelName = 'object') => {
-  const message = `Failed to create ${modelName}`;
-  return new ErrorTemplate(INVALID_ERROR_NAME, 20001, message);
-};
-
-const failedToUpdate = (modelName = 'object') => {
-  const message = `Failed to update ${modelName}`;
-  return new ErrorTemplate(INVALID_ERROR_NAME, 20002, message);
-};
-
-const failedToDelete = (modelName = 'object') => {
-  const message = `Failed to create ${modelName}`;
-  return new ErrorTemplate(INVALID_ERROR_NAME, 20003, message);
-};
-
 exports.invalid = {
-  failedToCreate,
-  failedToUpdate,
-  failedToDelete,
+  failedToCreate: (modelName = 'object') => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, 20001, `Failed to create ${modelName}`);
+  },
+  failedToUpdate: (modelName = 'object') => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, 20002, `Failed to update ${modelName}`);
+  },
+  failedToDelete: (modelName = 'object') => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, 20003, `Failed to delete ${modelName}`);
+  },
+  duplicateInvite: () => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, 20004, 'User has already been invited to the team');
+  },
 };
 
+// Define Error Handler
 exports.handler = (err) => {
   if (isNotFoundError(err)) {
     const boomErr = Boom.notFound(err.message);

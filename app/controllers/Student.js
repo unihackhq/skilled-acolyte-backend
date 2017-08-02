@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
 const StudentService = require('../services/StudentService');
-const SkilledError = require('../errors');
+const Errors = require('../errors');
 const validators = require('../validators');
 
 // [GET] /student
 exports.getAllStudents = {
   handler: (req, res) => {
     StudentService.listAll((err, results) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res({ status: 'Success', results });
     });
   },
@@ -19,8 +19,8 @@ exports.getStudentById = {
   handler: (req, res) => {
     const id = req.params.id;
     StudentService.getStudent(id, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
-      return res({ result });
+      if (err) return res(Errors.handler(err));
+      return res(result);
     });
   },
   validate: {
@@ -35,7 +35,7 @@ exports.createStudent = {
   handler: (req, res) => {
     const payload = req.payload;
     StudentService.createStudent(payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },
@@ -51,7 +51,7 @@ exports.updateStudentById = {
     const payload = req.payload;
 
     StudentService.updateStudent(id, payload, (err, result) => {
-      if (err) return res(SkilledError.handler(err));
+      if (err) return res(Errors.handler(err));
       return res(result);
     });
   },

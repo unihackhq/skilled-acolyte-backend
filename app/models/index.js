@@ -31,7 +31,7 @@ Object.keys(db).forEach((modelName) => {
 db.Student.hasOne(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
-  as: 'userInformation',
+  as: 'user',
 });
 
 // Each ticket belongs to a student - either as the original or current ticket

@@ -3,7 +3,6 @@
 const Student = require('../models').Student;
 const User = require('../models').User;
 const Error = require('../errors');
-const Response = require('../responses');
 
 const MODEL_NAME = 'student';
 
@@ -91,7 +90,10 @@ exports.deleteStudent = (id, callback) => {
       return student.destroy({ where: { id } })
         .then((result) => {
           if (!result) return callback(Error.invalid.failedToDelete(MODEL_NAME));
-          return callback(null, Response.successDelete(MODEL_NAME));
+          return callback(null, {
+            status: 'SUCCESS',
+            message: `Successfully deleted ${MODEL_NAME}`,
+          });
         });
     })
     .catch(error => callback(error));
