@@ -83,8 +83,7 @@ exports.bulkCreateStudent = (students, callback) => {
     return new Promise((resolve, reject) => {
       exports.createStudent(student, (error, result) => {
         if (error) {
-          callback(error);
-          reject();
+          return reject();
         }
         return resolve(result);
       });
@@ -94,6 +93,9 @@ exports.bulkCreateStudent = (students, callback) => {
   Promise.all(resultPromise)
     .then((result) => {
       callback(null, result);
+    })
+    .catch(() => {
+      return callback(Error.invalid.failedToCreate(MODEL_NAME));
     });
 };
 
