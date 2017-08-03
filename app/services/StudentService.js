@@ -42,6 +42,30 @@ exports.createStudent = (data, callback) => {
     });
 };
 
+exports.bulkCreateStudent = (students, callback) => {
+  const resultPromise = students.map((student) => {
+    // assign IDs manually
+    student.id = uuidv4();
+    student.user.id = student.id;
+
+    return new Promise((resolve, reject) => {
+      exports.createStudent(student, (error, result) => {
+        if (error) {
+          callback(error);
+          reject();
+        }
+        return resolve(result);
+      });
+    });
+  });
+
+  Promise.all(resultPromise)
+    .then((result) => {
+      callback(null, result);
+    });
+};
+
+
 exports.updateStudent = (id, payload, callback) => {
   Student.findById(id)
     .then((student) => {

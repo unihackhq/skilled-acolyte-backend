@@ -1,8 +1,9 @@
 const Joi = require('joi');
 const Boom = require('boom');
+const Errors = require('../errors');
 const Event = require('../models').Event;
-const Student = require('../models').Student;
-const User = require('../models').User;
+const StudentService = require('../services/StudentService');
+const EventService = require('../services/EventService');
 const responses = require('../responses');
 const ebService = require('../services/Eventbrite');
 
@@ -14,9 +15,10 @@ exports.prepoulateEvent = {
     const payload = req.payload;
     ebService.prepopulateEvent(payload.eventId)
       .then((data) => {
-        Event.create(data)
-          .then((result) => { res(result); })
-          .catch(() => { res(responses.internalError('create', 'event')); });
+        EventService.createEvent(data, (err, result) => {
+          if (err) return res(Errors.handler(err));
+          return res(result);
+        });
       })
       .catch((error) => {
         // print error (also the response if it's http error)
@@ -48,14 +50,10 @@ exports.prepoulateAttendees = {
 
         return ebService.prepopulateStudents(payload.eventId)
           .then((students) => {
-            User.bulkCreate(students)
-              .then((users) => {
-                return students.map((student, i) => Object.assign(student, { id: users[i].id }));
-              })
-              .then((studentsWithId) => {
-                Student.bulkCreate(studentsWithId)
-                  .then(() => res({ status: 'Success' }));
-              });
+            StudentService.bulkCreateStudent(students, (err, result) => {
+              if (err) return res(Errors.handler(err));
+              return res(result);
+            });
           })
           .catch((error) => {
             // print error (also the response if it's http error)
