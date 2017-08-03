@@ -12,12 +12,6 @@ exports.listAll = (callback) => {
     .catch(error => callback(error));
 };
 
-exports.listAll = (callback) => {
-  Student.findAll()
-    .then(results => callback(null, results))
-    .catch(error => callback(error));
-};
-
 exports.getStudent = (id, callback) => {
   Student.findById(id)
     .then((result) => {
