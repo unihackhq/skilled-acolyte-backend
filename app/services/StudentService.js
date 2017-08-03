@@ -3,7 +3,6 @@
 const Student = require('../models').Student;
 const User = require('../models').User;
 const Error = require('../errors');
-const uuidv4 = require('uuid/v4');
 
 const MODEL_NAME = 'student';
 
@@ -81,10 +80,6 @@ exports.createStudent = (data, callback) => {
 
 exports.bulkCreateStudent = (students, callback) => {
   const resultPromise = students.map((student) => {
-    // assign IDs manually
-    student.id = uuidv4();
-    student.user.id = student.id;
-
     return new Promise((resolve, reject) => {
       exports.createStudent(student, (error, result) => {
         if (error) {
