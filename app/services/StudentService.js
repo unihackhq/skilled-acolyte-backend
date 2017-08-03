@@ -29,11 +29,48 @@ exports.getStudent = (id, callback) => {
 };
 
 exports.createStudent = (data, callback) => {
-  // assign IDs manually
-  data.id = uuidv4();
-  data.user.id = data.id;
+  const CreateUserPromise = (payload) => {
+    let id;
+    const userId = payload.id;
+    const userObj = payload.user;
 
-  Student.create(data, { include: [{ model: User, as: 'user' }] })
+    return new Promise((resolve, reject) => {
+      if (userId) {
+        console.log('Identified User ID, bypassing CreateUserPromise');
+        id = userId;
+        return resolve({ id, payload });
+      }
+      return User.create(userObj)
+        .then((result) => {
+          const user = result.get({ plain: true });
+          id = user.id;
+          return resolve({ id, payload, user });
+        })
+        .catch(() => {
+          return reject(Error.invalid.failedToCreate('user (through student)'));
+        });
+    });
+  };
+
+  const CreateStudentPromise = ({ id, payload, user }) => {
+    return new Promise((resolve, reject) => {
+      payload.id = id;
+      return Student.create(payload)
+        .then((result) => {
+          const student = result.get({ plain: true });
+          if (user) {
+            student.user = user;
+          }
+          return resolve(student);
+        })
+        .catch(() => {
+          return reject(Error.invalid.failedToCreate(MODEL_NAME));
+        });
+    });
+  };
+
+  CreateUserPromise(data)
+    .then(CreateStudentPromise)
     .then((result) => {
       callback(null, result);
     })

@@ -28,7 +28,7 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // Each student is a user (though not every user is a student). Each student
 // also belongs to a University.
-db.Student.hasOne(db.User, {
+db.Student.belongsTo(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
   as: 'user'
