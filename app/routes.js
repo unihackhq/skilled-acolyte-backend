@@ -41,6 +41,6 @@ module.exports = [
   { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
   { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepoulateAttendees },
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepopulateEvent },
+  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepopulateAttendees },
 ];
