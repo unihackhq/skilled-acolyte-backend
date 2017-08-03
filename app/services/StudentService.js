@@ -3,6 +3,7 @@
 const Student = require('../models').Student;
 const User = require('../models').User;
 const Error = require('../errors');
+const uuidv4 = require('uuid/v4');
 
 const MODEL_NAME = 'student';
 
@@ -28,39 +29,11 @@ exports.getStudent = (id, callback) => {
 };
 
 exports.createStudent = (data, callback) => {
-  const CreateUserPromise = ({ id, payload, student }) => {
-    return new Promise((resolve, reject) => {
-      const userObj = payload.user;
-      userObj.id = id;
+  // assign IDs manually
+  data.id = uuidv4();
+  data.user.id = data.id;
 
-      return User.create(userObj)
-        .then((result) => {
-          student.user = result.get({ plain: true });
-          return resolve(student);
-        })
-        .catch((err) => {
-          console.log(err);
-          return reject(Error.invalid.failedToCreate('user (through student)'));
-        });
-    });
-  };
-
-  const CreateStudentPromise = (payload) => {
-    return new Promise((resolve, reject) => {
-      return Student.create(payload)
-        .then((result) => {
-          const id = result.id;
-          return resolve({ id, payload, student: result.get({ plain: true }) });
-        })
-        .catch((err) => {
-          console.log(err);
-          return reject(Error.invalid.failedToCreate(MODEL_NAME));
-        });
-    });
-  };
-
-  CreateStudentPromise(data)
-    .then(CreateUserPromise)
+  Student.create(data, { include: [{ model: User, as: 'user' }] })
     .then((result) => {
       callback(null, result);
     })
