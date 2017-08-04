@@ -45,7 +45,7 @@ db.Ticket.belongsTo(db.Student, { as: 'currentStudent' });
 
 // An event can have as many teams. A team can only 'belong' to an event. Hence
 // the use of a One-to-many association.
-db.Event.hasMany(db.Team, { as: 'Teams' });
+db.Event.hasMany(db.Team, { as: 'Teams', foreignKey: 'eventId' });
 
 // A team can have many students. A student can be in many teams. Hene the
 // Belongs to Many association.
