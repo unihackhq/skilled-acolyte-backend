@@ -127,7 +127,7 @@ exports.deleteStudent = (id, callback) => {
 };
 
 exports.getStudentDirectory = (callback) => {
-  Student.findAll({ include: [{ model: User }] })
+  Student.findAll({ include: [{ model: User, as: 'user' }] })
     .then((result) => {
       callback(null, result);
     })
