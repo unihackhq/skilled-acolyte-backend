@@ -29,13 +29,15 @@ const mapAttendeeToStudent = (attendee) => {
 
   return uniUtils.findCreateFromName(uni)
     .then(university => ({
-      firstName: attendee.profile.first_name,
-      lastName: attendee.profile.last_name,
-      preferredName: attendee.profile.first_name,
-      email: attendee.profile.email,
-      dateOfBirth: attendee.profile.birth_date,
-      gender: attendee.profile.gender,
-      mobile: attendee.profile.cell_phone,
+      user: {
+        firstName: attendee.profile.first_name,
+        lastName: attendee.profile.last_name,
+        preferredName: attendee.profile.first_name,
+        email: attendee.profile.email,
+        dateOfBirth: attendee.profile.birth_date,
+        gender: attendee.profile.gender,
+        mobile: attendee.profile.cell_phone
+      },
       university: university.id,
       studyLevel,
       // lol we didn't ask :P

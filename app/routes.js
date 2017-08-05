@@ -24,6 +24,7 @@ module.exports = [
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
   { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
   { method: 'GET', path: '/api/v1/students/{id}/teams', config: controllers.Student.getStudentTeamsById },
+  { method: 'POST', path: '/api/v1/students/{id}/teams', config: controllers.Student.assignTeam },
   { method: 'GET', path: '/api/v1/students/{id}/invites', config: controllers.Student.getStudentInvitesById },
 
   { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },
@@ -41,6 +42,6 @@ module.exports = [
   { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
   { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepoulateAttendees },
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepopulateEvent },
+  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepopulateAttendees },
 ];

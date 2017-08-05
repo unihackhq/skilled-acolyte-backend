@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 exports.payload = {
+  id: Joi.string(),
   firstName: Joi.string(),
   lastName: Joi.string(),
   preferredName: Joi.string(),

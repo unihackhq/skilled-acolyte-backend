@@ -24,16 +24,22 @@ exports.notFound = {
 // Define Invalid Errors
 exports.invalid = {
   failedToCreate: (modelName = 'object') => {
-    return new ErrorTemplate(INVALID_ERROR_NAME, 20001, `Failed to create ${modelName}`);
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20001', `Failed to create ${modelName}`);
   },
   failedToUpdate: (modelName = 'object') => {
-    return new ErrorTemplate(INVALID_ERROR_NAME, 20002, `Failed to update ${modelName}`);
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20002', `Failed to update ${modelName}`);
   },
   failedToDelete: (modelName = 'object') => {
-    return new ErrorTemplate(INVALID_ERROR_NAME, 20003, `Failed to delete ${modelName}`);
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20003', `Failed to delete ${modelName}`);
   },
   duplicateInvite: () => {
-    return new ErrorTemplate(INVALID_ERROR_NAME, 20004, 'User has already been invited to the team');
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20004', 'User has already been invited to the team');
+  },
+  outOfOrder: (modelName = 'object') => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20005', `You must create a ${modelName} first!`);
+  },
+  alreadyMember: () => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20006', 'User is already a member of the team');
   },
 };
 
