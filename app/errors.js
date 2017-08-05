@@ -38,6 +38,9 @@ exports.invalid = {
   outOfOrder: (modelName = 'object') => {
     return new ErrorTemplate(INVALID_ERROR_NAME, '20005', `You must create a ${modelName} first!`);
   },
+  alreadyMember: () => {
+    return new ErrorTemplate(INVALID_ERROR_NAME, '20006', 'User is already a member of the team');
+  },
 };
 
 // Define Error Handler

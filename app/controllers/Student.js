@@ -89,6 +89,27 @@ exports.getStudentTeamsById = {
   },
 };
 
+// [POST] /student/{id}/teams
+exports.assignTeam = {
+  handler: (req, res) => {
+    const teamId = req.payload.teamId;
+    const userId = req.params.id;
+
+    StudentService.joinTeam(teamId, userId, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+    payload: {
+      teamId: Joi.string().guid({ version: 'uuidv4' }),
+    }
+  },
+};
+
 // [GET] /student/{id}/invites
 exports.getStudentInvitesById = {
   handler: (req, res) => {

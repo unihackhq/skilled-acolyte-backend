@@ -24,6 +24,7 @@ module.exports = [
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
   { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
   { method: 'GET', path: '/api/v1/students/{id}/teams', config: controllers.Student.getStudentTeamsById },
+  { method: 'POST', path: '/api/v1/students/{id}/teams', config: controllers.Student.assignTeam },
   { method: 'GET', path: '/api/v1/students/{id}/invites', config: controllers.Student.getStudentInvitesById },
 
   { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },

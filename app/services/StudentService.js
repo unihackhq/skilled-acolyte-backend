@@ -2,7 +2,8 @@
 
 const Student = require('../models').Student;
 const User = require('../models').User;
-const Error = require('../errors');
+const Team = require('../models').Team;
+const Errors = require('../errors');
 
 const MODEL_NAME = 'student';
 
@@ -21,7 +22,7 @@ exports.listAll = (callback) => {
 exports.getStudent = (id, callback) => {
   Student.findById(id)
     .then((result) => {
-      if (!result) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      if (!result) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
       return callback(null, result);
     })
     .catch(error => callback(error));
@@ -46,7 +47,7 @@ exports.createStudent = (data, callback) => {
           return resolve({ id, payload, user });
         })
         .catch(() => {
-          return reject(Error.invalid.failedToCreate('user (through student)'));
+          return reject(Errors.invalid.failedToCreate('user (through student)'));
         });
     });
   };
@@ -63,7 +64,7 @@ exports.createStudent = (data, callback) => {
           return resolve(student);
         })
         .catch(() => {
-          return reject(Error.invalid.failedToCreate(MODEL_NAME));
+          return reject(Errors.invalid.failedToCreate(MODEL_NAME));
         });
     });
   };
@@ -95,7 +96,7 @@ exports.bulkCreateStudent = (students, callback) => {
       callback(null, result);
     })
     .catch(() => {
-      return callback(Error.invalid.failedToCreate(MODEL_NAME));
+      return callback(Errors.invalid.failedToCreate(MODEL_NAME));
     });
 };
 
@@ -103,7 +104,7 @@ exports.bulkCreateStudent = (students, callback) => {
 exports.updateStudent = (id, payload, callback) => {
   Student.findById(id)
     .then((student) => {
-      if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      if (!student) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
       return student.updateAttributes(payload)
         .then((result) => { callback(null, result); });
     })
@@ -113,10 +114,10 @@ exports.updateStudent = (id, payload, callback) => {
 exports.deleteStudent = (id, callback) => {
   Student.findById(id)
     .then((student) => {
-      if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      if (!student) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
       return student.destroy({ where: { id } })
         .then((result) => {
-          if (!result) return callback(Error.invalid.failedToDelete(MODEL_NAME));
+          if (!result) return callback(Errors.invalid.failedToDelete(MODEL_NAME));
           return callback(null, {
             status: 'SUCCESS',
             message: `Successfully deleted ${MODEL_NAME}`,
@@ -137,13 +138,45 @@ exports.getStudentDirectory = (callback) => {
 exports.getStudentTeams = (id, callback) => {
   Student.findById(id)
     .then((student) => {
-      if (!student) return callback(Error.notFound.modelNotFound(MODEL_NAME));
+      if (!student) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
       return student.getTeams({ joinTableAttributes: ['invited'] })
         .then((results) => {
           return callback(null, results);
         });
     })
     .catch(error => callback(error));
+};
+
+const assignTeam = (team, studentId, callback) => {
+  return team.setMembers(studentId, { invited: false })
+    .then((results) => {
+      console.log(results);
+      const result = results[0][0];
+      console.log(result);
+      if (!result) {
+        return callback(Errors.invalid.failedToCreate('member'));
+      }
+      if (result === 1) {
+        return callback(Errors.invalid.alreadyMember());
+      }
+      return callback(null, invitedResult);
+    });
+}
+
+exports.joinTeam = (teamId, studentId, callback) => {
+  Team.findById(teamId)
+    .then((team) => {
+      if (!team) return callback(Errors.notFound.modelNotFound('team'));
+      team.hasInvited(studentId)
+        .then((result) => {
+          if (result) {
+            team.removeInvited(studentId).then(() => {
+              assignTeam(team, studentId, callback);
+            });
+          }
+          assignTeam(team, studentId, callback);
+        });
+    });
 };
 
 exports.getStudentInvites = (id, callback) => {
