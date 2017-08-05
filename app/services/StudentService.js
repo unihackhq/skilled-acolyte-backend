@@ -153,15 +153,15 @@ const assignTeam = (team, studentId, callback) => {
       if (result === 1) {
         return callback(Errors.invalid.alreadyMember());
       }
-      return callback(null, invitedResult);
+      return callback(null, result);
     });
-}
+};
 
 exports.joinTeam = (teamId, studentId, callback) => {
   Team.findById(teamId)
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound('team'));
-      team.hasInvited(studentId)
+      return team.hasInvited(studentId)
         .then((result) => {
           if (result) {
             team.removeInvited(studentId).then(() => {
