@@ -1,1 +1,1 @@
-exports.maybeRequired = (req) => (input) => (req ? input.required() : input);
+exports.maybeRequired = req => input => (req ? input.required() : input);
