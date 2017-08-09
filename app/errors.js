@@ -32,7 +32,7 @@ exports.invalid = {
   failedToDelete: (modelName = 'object') => {
     return new ErrorTemplate(INVALID_ERROR_NAME, '20003', `Failed to delete ${modelName}`);
   },
-  duplicateInvite: () => {
+  alreadyInvited: () => {
     return new ErrorTemplate(INVALID_ERROR_NAME, '20004', 'User has already been invited to the team');
   },
   outOfOrder: (modelName = 'object') => {

@@ -78,16 +78,24 @@ exports.inviteTeamMember = (teamId, studentId, callback) => {
   Team.findById(teamId)
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return team.setInvited(studentId, { invited: true })
+      return team.hasMembers(studentId)
         .then((result) => {
-          const invitedResult = result[0][0];
-          if (!invitedResult) {
-            return callback(Errors.invalid.failedToCreate('invite'));
+          if (result) {
+            return callback(Errors.invalid.alreadyMember());
           }
-          if (invitedResult === 1) {
-            return callback(Errors.invalid.failedToInvite());
-          }
-          return callback(null, invitedResult);
+
+          return team.addInvited(studentId, { invited: true })
+            .then((results) => {
+              if (results.length === 0) {
+                return callback(Errors.invalid.alreadyInvited());
+              }
+
+              const result = results[0][0];
+              return callback(null, result);
+            })
+            .catch((error) => {
+              return callback(Errors.invalid.failedToCreate(MODEL_NAME));
+            });
         });
     });
 };

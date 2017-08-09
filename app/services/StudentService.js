@@ -142,18 +142,17 @@ exports.getStudentTeams = (id, callback) => {
 };
 
 const assignTeam = (team, studentId, callback) => {
-  return team.setMembers(studentId, { invited: false })
+  return team.addMembers(studentId, { invited: false })
     .then((results) => {
-      console.log(results);
-      const result = results[0][0];
-      console.log(result);
-      if (!result) {
-        return callback(Errors.invalid.failedToCreate('member'));
-      }
-      if (result === 1) {
+      if (results.length === 0) {
         return callback(Errors.invalid.alreadyMember());
       }
+
+      const result = results[0][0];
       return callback(null, result);
+    })
+    .catch((error) => {
+      return callback(Errors.invalid.failedToCreate('member'));
     });
 };
 
