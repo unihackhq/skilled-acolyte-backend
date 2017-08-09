@@ -40,7 +40,7 @@ exports.createTeam = {
     });
   },
   validate: {
-    payload: validators.Team.payload,
+    payload: validators.Team.payload(true),
   },
 };
 
@@ -55,7 +55,7 @@ exports.updateTeamById = {
     });
   },
   validate: {
-    payload: validators.Team.payload,
+    payload: validators.Team.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -72,7 +72,6 @@ exports.deleteTeamById = {
     });
   },
   validate: {
-    payload: validators.Team.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -123,7 +122,7 @@ exports.createTeamInvite = {
   },
   validate: {
     payload: {
-      userId: Joi.string().guid({ version: 'uuidv4' }),
+      userId: Joi.string().guid({ version: 'uuidv4' }).required(),
     },
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),

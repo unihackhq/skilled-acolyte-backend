@@ -40,7 +40,7 @@ exports.createUser = {
     });
   },
   validate: {
-    payload: validators.User.payload,
+    payload: validators.User.payload(true),
   },
 };
 
@@ -56,7 +56,7 @@ exports.updateUserById = {
     });
   },
   validate: {
-    payload: validators.User.payload,
+    payload: validators.User.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },

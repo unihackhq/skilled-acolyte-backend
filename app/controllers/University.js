@@ -40,7 +40,7 @@ exports.createUniversity = {
     });
   },
   validate: {
-    payload: validators.University.payload,
+    payload: validators.University.payload(true),
   },
 };
 
@@ -55,7 +55,7 @@ exports.updateUniversityById = {
     });
   },
   validate: {
-    payload: validators.University.payload,
+    payload: validators.University.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -72,7 +72,6 @@ exports.deleteUniversityById = {
     });
   },
   validate: {
-    payload: validators.University.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },

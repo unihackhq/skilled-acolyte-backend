@@ -50,7 +50,7 @@ exports.createStudent = {
     });
   },
   validate: {
-    payload: validators.Student.payload,
+    payload: validators.Student.payload(true),
   },
 };
 
@@ -66,7 +66,7 @@ exports.updateStudentById = {
     });
   },
   validate: {
-    payload: validators.Student.payload,
+    payload: validators.Student.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -105,7 +105,7 @@ exports.assignTeam = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
     payload: {
-      teamId: Joi.string().guid({ version: 'uuidv4' }),
+      teamId: Joi.string().guid({ version: 'uuidv4' }).required(),
     }
   },
 };

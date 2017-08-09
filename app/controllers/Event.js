@@ -40,7 +40,7 @@ exports.createEvent = {
     });
   },
   validate: {
-    payload: validators.Event.payload,
+    payload: validators.Event.payload(true),
   },
 };
 
@@ -55,7 +55,7 @@ exports.updateEventById = {
     });
   },
   validate: {
-    payload: validators.Event.payload,
+    payload: validators.Event.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -72,7 +72,6 @@ exports.deleteEventById = {
     });
   },
   validate: {
-    payload: validators.Event.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
