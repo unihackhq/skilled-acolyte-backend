@@ -9,7 +9,7 @@ exports.getStudentDirectory = {
   handler: (req, res) => {
     StudentService.getStudentDirectory((err, results) => {
       if (err) return res(Errors.handler(err));
-      return res({ status: 'Success', results });
+      return res(results);
     });
   },
 };
@@ -19,7 +19,7 @@ exports.getAllStudents = {
   handler: (req, res) => {
     StudentService.listAll((err, results) => {
       if (err) return res(Errors.handler(err));
-      return res({ status: 'Success', results });
+      return res(results);
     });
   },
 };

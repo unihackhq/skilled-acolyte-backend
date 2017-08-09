@@ -9,7 +9,7 @@ exports.getAllEvents = {
   handler: (req, res) => {
     EventService.listAll((err, results) => {
       if (err) return res(Errors.handler(err));
-      return res({ status: 'Success', results });
+      return res(results);
     });
   },
 };

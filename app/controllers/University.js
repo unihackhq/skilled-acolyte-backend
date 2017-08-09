@@ -9,7 +9,7 @@ exports.getAllUniversities = {
   handler: (req, res) => {
     UniversityService.listAll((err, results) => {
       if (err) return res(Errors.handler(err));
-      return res({ status: 'Success', results });
+      return res(results);
     });
   },
 };

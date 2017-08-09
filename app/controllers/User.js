@@ -9,7 +9,7 @@ exports.getAllUsers = {
   handler: (req, res) => {
     UserService.listAll((err, results) => {
       if (err) return res(Errors.handler(err));
-      return res({ status: 'Success', results });
+      return res(results);
     });
   },
 };
