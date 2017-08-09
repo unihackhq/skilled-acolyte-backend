@@ -35,7 +35,7 @@ exports.getStudentById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };

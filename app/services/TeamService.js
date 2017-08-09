@@ -79,8 +79,8 @@ exports.inviteTeamMember = (teamId, studentId, callback) => {
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
       return team.hasMembers(studentId)
-        .then((result) => {
-          if (result) {
+        .then((isMember) => {
+          if (isMember) {
             return callback(Errors.invalid.alreadyMember());
           }
 
@@ -93,7 +93,7 @@ exports.inviteTeamMember = (teamId, studentId, callback) => {
               const result = results[0][0];
               return callback(null, result);
             })
-            .catch((error) => {
+            .catch(() => {
               return callback(Errors.invalid.failedToCreate(MODEL_NAME));
             });
         });

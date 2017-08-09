@@ -25,7 +25,7 @@ exports.getUserById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -58,7 +58,7 @@ exports.updateUserById = {
   validate: {
     payload: validators.User.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -74,7 +74,7 @@ exports.deleteUserById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };

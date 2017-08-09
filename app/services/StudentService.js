@@ -151,7 +151,7 @@ const assignTeam = (team, studentId, callback) => {
       const result = results[0][0];
       return callback(null, result);
     })
-    .catch((error) => {
+    .catch(() => {
       return callback(Errors.invalid.failedToCreate('member'));
     });
 };
@@ -161,8 +161,8 @@ exports.joinTeam = (teamId, studentId, callback) => {
     .then((team) => {
       if (!team) return callback(Errors.notFound.modelNotFound('team'));
       return team.hasInvited(studentId)
-        .then((result) => {
-          if (result) {
+        .then((isInvited) => {
+          if (isInvited) {
             team.removeInvited(studentId).then(() => {
               assignTeam(team, studentId, callback);
             });

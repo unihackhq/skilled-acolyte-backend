@@ -25,7 +25,7 @@ exports.getUniversityById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -57,7 +57,7 @@ exports.updateUniversityById = {
   validate: {
     payload: validators.University.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -74,7 +74,7 @@ exports.deleteUniversityById = {
   validate: {
     payload: validators.University.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };

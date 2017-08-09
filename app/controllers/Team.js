@@ -25,7 +25,7 @@ exports.getTeamById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -57,7 +57,7 @@ exports.updateTeamById = {
   validate: {
     payload: validators.Team.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -74,7 +74,7 @@ exports.deleteTeamById = {
   validate: {
     payload: validators.Team.payload,
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -90,7 +90,7 @@ exports.getTeamMembers = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -106,7 +106,7 @@ exports.getTeamInvitesById = {
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -123,10 +123,10 @@ exports.createTeamInvite = {
   },
   validate: {
     payload: {
-      userId: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid user id')),
+      userId: Joi.string().guid({ version: 'uuidv4' }),
     },
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };

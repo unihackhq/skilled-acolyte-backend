@@ -12,7 +12,7 @@ const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
 exports.validate = {
   validate: {
     payload: {
-      token: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid token')),
+      token: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
   handler: (req, res) => {
