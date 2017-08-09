@@ -8,8 +8,5 @@ exports.payload = {
   email: Joi.string().email(),
   dateOfBirth: Joi.date(),
   gender: Joi.string(),
-  mobile: Joi.number(),
-  authId: Joi.number(),
-  accessToken: Joi.string().token(),
-  deactivated: Joi.boolean(),
+  mobile: Joi.number()
 };

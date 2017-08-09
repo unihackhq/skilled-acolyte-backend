@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
 exports.payload = {
-  name: Joi.string().required().error(new Error('Name is required')),
-  startDate: Joi.date().error(new Error('startDate needs to be in dateform')),
-  endDate: Joi.date().error(new Error('endDate needs to be in dateform')),
-  eventbriteId: Joi.string(),
-  eventbriteLink: Joi.string().uri(),
+  name: Joi.string(),
   location: Joi.string(),
-  timezone: Joi.string(),
-  logoUrl: Joi.string().uri(),
+  startDate: Joi.date(),
+  endDate: Joi.date(),
+  timezone: Joi.string().allow(null),
+  eventbriteId: Joi.string().allow(null),
+  eventbriteLink: Joi.string().uri().allow(null),
+  logoUrl: Joi.string().uri().allow(null)
 };
