@@ -163,11 +163,11 @@ exports.joinTeam = (teamId, studentId, callback) => {
       return team.hasInvited(studentId)
         .then((isInvited) => {
           if (isInvited) {
-            team.removeInvited(studentId).then(() => {
+            return team.removeInvited(studentId).then(() => {
               assignTeam(team, studentId, callback);
             });
           }
-          assignTeam(team, studentId, callback);
+          return assignTeam(team, studentId, callback);
         });
     });
 };
