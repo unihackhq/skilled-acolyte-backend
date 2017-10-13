@@ -1,33 +1,26 @@
 const Joi = require('joi');
 
-const Student = require('../models').Student;
-const User = require('../models').User;
+const StudentService = require('../services/StudentService');
+const Errors = require('../errors');
 const validators = require('../validators');
-const responses = require('../responses');
 
 // [GET] /student_directory
 exports.getStudentDirectory = {
   handler: (req, res) => {
-    Student.findAll({ include: [{ model: User }] })
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result.map(({ id, User: { firstName, lastName } }) => ({ id, name: `${firstName} ${lastName}` })),
-        });
-      });
+    StudentService.getStudentDirectory((err, results) => {
+      if (err) return res(Errors.handler(err));
+      return res(results);
+    });
   },
 };
 
 // [GET] /student
 exports.getAllStudents = {
   handler: (req, res) => {
-    Student.findAll()
-      .then((result) => {
-        res({
-          status: 'Success',
-          data: result,
-        });
-      });
+    StudentService.listAll((err, results) => {
+      if (err) return res(Errors.handler(err));
+      return res(results);
+    });
   },
 };
 
@@ -35,18 +28,14 @@ exports.getAllStudents = {
 exports.getStudentById = {
   handler: (req, res) => {
     const id = req.params.id;
-
-    Student.findById(id)
-      .then((result) => {
-        if (!result) {
-          return res(responses.notFound('student'));
-        }
-        return res(result);
-      });
+    StudentService.getStudent(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
     params: {
-      id: Joi.string().guid({ version: 'uuidv4' }).error(new Error('Not a valid id')),
+      id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
@@ -55,12 +44,13 @@ exports.getStudentById = {
 exports.createStudent = {
   handler: (req, res) => {
     const payload = req.payload;
-    return Student.create(payload)
-      .then((result) => { res(result); })
-      .catch(() => { res(responses.internalError('create', 'Student')); });
+    StudentService.createStudent(payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
-    payload: validators.Student.payload,
+    payload: validators.Student.payload(true),
   },
 };
 
@@ -70,24 +60,66 @@ exports.updateStudentById = {
     const id = req.params.id;
     const payload = req.payload;
 
-    Student.findById(id)
-      .then((student) => {
-        if (!student) {
-          return res(responses.notFound('student'));
-        }
-
-        return student.updateAttributes(payload)
-          .then((result) => {
-            if (!result) {
-              return res(responses.internalError('update', 'student'));
-            }
-
-            return res(result);
-          });
-      });
+    StudentService.updateStudent(id, payload, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
   },
   validate: {
-    payload: validators.Student.payload,
+    payload: validators.Student.payload(false),
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [GET] /student/{id}/teams
+exports.getStudentTeamsById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    StudentService.getStudentTeams(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [POST] /student/{id}/teams
+exports.assignTeam = {
+  handler: (req, res) => {
+    const teamId = req.payload.teamId;
+    const userId = req.params.id;
+
+    StudentService.joinTeam(teamId, userId, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+    payload: {
+      teamId: Joi.string().guid({ version: 'uuidv4' }).required(),
+    }
+  },
+};
+
+// [GET] /student/{id}/invites
+exports.getStudentInvitesById = {
+  handler: (req, res) => {
+    const id = req.params.id;
+    StudentService.getStudentInvites(id, (err, result) => {
+      if (err) return res(Errors.handler(err));
+      return res(result);
+    });
+  },
+  validate: {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },

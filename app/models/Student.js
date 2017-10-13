@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
   },
   university: {
     type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    allowNull: true,
   },
   studyLevel: {
     type: DataTypes.STRING,

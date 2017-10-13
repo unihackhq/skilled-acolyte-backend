@@ -12,7 +12,7 @@ module.exports = {
     const message = `There is no ${modelName} with that id`;
     return Boom.notFound(message);
   },
-  internalError: (command, modelName) => {
+  invalid: (command, modelName) => {
     const message = `Unable to ${command} ${modelName}`;
     return Boom.internal(message);
   },

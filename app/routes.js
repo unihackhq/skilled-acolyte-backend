@@ -23,6 +23,9 @@ module.exports = [
   { method: 'POST', path: '/api/v1/students', config: controllers.Student.createStudent },
   { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
   { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
+  { method: 'GET', path: '/api/v1/students/{id}/teams', config: controllers.Student.getStudentTeamsById },
+  { method: 'POST', path: '/api/v1/students/{id}/teams', config: controllers.Student.assignTeam },
+  { method: 'GET', path: '/api/v1/students/{id}/invites', config: controllers.Student.getStudentInvitesById },
 
   { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },
   { method: 'POST', path: '/api/v1/users', config: controllers.User.createUser },
@@ -35,7 +38,10 @@ module.exports = [
   { method: 'GET', path: '/api/v1/teams/{id}', config: controllers.Team.getTeamById },
   { method: 'PUT', path: '/api/v1/teams/{id}', config: controllers.Team.updateTeamById },
   { method: 'DELETE', path: '/api/v1/teams/{id}', config: controllers.Team.deleteTeamById },
+  { method: 'GET', path: '/api/v1/teams/{id}/members', config: controllers.Team.getTeamMembers },
+  { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
+  { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepoulateEvent },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepoulateAttendees },
+  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepopulateEvent },
+  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepopulateAttendees },
 ];

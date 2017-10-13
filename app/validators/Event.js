@@ -1,10 +1,17 @@
 const Joi = require('joi');
+const maybeRequired = require('../util/validators').maybeRequired;
 
-exports.payload = {
-  name: Joi.string().required().error(new Error('Name is required')),
-  startDate: Joi.date().error(new Error('startDate needs to be in dateform')),
-  endDate: Joi.date().error(new Error('endDate needs to be in dateform')),
-  eventbriteLink: Joi.string().uri(),
-  location: Joi.string(),
-  logoUrl: Joi.string().uri(),
+exports.payload = (isReq) => {
+  const req = maybeRequired(isReq);
+  return {
+    id: Joi.string().guid({ version: 'uuidv4' }),
+    name: req(Joi.string()),
+    location: req(Joi.string()),
+    startDate: req(Joi.date()),
+    endDate: req(Joi.date()),
+    timezone: Joi.string().allow(null),
+    eventbriteId: Joi.string().allow(null),
+    eventbriteLink: Joi.string().uri().allow(null),
+    logoUrl: Joi.string().uri().allow(null)
+  };
 };
