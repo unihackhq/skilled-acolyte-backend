@@ -12,9 +12,6 @@ A hackathon management system with the following features:
 
 # Development
 ```Bash
-yarn install
-```
-```Bash
 docker-compose up
 ```
 
