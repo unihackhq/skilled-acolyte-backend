@@ -27,7 +27,7 @@ exports.getAllStudents = {
 // [GET] /student/{id}
 exports.getStudentById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     StudentService.getStudent(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -43,7 +43,7 @@ exports.getStudentById = {
 // [POST] /student
 exports.createStudent = {
   handler: (req, res) => {
-    const payload = req.payload;
+    const { payload } = req;
     StudentService.createStudent(payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -57,8 +57,8 @@ exports.createStudent = {
 // [PUT] /Student/{id}
 exports.updateStudentById = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const payload = req.payload;
+    const { id } = req.params;
+    const { payload } = req;
 
     StudentService.updateStudent(id, payload, (err, result) => {
       if (err) return res(Errors.handler(err));
@@ -76,7 +76,7 @@ exports.updateStudentById = {
 // [GET] /student/{id}/teams
 exports.getStudentTeamsById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     StudentService.getStudentTeams(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -92,8 +92,8 @@ exports.getStudentTeamsById = {
 // [POST] /student/{id}/teams
 exports.assignTeam = {
   handler: (req, res) => {
-    const teamId = req.payload.teamId;
-    const userId = req.params.id;
+    const { teamId } = req.payload;
+    const { userId } = req.params;
 
     StudentService.joinTeam(teamId, userId, (err, result) => {
       if (err) return res(Errors.handler(err));
@@ -113,7 +113,7 @@ exports.assignTeam = {
 // [GET] /student/{id}/invites
 exports.getStudentInvitesById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     StudentService.getStudentInvites(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);

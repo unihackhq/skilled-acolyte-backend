@@ -17,7 +17,7 @@ exports.getAllUniversities = {
 // [GET] /university/{id}
 exports.getUniversityById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     UniversityService.getUniversity(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -33,7 +33,7 @@ exports.getUniversityById = {
 // [POST] /university
 exports.createUniversity = {
   handler: (req, res) => {
-    const payload = req.payload;
+    const { payload } = req;
     UniversityService.createUniversity(payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -47,8 +47,8 @@ exports.createUniversity = {
 // [PUT] /university/{id}
 exports.updateUniversityById = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const payload = req.payload;
+    const { id } = req.params;
+    const { payload } = req;
     UniversityService.updateUniversity(id, payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -65,7 +65,7 @@ exports.updateUniversityById = {
 // [DELETE] /university/{id}
 exports.deleteUniversityById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     UniversityService.deleteUniversity(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);

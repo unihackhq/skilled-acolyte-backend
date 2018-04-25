@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const maybeRequired = require('../util/validators').maybeRequired;
+const { maybeRequired } = require('../util/validators');
 
 exports.payload = (isReq) => {
   const req = maybeRequired(isReq);

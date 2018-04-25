@@ -1,8 +1,8 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
-const Student = require('../models').Student;
-const User = require('../models').User;
-const Team = require('../models').Team;
+const { Student } = require('../models');
+const { User } = require('../models');
+const { Team } = require('../models');
 const Errors = require('../errors');
 
 const MODEL_NAME = 'student';
@@ -24,21 +24,18 @@ exports.getStudent = (id, callback) => {
 
 exports.createStudent = (data, callback) => {
   const CreateUserPromise = (payload) => {
-    let id;
     const userId = payload.id;
     const userObj = payload.user;
 
     return new Promise((resolve, reject) => {
       if (userId) {
         console.log('Identified User ID, bypassing CreateUserPromise');
-        id = userId;
-        return resolve({ id, payload });
+        return resolve({ id: userId, payload });
       }
       return User.create(userObj)
         .then((result) => {
           const user = result.get({ plain: true });
-          id = user.id;
-          return resolve({ id, payload, user });
+          return resolve({ id: user.id, payload, user });
         })
         .catch(() => {
           return reject(Errors.invalid.failedToCreate('user (through student)'));

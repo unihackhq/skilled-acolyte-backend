@@ -17,7 +17,7 @@ exports.getAllUsers = {
 // [GET] /user/{id}
 exports.getUserById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     UserService.getUser(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -33,7 +33,7 @@ exports.getUserById = {
 // [POST] /user
 exports.createUser = {
   handler: (req, res) => {
-    const payload = req.payload;
+    const { payload } = req;
     UserService.createUser(payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -47,8 +47,8 @@ exports.createUser = {
 // [PUT] /user/{id}
 exports.updateUserById = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const payload = req.payload;
+    const { id } = req.params;
+    const { payload } = req;
 
     UserService.updateUser(id, payload, (err, result) => {
       if (err) return res(Errors.handler(err));
@@ -66,7 +66,7 @@ exports.updateUserById = {
 // [DELETE] /user/{id}
 exports.deleteUserById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     UserService.deleteUser(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
