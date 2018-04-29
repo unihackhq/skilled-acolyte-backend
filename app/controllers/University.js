@@ -4,17 +4,17 @@ const UniversityService = require('../services/UniversityService');
 const validators = require('../validators');
 
 // [GET] /universities
-exports.getAllUniversities = {
+exports.list = {
   handler: async (req, h) => {
-    return UniversityService.listAll();
+    return UniversityService.list();
   },
 };
 
 // [GET] /universities/{id}
-exports.getUniversityById = {
+exports.get = {
   handler: async (req, h) => {
     const { id } = req.params;
-    return UniversityService.getUniversity(id);
+    return UniversityService.get(id);
   },
   validate: {
     params: {
@@ -24,10 +24,10 @@ exports.getUniversityById = {
 };
 
 // [POST] /universities
-exports.createUniversity = {
+exports.create = {
   handler: async (req, h) => {
     const { payload } = req;
-    return UniversityService.createUniversity(payload);
+    return UniversityService.create(payload);
   },
   validate: {
     payload: validators.University.payload(true),
@@ -35,11 +35,11 @@ exports.createUniversity = {
 };
 
 // [PUT] /universities/{id}
-exports.updateUniversityById = {
+exports.update = {
   handler: async (req, h) => {
     const { id } = req.params;
     const { payload } = req;
-    return UniversityService.updateUniversity(id, payload);
+    return UniversityService.update(id, payload);
   },
   validate: {
     payload: validators.University.payload(false),
@@ -50,10 +50,10 @@ exports.updateUniversityById = {
 };
 
 // [DELETE] /universities/{id}
-exports.deleteUniversityById = {
+exports.delete = {
   handler: async (req, h) => {
     const { id } = req.params;
-    return UniversityService.deleteUniversity(id);
+    return UniversityService.delete(id);
   },
   validate: {
     params: {

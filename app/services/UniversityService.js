@@ -1,19 +1,17 @@
 const Boom = require('boom');
 const { University } = require('../models');
 
-const MODEL_NAME = 'university';
-
-exports.listAll = async () => {
+exports.list = async () => {
   return University.findAll();
 };
 
-exports.getUniversity = async (id) => {
+exports.get = async (id) => {
   const result = await University.findById(id);
   if (!result) throw Boom.notFound('Could not find the university');
   return result;
 };
 
-exports.createUniversity = async (payload) => {
+exports.create = async (payload) => {
   try {
     const result = await University.create(payload);
     return result;
@@ -22,13 +20,13 @@ exports.createUniversity = async (payload) => {
   }
 };
 
-exports.updateUniversity = async (id, payload) => {
+exports.update = async (id, payload) => {
   const result = await University.findById(id);
   if (!result) throw Boom.notFound('Could not find the university');
   return result.updateAttributes(payload);
 };
 
-exports.deleteUniversity = async (id) => {
+exports.delete = async (id) => {
   const result = await University.findById(id);
   if (!result) throw Boom.notFound('Could not find the university');
 

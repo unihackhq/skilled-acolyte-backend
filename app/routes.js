@@ -9,11 +9,11 @@ module.exports = [
   { method: 'POST', path: '/api/v1/token', options: t(controllers.Token.validate) },
   { method: 'GET', path: '/api/v1/token/{email}', options: t(controllers.Token.request) },
 
-  { method: 'GET', path: '/api/v1/universities', options: t(controllers.University.getAllUniversities) },
-  { method: 'POST', path: '/api/v1/universities', options: t(controllers.University.createUniversity) },
-  { method: 'GET', path: '/api/v1/universities/{id}', options: t(controllers.University.getUniversityById) },
-  { method: 'PUT', path: '/api/v1/universities/{id}', options: t(controllers.University.updateUniversityById) },
-  { method: 'DELETE', path: '/api/v1/universities/{id}', options: t(controllers.University.deleteUniversityById) },
+  { method: 'GET', path: '/api/v1/universities', options: t(controllers.University.list) },
+  { method: 'GET', path: '/api/v1/universities/{id}', options: t(controllers.University.get) },
+  { method: 'POST', path: '/api/v1/universities', options: t(controllers.University.create) },
+  { method: 'PUT', path: '/api/v1/universities/{id}', options: t(controllers.University.update) },
+  { method: 'DELETE', path: '/api/v1/universities/{id}', options: t(controllers.University.delete) },
 
   { method: 'GET', path: '/api/v1/events', options: t(controllers.Event.getAllEvents) },
   { method: 'POST', path: '/api/v1/events', options: t(controllers.Event.createEvent) },
