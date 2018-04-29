@@ -5,14 +5,14 @@ const validator = require('../validators').User;
 
 // [GET] /users
 exports.list = {
-  handler: async (req, h) => {
+  handler: async () => {
     return service.list();
   },
 };
 
 // [GET] /users/{id}
 exports.get = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     return service.get(id);
   },
@@ -25,7 +25,7 @@ exports.get = {
 
 // [POST] /users
 exports.create = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { payload } = req;
     return service.create(payload);
   },
@@ -36,7 +36,7 @@ exports.create = {
 
 // [PUT] /users/{id}
 exports.update = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     const { payload } = req;
     return service.update(id, payload);
@@ -51,7 +51,7 @@ exports.update = {
 
 // [DELETE] /users/{id}
 exports.delete = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     return service.delete(id);
   },

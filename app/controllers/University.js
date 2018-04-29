@@ -5,14 +5,14 @@ const validator = require('../validators').University;
 
 // [GET] /universities
 exports.list = {
-  handler: async (req, h) => {
+  handler: async () => {
     return service.list();
   },
 };
 
 // [GET] /universities/{id}
 exports.get = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     return service.get(id);
   },
@@ -25,7 +25,7 @@ exports.get = {
 
 // [POST] /universities
 exports.create = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { payload } = req;
     return service.create(payload);
   },
@@ -36,7 +36,7 @@ exports.create = {
 
 // [PUT] /universities/{id}
 exports.update = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     const { payload } = req;
     return service.update(id, payload);
@@ -51,7 +51,7 @@ exports.update = {
 
 // [DELETE] /universities/{id}
 exports.delete = {
-  handler: async (req, h) => {
+  handler: async (req) => {
     const { id } = req.params;
     return service.delete(id);
   },

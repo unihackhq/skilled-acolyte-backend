@@ -1,7 +1,7 @@
 const controllers = require('./controllers');
 
 // transform the route options to include CORS access control options
-const t = (options) => ({ cors: { origin: 'ignore' }, ...options});
+const t = options => ({ cors: { origin: 'ignore' }, ...options });
 
 module.exports = [
   { method: 'GET', path: '/api/v1/test', options: t(controllers.Example.get) },
