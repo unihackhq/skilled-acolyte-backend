@@ -15,11 +15,11 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/universities/{id}', options: t(controllers.University.update) },
   { method: 'DELETE', path: '/api/v1/universities/{id}', options: t(controllers.University.delete) },
 
-  { method: 'GET', path: '/api/v1/events', options: t(controllers.Event.getAllEvents) },
-  { method: 'POST', path: '/api/v1/events', options: t(controllers.Event.createEvent) },
-  { method: 'GET', path: '/api/v1/events/{id}', options: t(controllers.Event.getEventById) },
-  { method: 'PUT', path: '/api/v1/events/{id}', options: t(controllers.Event.updateEventById) },
-  { method: 'DELETE', path: '/api/v1/events/{id}', options: t(controllers.Event.deleteEventById) },
+  { method: 'GET', path: '/api/v1/events', options: t(controllers.Event.list) },
+  { method: 'GET', path: '/api/v1/events/{id}', options: t(controllers.Event.get) },
+  { method: 'POST', path: '/api/v1/events', options: t(controllers.Event.create) },
+  { method: 'PUT', path: '/api/v1/events/{id}', options: t(controllers.Event.update) },
+  { method: 'DELETE', path: '/api/v1/events/{id}', options: t(controllers.Event.delete) },
 
   { method: 'GET', path: '/api/v1/students', options: t(controllers.Student.list) },
   { method: 'GET', path: '/api/v1/students/directory', options: t(controllers.Student.directory) },

@@ -1,27 +1,20 @@
 const Joi = require('joi');
 
-const EventService = require('../services/EventService');
-const Errors = require('../errors');
-const validators = require('../validators');
+const service = require('../services/EventService');
+const validator = require('../validators').Event;
 
 // [GET] /events
-exports.getAllEvents = {
-  handler: (req, res) => {
-    EventService.listAll((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+exports.list = {
+  handler: async () => {
+    return service.list();
   },
 };
 
-// [GET] /event/{id}
-exports.getEventById = {
-  handler: (req, res) => {
+// [GET] /events/{id}
+exports.get = {
+  handler: async (req) => {
     const { id } = req.params;
-    EventService.getEvent(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.get(id);
   },
   validate: {
     params: {
@@ -30,46 +23,37 @@ exports.getEventById = {
   },
 };
 
-// [POST] /event
-exports.createEvent = {
-  handler: (req, res) => {
+// [POST] /events
+exports.create = {
+  handler: async (req) => {
     const { payload } = req;
-    EventService.createEvent(payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.create(payload);
   },
   validate: {
-    payload: validators.Event.payload(true),
+    payload: validator.payload(true),
   },
 };
 
-// [PUT] /event/{id}
-exports.updateEventById = {
-  handler: (req, res) => {
+// [PUT] /events/{id}
+exports.update = {
+  handler: async (req) => {
     const { id } = req.params;
     const { payload } = req;
-    EventService.updateEvent(id, payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.update(id, payload);
   },
   validate: {
-    payload: validators.Event.payload(false),
+    payload: validator.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
 
-// [DELETE] /event/{id}
-exports.deleteEventById = {
-  handler: (req, res) => {
+// [DELETE] /events/{id}
+exports.delete = {
+  handler: async (req) => {
     const { id } = req.params;
-    EventService.deleteEvent(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.delete(id);
   },
   validate: {
     params: {

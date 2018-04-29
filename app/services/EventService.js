@@ -1,51 +1,38 @@
+const Boom = require('boom');
 const { Event } = require('../models');
-const Errors = require('../errors');
 
-const MODEL_NAME = 'event';
-
-exports.listAll = (callback) => {
-  Event.findAll()
-    .then(results => callback(null, results))
-    .catch(error => callback(error));
+exports.list = async () => {
+  return Event.findAll();
 };
 
-exports.getEvent = (id, callback) => {
-  Event.findById(id)
-    .then((result) => {
-      if (!result) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return callback(null, result);
-    })
-    .catch(error => callback(error));
+
+exports.get = async (id) => {
+  const result = await Event.findById(id);
+  if (!result) throw Boom.notFound('Could not find the event');
+  return result;
 };
 
-exports.createEvent = (payload, callback) => {
-  Event.create(payload)
-    .then(result => callback(null, result))
-    .catch(() => callback(Errors.invalid.failedToCreate(MODEL_NAME)));
+exports.create = async (payload) => {
+  try {
+    const result = await Event.create(payload);
+    return result;
+  } catch (err) {
+    throw Boom.internal('Could not create the event');
+  }
 };
 
-exports.updateEvent = (id, payload, callback) => {
-  Event.findById(id)
-    .then((result) => {
-      if (!result) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return result.updateAttributes(payload)
-        .then((update) => { callback(null, update); });
-    })
-    .catch(error => callback(error));
+exports.update = async (id, payload) => {
+  const result = await Event.findById(id);
+  if (!result) throw Boom.notFound('Could not find the event');
+  return result.updateAttributes(payload);
 };
 
-exports.deleteEvent = (id, callback) => {
-  Event.findById(id)
-    .then((result) => {
-      if (!result) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return result.destroy({ where: { id } })
-        .then((deleted) => {
-          if (!deleted) return callback(Errors.invalid.failedToDelete(MODEL_NAME));
-          return callback(null, {
-            status: 'SUCCESS',
-            message: `Successfully deleted ${MODEL_NAME}`,
-          });
-        });
-    })
-    .catch(error => callback(error));
+exports.delete = async (id) => {
+  const result = await Event.findById(id);
+  if (!result) throw Boom.notFound('Could not find the event');
+
+  const deleted = await result.destroy({ where: { id } });
+  if (!deleted) throw Boom.internal('Could not delete the event');
+
+  return {};
 };
