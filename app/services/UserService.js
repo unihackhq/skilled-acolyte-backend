@@ -1,53 +1,37 @@
+const Boom = require('boom');
 const { User } = require('../models');
-const Errors = require('../errors');
 
-const MODEL_NAME = 'user';
-
-exports.listAll = (callback) => {
-  User.findAll()
-    .then(results => callback(null, results))
-    .catch(error => callback(error));
+exports.list = async () => {
+  return User.findAll();
 };
 
-exports.getUser = (id, callback) => {
-  User.findById(id)
-    .then((result) => {
-      if (!result) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return callback(null, result);
-    })
-    .catch(error => callback(error));
+exports.get = async (id) => {
+  const result = await User.findById(id);
+  if (!result) throw Boom.notFound('Could not find the user');
+  return result;
 };
 
-exports.createUser = (payload, callback) => {
-  User.create(payload)
-    .then(result => callback(null, result))
-    .catch(() => callback(Errors.invalid.failedToCreate(MODEL_NAME)));
+exports.create = async (payload) => {
+  try {
+    const result = await User.create(payload);
+    return result;
+  } catch (err) {
+    throw Boom.internal('Could not create the user');
+  }
 };
 
-exports.updateUser = (id, payload, callback) => {
-  User.findById(id)
-    .then((user) => {
-      if (!user) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
-      return user.updateAttributes(payload)
-        .then((result) => { callback(null, result); });
-    })
-    .catch(error => callback(error));
+exports.update = async (id, payload) => {
+  const result = await User.findById(id);
+  if (!result) throw Boom.notFound('Could not find the user');
+  return result.updateAttributes(payload);
 };
 
-exports.deleteUser = (id, callback) => {
-  User.findById(id)
-    .then((user) => {
-      if (!user) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
+exports.delete = async (id) => {
+  const result = await User.findById(id);
+  if (!result) throw Boom.notFound('Could not find the user');
 
-      // Soft delete
-      return user.updateAttributes({ deactivated: true })
-        .then((result) => {
-          if (!result) return callback(Errors.invalid.failedToDelete(MODEL_NAME));
-          return callback(null, {
-            status: 'SUCCESS',
-            message: `Successfully deleted ${MODEL_NAME}`,
-          });
-        });
-    })
-    .catch(error => callback(error));
+  const deactivated = result.updateAttributes({ deactivated: true });
+  if (!deactivated) throw Boom.internal('Could not delete the user');
+
+  return {};
 };

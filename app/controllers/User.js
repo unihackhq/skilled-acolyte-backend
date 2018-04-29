@@ -1,27 +1,20 @@
 const Joi = require('joi');
 
-const UserService = require('../services/UserService');
-const Errors = require('../errors');
-const validators = require('../validators');
+const service = require('../services/UserService');
+const validator = require('../validators').User;
 
-// [GET] /user
-exports.getAllUsers = {
-  handler: (req, res) => {
-    UserService.listAll((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+// [GET] /users
+exports.list = {
+  handler: async (req, h) => {
+    return service.list();
   },
 };
 
-// [GET] /user/{id}
-exports.getUserById = {
-  handler: (req, res) => {
+// [GET] /users/{id}
+exports.get = {
+  handler: async (req, h) => {
     const { id } = req.params;
-    UserService.getUser(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.get(id);
   },
   validate: {
     params: {
@@ -30,47 +23,37 @@ exports.getUserById = {
   },
 };
 
-// [POST] /user
-exports.createUser = {
-  handler: (req, res) => {
+// [POST] /users
+exports.create = {
+  handler: async (req, h) => {
     const { payload } = req;
-    UserService.createUser(payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.create(payload);
   },
   validate: {
-    payload: validators.User.payload(true),
+    payload: validator.payload(true),
   },
 };
 
-// [PUT] /user/{id}
-exports.updateUserById = {
-  handler: (req, res) => {
+// [PUT] /users/{id}
+exports.update = {
+  handler: async (req, h) => {
     const { id } = req.params;
     const { payload } = req;
-
-    UserService.updateUser(id, payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.update(id, payload);
   },
   validate: {
-    payload: validators.User.payload(false),
+    payload: validator.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
 
-// [DELETE] /user/{id}
-exports.deleteUserById = {
-  handler: (req, res) => {
+// [DELETE] /users/{id}
+exports.delete = {
+  handler: async (req, h) => {
     const { id } = req.params;
-    UserService.deleteUser(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.delete(id);
   },
   validate: {
     params: {
