@@ -1,27 +1,20 @@
 const Joi = require('joi');
 
 const UniversityService = require('../services/UniversityService');
-const Errors = require('../errors');
 const validators = require('../validators');
 
-// [GET] /university
+// [GET] /universities
 exports.getAllUniversities = {
-  handler: (req, res) => {
-    UniversityService.listAll((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+  handler: async (req, h) => {
+    return UniversityService.listAll();
   },
 };
 
-// [GET] /university/{id}
+// [GET] /universities/{id}
 exports.getUniversityById = {
-  handler: (req, res) => {
+  handler: async (req, h) => {
     const { id } = req.params;
-    UniversityService.getUniversity(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return UniversityService.getUniversity(id);
   },
   validate: {
     params: {
@@ -30,29 +23,23 @@ exports.getUniversityById = {
   },
 };
 
-// [POST] /university
+// [POST] /universities
 exports.createUniversity = {
-  handler: (req, res) => {
+  handler: async (req, h) => {
     const { payload } = req;
-    UniversityService.createUniversity(payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return UniversityService.createUniversity(payload);
   },
   validate: {
     payload: validators.University.payload(true),
   },
 };
 
-// [PUT] /university/{id}
+// [PUT] /universities/{id}
 exports.updateUniversityById = {
-  handler: (req, res) => {
+  handler: async (req, h) => {
     const { id } = req.params;
     const { payload } = req;
-    UniversityService.updateUniversity(id, payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return UniversityService.updateUniversity(id, payload);
   },
   validate: {
     payload: validators.University.payload(false),
@@ -62,14 +49,11 @@ exports.updateUniversityById = {
   },
 };
 
-// [DELETE] /university/{id}
+// [DELETE] /universities/{id}
 exports.deleteUniversityById = {
-  handler: (req, res) => {
+  handler: async (req, h) => {
     const { id } = req.params;
-    UniversityService.deleteUniversity(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return UniversityService.deleteUniversity(id);
   },
   validate: {
     params: {
