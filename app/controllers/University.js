@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
-const UniversityService = require('../services/UniversityService');
-const validators = require('../validators');
+const service = require('../services/UniversityService');
+const validator = require('../validators').University;
 
 // [GET] /universities
 exports.list = {
   handler: async (req, h) => {
-    return UniversityService.list();
+    return service.list();
   },
 };
 
@@ -14,7 +14,7 @@ exports.list = {
 exports.get = {
   handler: async (req, h) => {
     const { id } = req.params;
-    return UniversityService.get(id);
+    return service.get(id);
   },
   validate: {
     params: {
@@ -27,10 +27,10 @@ exports.get = {
 exports.create = {
   handler: async (req, h) => {
     const { payload } = req;
-    return UniversityService.create(payload);
+    return service.create(payload);
   },
   validate: {
-    payload: validators.University.payload(true),
+    payload: validator.payload(true),
   },
 };
 
@@ -39,10 +39,10 @@ exports.update = {
   handler: async (req, h) => {
     const { id } = req.params;
     const { payload } = req;
-    return UniversityService.update(id, payload);
+    return service.update(id, payload);
   },
   validate: {
-    payload: validators.University.payload(false),
+    payload: validator.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -53,7 +53,7 @@ exports.update = {
 exports.delete = {
   handler: async (req, h) => {
     const { id } = req.params;
-    return UniversityService.delete(id);
+    return service.delete(id);
   },
   validate: {
     params: {
