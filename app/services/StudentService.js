@@ -87,9 +87,7 @@ exports.teams = async (id) => {
 
 const assignTeam = async (team, studentId) => {
   const results = await team.addMembers(studentId, { invited: false });
-  if (results.length === 0) {
-    throw Boom.badRequest('The student is already a member of the team');
-  }
+  if (results.length === 0) throw Boom.badRequest('The student is already a member of the team');
 
   return results[0][0];
 };

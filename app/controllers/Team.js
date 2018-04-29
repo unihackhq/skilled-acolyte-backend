@@ -1,27 +1,20 @@
 const Joi = require('joi');
 
-const TeamService = require('../services/TeamService');
-const Errors = require('../errors');
-const validators = require('../validators');
+const service = require('../services/TeamService');
+const validator = require('../validators').Team;
 
 // [GET] /teams
-exports.getAllTeams = {
-  handler: (req, res) => {
-    TeamService.listAll((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+exports.list = {
+  handler: async () => {
+    return service.list();
   },
 };
 
 // [GET] /teams/{id}
-exports.getTeamById = {
-  handler: (req, res) => {
+exports.get = {
+  handler: async (req) => {
     const { id } = req.params;
-    TeamService.getTeam(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.get(id);
   },
   validate: {
     params: {
@@ -31,31 +24,25 @@ exports.getTeamById = {
 };
 
 // [POST] /teams
-exports.createTeam = {
-  handler: (req, res) => {
+exports.create = {
+  handler: async (req) => {
     const { payload } = req;
-    TeamService.createTeam(payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.create(payload);
   },
   validate: {
-    payload: validators.Team.payload(true),
+    payload: validator.payload(true),
   },
 };
 
 // [PUT] /teams/{id}
-exports.updateTeamById = {
-  handler: (req, res) => {
+exports.update = {
+  handler: async (req) => {
     const { id } = req.params;
     const { payload } = req;
-    TeamService.updateTeam(id, payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.update(id, payload);
   },
   validate: {
-    payload: validators.Team.payload(false),
+    payload: validator.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
@@ -63,13 +50,10 @@ exports.updateTeamById = {
 };
 
 // [DELETE] /teams/{id}
-exports.deleteTeamById = {
-  handler: (req, res) => {
+exports.delete = {
+  handler: async (req) => {
     const { id } = req.params;
-    TeamService.deleteTeam(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.delete(id);
   },
   validate: {
     params: {
@@ -78,14 +62,11 @@ exports.deleteTeamById = {
   },
 };
 
-// [GET] /teams/{id}/people
-exports.getTeamMembers = {
-  handler: (req, res) => {
+// [GET] /teams/{id}/members
+exports.members = {
+  handler: async (req) => {
     const { id } = req.params;
-    TeamService.getTeamMembers(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.members(id);
   },
   validate: {
     params: {
@@ -95,13 +76,10 @@ exports.getTeamMembers = {
 };
 
 // [GET] /teams/{id}/invites
-exports.getTeamInvitesById = {
-  handler: (req, res) => {
+exports.invites = {
+  handler: async (req) => {
     const { id } = req.params;
-    TeamService.getTeamMemberInvites(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.invites(id);
   },
   validate: {
     params: {
@@ -111,14 +89,11 @@ exports.getTeamInvitesById = {
 };
 
 // [POST] /teams/{id}/invites
-exports.createTeamInvite = {
-  handler: (req, res) => {
+exports.invite = {
+  handler: (req) => {
     const { id } = req.params;
     const { userId } = req.payload;
-    TeamService.inviteTeamMember(id, userId, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.invite(id, userId);
   },
   validate: {
     payload: {

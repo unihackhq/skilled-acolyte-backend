@@ -5,7 +5,6 @@ exports.list = async () => {
   return Event.findAll();
 };
 
-
 exports.get = async (id) => {
   const result = await Event.findById(id);
   if (!result) throw Boom.notFound('Could not find the event');
