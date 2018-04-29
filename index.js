@@ -1,5 +1,4 @@
 const Hapi = require('hapi');
-const corsHeaders = require('hapi-cors-headers');
 
 const env = require('./env');
 const routes = require('./app/routes');
@@ -21,8 +20,6 @@ const init = async () => {
 
   // Register the routes, stored in routes.js
   app.route(routes);
-
-  app.ext('onPreResponse', corsHeaders);
 
   // If we're not running tests, pretty print request/response
   // TODO: Use good, good-console and good-squeeze
