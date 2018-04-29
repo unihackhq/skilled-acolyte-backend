@@ -32,8 +32,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "boom": "^7.2.0",
-    "hapi": "^16.6.2",
-    "hapi-auth-jwt2": "^7.4.1",
+    "hapi": "^17.4.0",
+    "hapi-auth-jwt2": "^8.1.0",
     "hapi-cors-headers": "^1.0.0",
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
