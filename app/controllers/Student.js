@@ -1,37 +1,27 @@
 const Joi = require('joi');
 
-const StudentService = require('../services/StudentService');
-const Errors = require('../errors');
-const validators = require('../validators');
+const service = require('../services/StudentService');
+const validator = require('../validators').Student;
 
 // [GET] /student_directory
-exports.getStudentDirectory = {
-  handler: (req, res) => {
-    StudentService.getStudentDirectory((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+exports.directory = {
+  handler: async () => {
+    return service.directory();
   },
 };
 
-// [GET] /student
-exports.getAllStudents = {
-  handler: (req, res) => {
-    StudentService.listAll((err, results) => {
-      if (err) return res(Errors.handler(err));
-      return res(results);
-    });
+// [GET] /students
+exports.list = {
+  handler: async () => {
+    return service.list();
   },
 };
 
-// [GET] /student/{id}
-exports.getStudentById = {
-  handler: (req, res) => {
+// [GET] /students/{id}
+exports.get = {
+  handler: async (req) => {
     const { id } = req.params;
-    StudentService.getStudent(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.get(id);
   },
   validate: {
     params: {
@@ -40,47 +30,37 @@ exports.getStudentById = {
   },
 };
 
-// [POST] /student
-exports.createStudent = {
-  handler: (req, res) => {
+// [POST] /students
+exports.create = {
+  handler: async (req) => {
     const { payload } = req;
-    StudentService.createStudent(payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.create(payload);
   },
   validate: {
-    payload: validators.Student.payload(true),
+    payload: validator.payload(true),
   },
 };
 
-// [PUT] /Student/{id}
-exports.updateStudentById = {
-  handler: (req, res) => {
+// [PUT] /students/{id}
+exports.update = {
+  handler: async (req) => {
     const { id } = req.params;
     const { payload } = req;
-
-    StudentService.updateStudent(id, payload, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.update(id, payload);
   },
   validate: {
-    payload: validators.Student.payload(false),
+    payload: validator.payload(false),
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
 
-// [GET] /student/{id}/teams
-exports.getStudentTeamsById = {
-  handler: (req, res) => {
+// [DELETE] /students/{id}
+exports.delete = {
+  handler: async (req) => {
     const { id } = req.params;
-    StudentService.getStudentTeams(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.delete(id);
   },
   validate: {
     params: {
@@ -89,16 +69,25 @@ exports.getStudentTeamsById = {
   },
 };
 
-// [POST] /student/{id}/teams
-exports.assignTeam = {
+// [GET] /students/{id}/teams
+exports.teams = {
+  handler: async (req) => {
+    const { id } = req.params;
+    return service.teams(id);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [POST] /students/{id}/teams
+exports.join = {
   handler: (req, res) => {
     const { teamId } = req.payload;
-    const { userId } = req.params;
-
-    StudentService.joinTeam(teamId, userId, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    const { id } = req.params;
+    return service.join(teamId, id);
   },
   validate: {
     params: {
@@ -110,14 +99,11 @@ exports.assignTeam = {
   },
 };
 
-// [GET] /student/{id}/invites
-exports.getStudentInvitesById = {
-  handler: (req, res) => {
+// [GET] /students/{id}/invites
+exports.invites = {
+  handler: async (req) => {
     const { id } = req.params;
-    StudentService.getStudentInvites(id, (err, result) => {
-      if (err) return res(Errors.handler(err));
-      return res(result);
-    });
+    return service.invites(id);
   },
   validate: {
     params: {

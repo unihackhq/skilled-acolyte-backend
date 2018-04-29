@@ -107,6 +107,9 @@ db.Student.addScope('defaultScope', {
       model: db.User,
       as: 'user',
       attributes: ['firstName', 'lastName', 'preferredName', 'email'],
+      where: {
+        deactivated: false,
+      },
     },
   ],
 }, { override: true });
