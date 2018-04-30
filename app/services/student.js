@@ -17,13 +17,12 @@ exports.get = async (id) => {
 
 exports.create = (data) => {
   const createUser = async (payload) => {
-    const userId = payload.id;
-    const userPayload = payload.user;
-    if (userId) {
-      return { id: userId, payload };
+    const { id, user: userPayload } = payload;
+    if (id && !userPayload) {
+      return { id, payload };
     }
 
-    const userInstance = await User.create(userPayload);
+    const userInstance = await User.create({ ...userPayload, id });
     const user = userInstance.get({ plain: true });
     return { id: user.id, payload, user };
   };
@@ -55,7 +54,7 @@ exports.update = async (id, payload) => {
 
 exports.delete = async (id) => {
   const student = await User.findById(id);
-  if (!result) throw Boom.notFound('Could not find the student');
+  if (!student) throw Boom.notFound('Could not find the student');
 
   const deactivated = student.updateAttributes({ deactivated: true });
   if (!deactivated) throw Boom.internal('Could not delete the student');

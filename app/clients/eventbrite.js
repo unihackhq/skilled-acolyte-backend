@@ -24,7 +24,7 @@ const moreAttendees = (eventId, data) => {
   if (data.pagination.has_more_items) {
     return call(`/events/${eventId}/attendees?continuation=${data.pagination.continuation}`)
       // call this function again to get more attendees if this isn't the last page
-      .then(response => getMoreAttendees(eventId, response))
+      .then(response => moreAttendees(eventId, response))
       // concat the attendees from prev call with attendees
       // from the current call (all the calls after it)
       .then(newAttendees => data.attendees.concat(newAttendees));
@@ -34,5 +34,5 @@ const moreAttendees = (eventId, data) => {
 
 exports.attendees = (eventId) => {
   return call(`/events/${eventId}/attendees`)
-    .then(data => getMoreAttendees(eventId, data));
+    .then(data => moreAttendees(eventId, data));
 };
