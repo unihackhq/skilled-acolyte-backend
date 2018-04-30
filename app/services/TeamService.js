@@ -1,5 +1,6 @@
 const Boom = require('boom');
 const { Team } = require('../models');
+const studentService = require('./StudentService');
 
 exports.list = async () => {
   return Team.findAll();
@@ -11,10 +12,19 @@ exports.get = async (id) => {
   return result;
 };
 
-exports.create = async (payload) => {
+exports.create = async (studentId, payload) => {
   try {
-    const result = await Team.create(payload);
-    return result;
+    const team = await Team.create(payload);
+    await studentService._join(team, studentId);
+    return team;
+  } catch (err) {
+    throw Boom.internal('Could not create the team');
+  }
+};
+
+exports.onlyCreate = async (payload) => {
+  try {
+    return Team.create(payload);
   } catch (err) {
     throw Boom.internal('Could not create the team');
   }

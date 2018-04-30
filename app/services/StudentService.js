@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const { Student, User, Team } = require('../models');
+const { Student, User, Team, TeamAssignment } = require('../models');
 
 exports.list = async () => {
   return Student.findAll();
@@ -51,7 +51,7 @@ exports.create = (data) => {
   return createUser(data).then(createStudent);
 };
 
-exports.bulkCreate = (payloads, callback) => {
+exports.bulkCreate = (payloads) => {
   const results = payloads.map(payload => exports.createStudent(payload));
   return Promise.all(results);
 };
@@ -80,32 +80,42 @@ exports.directory = async () => {
 };
 
 exports.teams = async (id) => {
-  const result = await Student.findById(id);
-  if (!result) throw Boom.notFound('Could not find the student');
-  return student.getTeams({ joinTableAttributes: ['invited'] });
+  const student = await Student.findById(id);
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student.getTeams();
 };
 
-const assignTeam = async (team, studentId) => {
+exports.invites = async (id) => {
+  const student = await Student.findById(id);
+  if (!student) throw Boom.notFound('Could not find the student');
+
+  return student.getInvites();
+};
+
+exports._join = async (team, studentId) => {
   const results = await team.addMembers(studentId, { invited: false });
   if (results.length === 0) throw Boom.badRequest('The student is already a member of the team');
 
   return results[0][0];
 };
 
-exports.join = async (teamId, studentId) => {
+const _removeInvite = async (studentId, teamId) => {
   const team = await Team.findById(teamId);
   if (!team) throw Boom.notFound('Could not find the team');
+
   const isInvited = await team.hasInvited(studentId)
-  if (isInvited) {
-    await team.removeInvited(studentId);
-    return assignTeam(team, studentId, callback);
-  }
-  throw Boom.badRequest('The student is not invited to the team');
+  if (!isInvited) throw Boom.badRequest('The student is not invited to the team');
+
+  await team.removeInvited(studentId);
+  return team;
+}
+
+exports.acceptInvite = async (studentId, teamId) => {
+  const team = await _removeInvite(studentId, teamId);
+  return exports._join(team, studentId);
 };
 
-exports.invites = async (id) => {
-  const student = Student.findById(id);
-  if (!student) throw Boom.notFound('Could not find the student');
-
-  return student.getInvites({ joinTableAttributes: ['invited'] });
+exports.rejectInvite = async (studentId, teamId) => {
+  await _removeInvite(studentId, teamId);
+  return {};
 };

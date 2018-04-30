@@ -26,11 +26,18 @@ exports.get = {
 // [POST] /teams
 exports.create = {
   handler: async (req) => {
-    const { payload } = req;
-    return service.create(payload);
+    const { addMe, ...payload } = req.payload;
+    if (addMe) {
+      return service.create(req.auth.credentials.userId, payload);
+    } else {
+      return service.onlyCreate(payload);
+    }
   },
   validate: {
-    payload: validator.payload(true),
+    payload: {
+      addMe: Joi.boolean().default(false),
+      ...validator.payload(true),
+    }
   },
 };
 

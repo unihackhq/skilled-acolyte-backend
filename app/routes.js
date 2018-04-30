@@ -25,11 +25,13 @@ module.exports = [
   { method: 'GET', path: '/api/v1/students/directory', options: t(controllers.Student.directory) },
   { method: 'GET', path: '/api/v1/students/{id}', options: t(controllers.Student.get) },
   { method: 'GET', path: '/api/v1/students/{id}/teams', options: t(controllers.Student.teams) },
-  { method: 'GET', path: '/api/v1/students/{id}/invites', options: t(controllers.Student.invites) },
-  { method: 'POST', path: '/api/v1/students/{id}/teams', options: t(controllers.Student.join) },
   { method: 'POST', path: '/api/v1/students', options: t(controllers.Student.create) },
   { method: 'PUT', path: '/api/v1/students/{id}', options: t(controllers.Student.update) },
   { method: 'DELETE', path: '/api/v1/students/{id}', options: t(controllers.Student.delete) },
+
+  { method: 'GET', path: '/api/v1/students/{id}/invites', options: t(controllers.Student.invites) },
+  { method: 'POST', path: '/api/v1/students/{studentId}/invites/{teamId}/accept', options: t(controllers.Student.acceptInvite) },
+  { method: 'POST', path: '/api/v1/students/{studentId}/invites/{teamId}/reject', options: t(controllers.Student.rejectInvite) },
 
   { method: 'GET', path: '/api/v1/users', options: t(controllers.User.list) },
   { method: 'GET', path: '/api/v1/users/{id}', options: t(controllers.User.get) },

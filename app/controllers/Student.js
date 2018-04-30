@@ -82,23 +82,6 @@ exports.teams = {
   },
 };
 
-// [POST] /students/{id}/teams
-exports.join = {
-  handler: (req, res) => {
-    const { teamId } = req.payload;
-    const { id } = req.params;
-    return service.join(teamId, id);
-  },
-  validate: {
-    params: {
-      id: Joi.string().guid({ version: 'uuidv4' }),
-    },
-    payload: {
-      teamId: Joi.string().guid({ version: 'uuidv4' }).required(),
-    }
-  },
-};
-
 // [GET] /students/{id}/invites
 exports.invites = {
   handler: async (req) => {
@@ -108,6 +91,34 @@ exports.invites = {
   validate: {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [POST] /students/{studentId}/invites/{teamId}/accept
+exports.acceptInvite = {
+  handler: async (req) => {
+    const { studentId, teamId } = req.params;
+    return service.acceptInvite(studentId, teamId);
+  },
+  validate: {
+    params: {
+      studentId: Joi.string().guid({ version: 'uuidv4' }),
+      teamId: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
+// [POST] /students/{studentId}/invites/{teamId}/reject
+exports.rejectInvite = {
+  handler: async (req) => {
+    const { studentId, teamId } = req.params;
+    return service.rejectInvite(studentId, teamId);
+  },
+  validate: {
+    params: {
+      studentId: Joi.string().guid({ version: 'uuidv4' }),
+      teamId: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
 };
