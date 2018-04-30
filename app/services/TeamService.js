@@ -60,7 +60,7 @@ exports.invites = async (id) => {
 
 exports.invite = async (teamId, studentId) => {
   const team = await Team.findById(teamId);
-  if (!team) return callback(Errors.notFound.modelNotFound(MODEL_NAME));
+  if (!team) throw Boom.notFound('Could not find the team');
 
   const isMember = await team.hasMembers(studentId);
   if (isMember) throw Boom.badRequest('The student is already invited to the team');

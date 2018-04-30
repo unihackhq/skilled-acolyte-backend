@@ -1,5 +1,9 @@
 const Boom = require('boom');
-const { Student, User, Team, TeamAssignment } = require('../models');
+const {
+  Student,
+  User,
+  Team
+} = require('../models');
 
 exports.list = async () => {
   return Student.findAll();
@@ -12,40 +16,26 @@ exports.get = async (id) => {
 };
 
 exports.create = (data) => {
-  const createUser = (payload) => {
+  const createUser = async (payload) => {
     const userId = payload.id;
     const userObj = payload.user;
+    if (userId) {
+      return { id: userId, payload };
+    }
 
-    return new Promise((resolve, reject) => {
-      if (userId) {
-        return resolve({ id: userId, payload });
-      }
-      return User.create(userObj)
-        .then((result) => {
-          const user = result.get({ plain: true });
-          return resolve({ id: user.id, payload, user });
-        })
-        .catch(() => {
-          return reject(Boom.internal('Could not create the student (user create failed)'));
-        });
-    });
+    const result = await User.create(userObj);
+    const user = result.get({ plain: true });
+    return { id: user.id, payload, user };
   };
 
-  const createStudent = ({ id, payload, user }) => {
-    return new Promise((resolve, reject) => {
-      payload.id = id;
-      return Student.create(payload)
-        .then((result) => {
-          const student = result.get({ plain: true });
-          if (user) {
-            student.user = user;
-          }
-          return resolve(student);
-        })
-        .catch(() => {
-          return reject(Boom.internal('Could not create the student'));
-        });
-    });
+  const createStudent = async ({ id, payload, user }) => {
+    const studentPayload = { id, ...payload };
+    const result = await Student.create(studentPayload);
+    const student = result.get({ plain: true });
+    if (user) {
+      student.user = user;
+    }
+    return student;
   };
 
   return createUser(data).then(createStudent);
@@ -103,12 +93,12 @@ const _removeInvite = async (studentId, teamId) => {
   const team = await Team.findById(teamId);
   if (!team) throw Boom.notFound('Could not find the team');
 
-  const isInvited = await team.hasInvited(studentId)
+  const isInvited = await team.hasInvited(studentId);
   if (!isInvited) throw Boom.badRequest('The student is not invited to the team');
 
   await team.removeInvited(studentId);
   return team;
-}
+};
 
 exports.acceptInvite = async (studentId, teamId) => {
   const team = await _removeInvite(studentId, teamId);

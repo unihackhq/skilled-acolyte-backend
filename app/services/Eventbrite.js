@@ -1,56 +1,69 @@
+const { University } = require('../models');
 const client = require('../clients/eventbrite');
-const uniUtils = require('../util/University');
 
-exports.prepopulateEvent = (eventId) => {
-  return client.getEvent(eventId)
-    .then(data => ({
-      name: data.name.text,
-      startDate: data.start.utc,
-      endDate: data.end.utc,
-      timezone: data.start.timezone,
-      eventbriteId: data.id,
-      eventbriteLink: data.url,
-      location: data.venue.address.localized_address_display,
-    }));
+exports.event = async (eventId) => {
+  const {
+    name,
+    start,
+    end,
+    id,
+    url,
+    venue
+  } = await client.getEvent(eventId);
+  return {
+    name: name.text,
+    startDate: start.utc,
+    endDate: end.utc,
+    timezone: start.timezone,
+    eventbriteId: id,
+    eventbriteLink: url,
+    location: venue.address.localized_address_display,
+  };
 };
 
-const mapAttendeeToStudent = (attendee) => {
+// find or create a university with name
+const findCreateUniFromName = (name) => {
+  return University
+    .findOrCreate({ where: { name }, defaults: { country: 'Australia' } })
+    .spread(uni => uni.get({ plain: true }));
+};
+
+const mapAttendeeToStudent = async (attendee) => {
   // put questions in an id accessible object
   const questions = attendee.answers.reduce((acc, question) => {
     return Object.assign(acc, { [question.question_id]: question });
   }, {});
 
   // TODO: put question ids in a config file or something
-  const uni = questions['15299392'].answer;
+  const uniName = questions['15299392'].answer;
   const studyLevel = questions['15299396'].answer;
   const shirtSize = questions['15299395'].answer;
   const dietaryReq = questions['15299393'].answer;
   const medicalReq = questions['15299394'].answer;
 
-  return uniUtils.findCreateFromName(uni)
-    .then(university => ({
-      user: {
-        firstName: attendee.profile.first_name,
-        lastName: attendee.profile.last_name,
-        preferredName: attendee.profile.first_name,
-        email: attendee.profile.email,
-        dateOfBirth: attendee.profile.birth_date,
-        gender: attendee.profile.gender,
-        mobile: attendee.profile.cell_phone
-      },
-      university: university.id,
-      studyLevel,
-      // lol we didn't ask :P
-      degree: 'Unknown',
-      dietaryReq,
-      medicalReq,
-      shirtSize,
-      photoUrl: '',
-    }));
+  const uni = await findCreateUniFromName(uniName);
+  return {
+    user: {
+      firstName: attendee.profile.first_name,
+      lastName: attendee.profile.last_name,
+      preferredName: attendee.profile.first_name,
+      email: attendee.profile.email,
+      dateOfBirth: attendee.profile.birth_date,
+      gender: attendee.profile.gender,
+      mobile: attendee.profile.cell_phone
+    },
+    university: uni.id,
+    studyLevel,
+    // lol we didn't ask :P
+    degree: 'Unknown',
+    dietaryReq,
+    medicalReq,
+    shirtSize,
+    photoUrl: '',
+  };
 };
 
-exports.prepopulateStudents = (eventId) => {
-  return client.getAttendees(eventId)
-    .then(attendees => attendees.map(attendee => mapAttendeeToStudent(attendee)))
-    .then(attendees => Promise.all(attendees));
+exports.students = async (eventId) => {
+  const attendees = await client.getAttendees(eventId);
+  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee)));
 };

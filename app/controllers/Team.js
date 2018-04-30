@@ -29,9 +29,8 @@ exports.create = {
     const { addMe, ...payload } = req.payload;
     if (addMe) {
       return service.create(req.auth.credentials.userId, payload);
-    } else {
-      return service.onlyCreate(payload);
     }
+    return service.onlyCreate(payload);
   },
   validate: {
     payload: {

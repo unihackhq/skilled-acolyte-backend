@@ -48,6 +48,6 @@ module.exports = [
   { method: 'PUT', path: '/api/v1/teams/{id}', options: t(controllers.Team.update) },
   { method: 'DELETE', path: '/api/v1/teams/{id}', options: t(controllers.Team.delete) },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', options: t(controllers.Prepopulate.prepopulateEvent) },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', options: t(controllers.Prepopulate.prepopulateAttendees) },
+  { method: 'POST', path: '/api/v1/prepopulate/event', options: t(controllers.Prepopulate.event) },
+  { method: 'POST', path: '/api/v1/prepopulate/attendees', options: t(controllers.Prepopulate.attendees) },
 ];
