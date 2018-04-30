@@ -5,7 +5,7 @@ const env = require('../../env');
 // eslint-disable-next-line no-unused-vars
 exports.validate = async (decoded, req) => {
   // TODO:
-  // If decoded.userId not in user's database, then..
+  // If decoded.id not in user's database, then..
   // Check to see if user is not deauthorised ..
   // if (false) {
   //   return callback(null, false);
