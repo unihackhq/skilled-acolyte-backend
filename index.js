@@ -3,7 +3,7 @@ const Hapi = require('hapi');
 const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
-const validate = require('./app/util/Token');
+const Token = require('./app/util/Token');
 
 const init = async () => {
   const app = new Hapi.Server({ host: env.API_HOST, port: env.API_PORT });
@@ -14,9 +14,10 @@ const init = async () => {
   // JWT is the authentication strategy
   app.auth.strategy('jwt', 'jwt', {
     key: env.JWT_KEY,
-    validate,
-    verifyOptions: { algorithms: ['HS256'] },
+    validate: Token.validate,
+    verifyOptions: { algorithms: ['HS256'], tokenType: 'Bearer' },
   });
+  app.auth.default('jwt');
 
   // Register the routes, stored in routes.js
   app.route(routes);
