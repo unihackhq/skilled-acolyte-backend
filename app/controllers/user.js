@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
-const service = require('../services/UserService');
-const validator = require('../validators').User;
+const service = require('../services/user');
+const validator = require('../validators/user');
 
 // [GET] /users
 exports.list = {

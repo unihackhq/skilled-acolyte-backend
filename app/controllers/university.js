@@ -1,16 +1,16 @@
 const Joi = require('joi');
 
-const service = require('../services/EventService');
-const validator = require('../validators').Event;
+const service = require('../services/university');
+const validator = require('../validators/university');
 
-// [GET] /events
+// [GET] /universities
 exports.list = {
   handler: async () => {
     return service.list();
   },
 };
 
-// [GET] /events/{id}
+// [GET] /universities/{id}
 exports.get = {
   handler: async (req) => {
     const { id } = req.params;
@@ -23,7 +23,7 @@ exports.get = {
   },
 };
 
-// [POST] /events
+// [POST] /universities
 exports.create = {
   handler: async (req) => {
     const { payload } = req;
@@ -34,7 +34,7 @@ exports.create = {
   },
 };
 
-// [PUT] /events/{id}
+// [PUT] /universities/{id}
 exports.update = {
   handler: async (req) => {
     const { id } = req.params;
@@ -49,7 +49,7 @@ exports.update = {
   },
 };
 
-// [DELETE] /events/{id}
+// [DELETE] /universities/{id}
 exports.delete = {
   handler: async (req) => {
     const { id } = req.params;

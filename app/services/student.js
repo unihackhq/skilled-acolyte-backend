@@ -10,28 +10,28 @@ exports.list = async () => {
 };
 
 exports.get = async (id) => {
-  const result = await Student.findById(id);
-  if (!result) throw Boom.notFound('Could not find the student');
-  return result;
+  const student = await Student.findById(id);
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student;
 };
 
 exports.create = (data) => {
   const createUser = async (payload) => {
     const userId = payload.id;
-    const userObj = payload.user;
+    const userPayload = payload.user;
     if (userId) {
       return { id: userId, payload };
     }
 
-    const result = await User.create(userObj);
-    const user = result.get({ plain: true });
+    const userInstance = await User.create(userPayload);
+    const user = userInstance.get({ plain: true });
     return { id: user.id, payload, user };
   };
 
   const createStudent = async ({ id, payload, user }) => {
     const studentPayload = { id, ...payload };
-    const result = await Student.create(studentPayload);
-    const student = result.get({ plain: true });
+    const studentInstance = await Student.create(studentPayload);
+    const student = studentInstance.get({ plain: true });
     if (user) {
       student.user = user;
     }
@@ -42,22 +42,22 @@ exports.create = (data) => {
 };
 
 exports.bulkCreate = (payloads) => {
-  const results = payloads.map(payload => exports.createStudent(payload));
-  return Promise.all(results);
+  const students = payloads.map(payload => exports.createStudent(payload));
+  return Promise.all(students);
 };
 
 
 exports.update = async (id, payload) => {
-  const result = await Student.findById(id);
-  if (!result) throw Boom.notFound('Could not find the student');
-  return result.updateAttributes(payload);
+  const student = await Student.findById(id);
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student.updateAttributes(payload);
 };
 
 exports.delete = async (id) => {
-  const result = await User.findById(id);
+  const student = await User.findById(id);
   if (!result) throw Boom.notFound('Could not find the student');
 
-  const deactivated = result.updateAttributes({ deactivated: true });
+  const deactivated = student.updateAttributes({ deactivated: true });
   if (!deactivated) throw Boom.internal('Could not delete the student');
 
   return {};
@@ -78,15 +78,13 @@ exports.teams = async (id) => {
 exports.invites = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-
   return student.getInvites();
 };
 
 exports._join = async (team, studentId) => {
-  const results = await team.addMembers(studentId, { invited: false });
-  if (results.length === 0) throw Boom.badRequest('The student is already a member of the team');
-
-  return results[0][0];
+  const added = await team.addMembers(studentId, { invited: false });
+  if (added.length === 0) throw Boom.badRequest('The student is already a member of the team');
+  return added[0][0];
 };
 
 const _removeInvite = async (studentId, teamId) => {

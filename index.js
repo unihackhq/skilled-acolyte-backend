@@ -3,7 +3,7 @@ const Hapi = require('hapi');
 const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
-const Token = require('./app/util/Token');
+const Token = require('./app/util/token');
 
 const init = async () => {
   const app = new Hapi.Server({ host: env.API_HOST, port: env.API_PORT });

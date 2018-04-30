@@ -9,7 +9,7 @@ exports.event = async (eventId) => {
     id,
     url,
     venue
-  } = await client.getEvent(eventId);
+  } = await client.event(eventId);
   return {
     name: name.text,
     startDate: start.utc,
@@ -64,6 +64,6 @@ const mapAttendeeToStudent = async (attendee) => {
 };
 
 exports.students = async (eventId) => {
-  const attendees = await client.getAttendees(eventId);
+  const attendees = await client.attendees(eventId);
   return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee)));
 };

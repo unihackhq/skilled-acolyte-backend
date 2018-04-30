@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
-const service = require('../services/StudentService');
-const validator = require('../validators').Student;
+const service = require('../services/student');
+const validator = require('../validators/student');
 
 // [GET] /student_directory
 exports.directory = {

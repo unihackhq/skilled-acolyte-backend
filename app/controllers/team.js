@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
-const service = require('../services/TeamService');
-const validator = require('../validators').Team;
+const service = require('../services/team');
+const validator = require('../validators/team');
 
 // [GET] /teams
 exports.list = {

@@ -1,11 +1,11 @@
 const Joi = require('joi');
-const PrepopulateService = require('../services/PrepopulateService');
+const service = require('../services/prepopulate');
 
 // [POST] /prepopulate/event
 exports.event = {
   handler: async (req) => {
     const { eventId } = req.payload;
-    return PrepopulateService.event(eventId);
+    return service.event(eventId);
   },
   validate: {
     payload: {
@@ -18,7 +18,7 @@ exports.event = {
 exports.attendees = {
   handler: async (req) => {
     const { eventId } = req.payload;
-    return PrepopulateService.attendees(eventId);
+    return service.attendees(eventId);
   },
   validate: {
     payload: {
