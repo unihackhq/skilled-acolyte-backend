@@ -9,10 +9,10 @@
   "scripts": {
     "test": "npm-run-all lint",
     "lint": "eslint .",
-    "dev": "nodemon index.js",
+    "dev": "nodemon --inspect=0.0.0.0 index.js",
     "start": "node index.js",
     "docker-start": "node index.js",
-    "docker-dev": "nodemon index.js"
+    "docker-dev": "nodemon --inspect=0.0.0.0 index.js"
   },
   "repository": {
     "type": "git",
