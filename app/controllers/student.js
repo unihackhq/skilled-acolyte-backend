@@ -37,7 +37,7 @@ exports.create = {
     return service.create(payload);
   },
   validate: {
-    payload: validator.payload(true),
+    payload: validator.requiredPayload,
   },
 };
 
@@ -49,7 +49,7 @@ exports.update = {
     return service.update(id, payload);
   },
   validate: {
-    payload: validator.payload(false),
+    payload: validator.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },

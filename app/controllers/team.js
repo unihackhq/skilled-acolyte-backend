@@ -35,7 +35,7 @@ exports.create = {
   validate: {
     payload: {
       addMe: Joi.boolean().default(false),
-      ...validator.payload(true),
+      ...validator.requiredPayload,
     }
   },
 };
@@ -48,7 +48,7 @@ exports.update = {
     return service.update(id, payload);
   },
   validate: {
-    payload: validator.payload(false),
+    payload: validator.payload,
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
