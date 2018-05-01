@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const {
   token,
   university,
@@ -7,53 +8,62 @@ const {
   team,
   prepopulate
 } = require('./controllers');
+const { API_URL_VERSION } = require('../env');
+
+const prefix = `/api/v${API_URL_VERSION}`;
+
+const routes = [
+  { method: 'POST', path: `${prefix}/token`, options: token.validate },
+  { method: 'GET', path: `${prefix}/token/{email}`, options: token.request },
+
+  { method: 'GET', path: `${prefix}/universities`, options: university.list },
+  { method: 'GET', path: `${prefix}/universities/{id}`, options: university.get },
+  { method: 'POST', path: `${prefix}/universities`, options: university.create },
+  { method: 'PUT', path: `${prefix}/universities/{id}`, options: university.update },
+  { method: 'DELETE', path: `${prefix}/universities/{id}`, options: university.delete },
+
+  { method: 'GET', path: `${prefix}/events`, options: event.list },
+  { method: 'GET', path: `${prefix}/events/{id}`, options: event.get },
+  { method: 'POST', path: `${prefix}/events`, options: event.create },
+  { method: 'PUT', path: `${prefix}/events/{id}`, options: event.update },
+  { method: 'DELETE', path: `${prefix}/events/{id}`, options: event.delete },
+
+  { method: 'GET', path: `${prefix}/students`, options: student.list },
+  { method: 'GET', path: `${prefix}/students/directory`, options: student.directory },
+  { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
+  { method: 'GET', path: `${prefix}/students/{id}:uuuuuuuuuuuuuuuuu/teams`, options: student.teams },
+  { method: 'POST', path: `${prefix}/students`, options: student.create },
+  { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
+  { method: 'DELETE', path: `${prefix}/students/{id}`, options: student.delete },
+
+  { method: 'GET', path: `${prefix}/students/{id}/invites`, options: student.invites },
+  { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/accept`, options: student.acceptInvite },
+  { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/reject`, options: student.rejectInvite },
+
+  { method: 'GET', path: `${prefix}/users`, options: user.list },
+  { method: 'GET', path: `${prefix}/users/{id}`, options: user.get },
+  { method: 'POST', path: `${prefix}/users`, options: user.create },
+  { method: 'PUT', path: `${prefix}/users/{id}`, options: user.update },
+  { method: 'DELETE', path: `${prefix}/users/{id}`, options: user.delete },
+
+  { method: 'GET', path: `${prefix}/teams`, options: team.list },
+  { method: 'GET', path: `${prefix}/teams/{id}`, options: team.get },
+  { method: 'GET', path: `${prefix}/teams/{id}/members`, options: team.members },
+  { method: 'GET', path: `${prefix}/teams/{id}/invites`, options: team.invites },
+  { method: 'POST', path: `${prefix}/teams`, options: team.create },
+  { method: 'POST', path: `${prefix}/teams/{id}/invites`, options: team.invite },
+  { method: 'PUT', path: `${prefix}/teams/{id}`, options: team.update },
+  { method: 'DELETE', path: `${prefix}/teams/{id}`, options: team.delete },
+
+  { method: 'POST', path: `${prefix}/prepopulate/event`, options: prepopulate.event },
+  { method: 'POST', path: `${prefix}/prepopulate/attendees`, options: prepopulate.attendees },
+];
 
 // transform the route options to include CORS access control options
-const t = options => ({ cors: { origin: 'ignore' }, ...options });
-
-module.exports = [
-  { method: 'POST', path: '/api/v1/token', options: t(token.validate) },
-  { method: 'GET', path: '/api/v1/token/{email}', options: t(token.request) },
-
-  { method: 'GET', path: '/api/v1/universities', options: t(university.list) },
-  { method: 'GET', path: '/api/v1/universities/{id}', options: t(university.get) },
-  { method: 'POST', path: '/api/v1/universities', options: t(university.create) },
-  { method: 'PUT', path: '/api/v1/universities/{id}', options: t(university.update) },
-  { method: 'DELETE', path: '/api/v1/universities/{id}', options: t(university.delete) },
-
-  { method: 'GET', path: '/api/v1/events', options: t(event.list) },
-  { method: 'GET', path: '/api/v1/events/{id}', options: t(event.get) },
-  { method: 'POST', path: '/api/v1/events', options: t(event.create) },
-  { method: 'PUT', path: '/api/v1/events/{id}', options: t(event.update) },
-  { method: 'DELETE', path: '/api/v1/events/{id}', options: t(event.delete) },
-
-  { method: 'GET', path: '/api/v1/students', options: t(student.list) },
-  { method: 'GET', path: '/api/v1/students/directory', options: t(student.directory) },
-  { method: 'GET', path: '/api/v1/students/{id}', options: t(student.get) },
-  { method: 'GET', path: '/api/v1/students/{id}/teams', options: t(student.teams) },
-  { method: 'POST', path: '/api/v1/students', options: t(student.create) },
-  { method: 'PUT', path: '/api/v1/students/{id}', options: t(student.update) },
-  { method: 'DELETE', path: '/api/v1/students/{id}', options: t(student.delete) },
-
-  { method: 'GET', path: '/api/v1/students/{id}/invites', options: t(student.invites) },
-  { method: 'POST', path: '/api/v1/students/{studentId}/invites/{teamId}/accept', options: t(student.acceptInvite) },
-  { method: 'POST', path: '/api/v1/students/{studentId}/invites/{teamId}/reject', options: t(student.rejectInvite) },
-
-  { method: 'GET', path: '/api/v1/users', options: t(user.list) },
-  { method: 'GET', path: '/api/v1/users/{id}', options: t(user.get) },
-  { method: 'POST', path: '/api/v1/users', options: t(user.create) },
-  { method: 'PUT', path: '/api/v1/users/{id}', options: t(user.update) },
-  { method: 'DELETE', path: '/api/v1/users/{id}', options: t(user.delete) },
-
-  { method: 'GET', path: '/api/v1/teams', options: t(team.list) },
-  { method: 'GET', path: '/api/v1/teams/{id}', options: t(team.get) },
-  { method: 'GET', path: '/api/v1/teams/{id}/members', options: t(team.members) },
-  { method: 'GET', path: '/api/v1/teams/{id}/invites', options: t(team.invites) },
-  { method: 'POST', path: '/api/v1/teams', options: t(team.create) },
-  { method: 'POST', path: '/api/v1/teams/{id}/invites', options: t(team.invite) },
-  { method: 'PUT', path: '/api/v1/teams/{id}', options: t(team.update) },
-  { method: 'DELETE', path: '/api/v1/teams/{id}', options: t(team.delete) },
-
-  { method: 'POST', path: '/api/v1/prepopulate/event', options: t(prepopulate.event) },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', options: t(prepopulate.attendees) },
-];
+module.exports = routes.map(({ options, ...route }) => ({
+  options: {
+    cors: { origin: 'ignore' },
+    ...options
+  },
+  ...route
+}));
