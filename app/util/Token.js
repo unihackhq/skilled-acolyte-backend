@@ -9,7 +9,7 @@ exports.validate = (decoded, request, callback) =>
   // if (false) {
   //   return callback(null, false);
   // }
-   callback(null, true);
+  callback(null, true);
 
 exports.create = user => JWT.sign(user, env.JWT_KEY, {
   expiresIn: '30d',

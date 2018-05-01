@@ -1,4 +1,4 @@
-const Event = require('../models').Event;
+const { Event } = require('../models');
 const Errors = require('../errors');
 
 const MODEL_NAME = 'event';

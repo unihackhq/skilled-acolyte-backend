@@ -6,18 +6,12 @@
     "url_version": "1",
     "EVENTBRITE_TOKEN": "#{process.env.EVENTBRITE_TOKEN}",
     "POSTMARK_CLIENT_KEY": "#{process.env.POSTMARK_CLIENT_KEY}",
-    "JWT_KEY": "this-is-secret"
-  },
-  "docker": {
-    "host": "0.0.0.0",
-    "port": "3000",
-    "version": "1.0.0",
-    "url_version": "1"
+    "JWT_KEY": "#{process.env.JWT_KEY}"
   },
   "dev": {
-    "host": "0.0.0.0",
-    "port": "3000",
-    "version": "1.0.0",
-    "url_version": "1"
+    "host": "0.0.0.0"
+  },
+  "docker": {
+    "host": "0.0.0.0"
   }
 }

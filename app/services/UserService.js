@@ -1,4 +1,4 @@
-const User = require('../models').User;
+const { User } = require('../models');
 const Errors = require('../errors');
 
 const MODEL_NAME = 'user';

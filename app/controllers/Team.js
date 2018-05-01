@@ -17,7 +17,7 @@ exports.getAllTeams = {
 // [GET] /teams/{id}
 exports.getTeamById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     TeamService.getTeam(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -33,7 +33,7 @@ exports.getTeamById = {
 // [POST] /teams
 exports.createTeam = {
   handler: (req, res) => {
-    const payload = req.payload;
+    const { payload } = req;
     TeamService.createTeam(payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -47,8 +47,8 @@ exports.createTeam = {
 // [PUT] /teams/{id}
 exports.updateTeamById = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const payload = req.payload;
+    const { id } = req.params;
+    const { payload } = req;
     TeamService.updateTeam(id, payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -65,7 +65,7 @@ exports.updateTeamById = {
 // [DELETE] /teams/{id}
 exports.deleteTeamById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     TeamService.deleteTeam(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -81,7 +81,7 @@ exports.deleteTeamById = {
 // [GET] /teams/{id}/people
 exports.getTeamMembers = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     TeamService.getTeamMembers(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -97,7 +97,7 @@ exports.getTeamMembers = {
 // [GET] /teams/{id}/invites
 exports.getTeamInvitesById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     TeamService.getTeamMemberInvites(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -113,8 +113,8 @@ exports.getTeamInvitesById = {
 // [POST] /teams/{id}/invites
 exports.createTeamInvite = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const userId = req.payload.userId;
+    const { id } = req.params;
+    const { userId } = req.payload;
     TeamService.inviteTeamMember(id, userId, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);

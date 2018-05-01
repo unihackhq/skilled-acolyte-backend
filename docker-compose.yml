@@ -12,6 +12,7 @@ services:
     restart: always
     volumes:
       - .:/usr/src/app/
+      - node_modules:/usr/src/app/node_modules
     links:
       - db
     environment:
@@ -22,8 +23,9 @@ services:
       NODE_ENV: 'dev'
       POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
       EVENTBRITE_TOKEN: $EVENTBRITE_TOKEN
+      JWT_KEY: 'this-is-secret'
   db:
-    image: postgres:9.6
+    image: postgres:10.3-alpine
     ports:
       - "5432:5432"
     volumes:
@@ -36,3 +38,4 @@ services:
 
 volumes:
   db_data:
+  node_modules:

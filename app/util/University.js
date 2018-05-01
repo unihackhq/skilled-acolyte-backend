@@ -1,4 +1,4 @@
-const University = require('../models').University;
+const { University } = require('../models');
 
 // find or create a university with name
 exports.findCreateFromName = (name) => {

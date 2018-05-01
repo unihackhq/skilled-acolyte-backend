@@ -1,4 +1,4 @@
-const University = require('../models').University;
+const { University } = require('../models');
 const Errors = require('../errors');
 
 const MODEL_NAME = 'university';

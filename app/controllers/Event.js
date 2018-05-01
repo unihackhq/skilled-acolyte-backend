@@ -17,7 +17,7 @@ exports.getAllEvents = {
 // [GET] /event/{id}
 exports.getEventById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     EventService.getEvent(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -33,7 +33,7 @@ exports.getEventById = {
 // [POST] /event
 exports.createEvent = {
   handler: (req, res) => {
-    const payload = req.payload;
+    const { payload } = req;
     EventService.createEvent(payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -47,8 +47,8 @@ exports.createEvent = {
 // [PUT] /event/{id}
 exports.updateEventById = {
   handler: (req, res) => {
-    const id = req.params.id;
-    const payload = req.payload;
+    const { id } = req.params;
+    const { payload } = req;
     EventService.updateEvent(id, payload, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);
@@ -65,7 +65,7 @@ exports.updateEventById = {
 // [DELETE] /event/{id}
 exports.deleteEventById = {
   handler: (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     EventService.deleteEvent(id, (err, result) => {
       if (err) return res(Errors.handler(err));
       return res(result);

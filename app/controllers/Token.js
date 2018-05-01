@@ -2,8 +2,7 @@ const Postmark = require('postmark');
 const Joi = require('joi');
 const Boom = require('boom');
 
-const User = require('../models').User;
-const Token = require('../models').Token;
+const { User, Token } = require('../models');
 const createToken = require('../util/Token').create;
 const env = require('../../env');
 
@@ -16,7 +15,7 @@ exports.validate = {
     },
   },
   handler: (req, res) => {
-    const { payload: { token } } = req;
+    const { token } = req.payload;
     Token.findById(token)
       .then((t) => {
         if (!t) {
@@ -37,8 +36,7 @@ exports.validate = {
             const jwt = createToken({ userId: user.id });
             // Create JWT here
             return res({ token: jwt });
-          })
-      )
+          }))
       .catch((err) => {
         console.log(err);
         return res(Boom.unauthorized());

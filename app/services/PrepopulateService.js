@@ -1,5 +1,5 @@
 const Errors = require('../errors');
-const Event = require('../models').Event;
+const { Event } = require('../models');
 const StudentService = require('../services/StudentService');
 const EventService = require('../services/EventService');
 const eventbriteService = require('../services/Eventbrite');
