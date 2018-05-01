@@ -1,5 +1,6 @@
 const { University } = require('../models');
 const client = require('../clients/eventbrite');
+const env = require('../../env');
 
 exports.event = async (eventId) => {
   const {
@@ -35,11 +36,12 @@ const mapAttendeeToStudent = async (attendee) => {
   }, {});
 
   // TODO: put question ids in a config file or something
-  const uniName = questions['15299392'].answer;
-  const studyLevel = questions['15299396'].answer;
-  const shirtSize = questions['15299395'].answer;
-  const dietaryReq = questions['15299393'].answer;
-  const medicalReq = questions['15299394'].answer;
+  const qId = env.EVENTBRITE_QUESTION_IDS;
+  const uniName = questions[qId.uni].answer;
+  const studyLevel = questions[qId.study_level].answer;
+  const shirtSize = questions[qId.shirt_size].answer;
+  const dietaryReq = questions[qId.dietary_req].answer;
+  const medicalReq = questions[qId.medical_req].answer;
 
   const uni = await findCreateUniFromName(uniName);
   return {

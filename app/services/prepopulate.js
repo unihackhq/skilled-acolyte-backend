@@ -6,7 +6,7 @@ const eventbriteService = require('../services/eventbrite');
 
 exports.event = async (eventId) => {
   const data = await eventbriteService.event(eventId);
-  return eventService.createEvent(data);
+  return eventService.create(data);
 };
 
 exports.attendees = async (eventId) => {
@@ -14,5 +14,5 @@ exports.attendees = async (eventId) => {
   if (!event) throw Boom.notFound('Could not find the event');
 
   const students = await eventbriteService.students(eventId);
-  return studentService.bulkCreateStudent(students);
+  return studentService.bulkCreate(students);
 };

@@ -41,7 +41,7 @@ exports.create = (data) => {
 };
 
 exports.bulkCreate = (payloads) => {
-  const students = payloads.map(payload => exports.createStudent(payload));
+  const students = payloads.map(payload => exports.create(payload));
   return Promise.all(students);
 };
 

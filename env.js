@@ -28,4 +28,7 @@ module.exports = {
   // ENV Information
   TESTING: process.env.TESTING === true || process.env.TESTING === 'true',
   DEV: process.env.DEV || false,
+
+  // EVENTBRITE
+  EVENTBRITE_QUESTION_IDS: APP.eventbrite_questions,
 };

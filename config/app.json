@@ -6,7 +6,14 @@
     "url_version": "1",
     "EVENTBRITE_TOKEN": "#{process.env.EVENTBRITE_TOKEN}",
     "POSTMARK_CLIENT_KEY": "#{process.env.POSTMARK_CLIENT_KEY}",
-    "JWT_KEY": "#{process.env.JWT_KEY}"
+    "JWT_KEY": "#{process.env.JWT_KEY}",
+    "eventbrite_questions": {
+      "uni": "15299392",
+      "study_level": "15299396",
+      "shirt_size": "15299395",
+      "dietary_req": "15299393",
+      "medical_req": "15299394"
+    }
   },
   "dev": {
     "host": "0.0.0.0"
