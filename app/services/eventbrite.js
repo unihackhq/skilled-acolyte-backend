@@ -35,7 +35,6 @@ const mapAttendeeToStudent = async (attendee) => {
     return Object.assign(acc, { [question.question_id]: question });
   }, {});
 
-  // TODO: put question ids in a config file or something
   const qId = env.EVENTBRITE_QUESTION_IDS;
   const uniName = questions[qId.uni].answer;
   const studyLevel = questions[qId.study_level].answer;
@@ -45,6 +44,14 @@ const mapAttendeeToStudent = async (attendee) => {
 
   const uni = await findCreateUniFromName(uniName);
   return {
+    universityId: uni.id,
+    studyLevel,
+    // lol we didn't ask :P
+    degree: 'Unknown',
+    dietaryReq,
+    medicalReq,
+    shirtSize,
+    photoUrl: null,
     user: {
       firstName: attendee.profile.first_name,
       lastName: attendee.profile.last_name,
@@ -54,14 +61,11 @@ const mapAttendeeToStudent = async (attendee) => {
       gender: attendee.profile.gender,
       mobile: attendee.profile.cell_phone
     },
-    university: uni.id,
-    studyLevel,
-    // lol we didn't ask :P
-    degree: 'Unknown',
-    dietaryReq,
-    medicalReq,
-    shirtSize,
-    photoUrl: '',
+    tickets: [{
+      eventbriteOrder: attendee.order_id,
+      ticketType: attendee.ticket_class_name,
+      cancelled: attendee.cancelled,
+    }],
   };
 };
 

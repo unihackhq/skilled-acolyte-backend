@@ -35,12 +35,6 @@ exports.create = async (payload) => {
   });
 };
 
-exports.bulkCreate = (payloads) => {
-  const students = payloads.map(payload => exports.create(payload));
-  return Promise.all(students);
-};
-
-
 exports.update = async (id, payload) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');

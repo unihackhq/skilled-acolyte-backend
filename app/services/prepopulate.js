@@ -14,5 +14,5 @@ exports.attendees = async (eventId) => {
   if (!event) throw Boom.notFound('Could not find the event');
 
   const students = await eventbriteService.students(eventId);
-  return studentService.bulkCreate(students);
+  return Promise.all(students.map(student => studentService.create(student)));
 };

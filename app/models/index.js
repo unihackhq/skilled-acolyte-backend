@@ -26,13 +26,13 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // ASSOCIATION DEFINITIONS
 // =============================================================================
-// Each student is a user (though not every user is a student). Each student
-// also belongs to a University.
+// Each student is a user (though not every user is a student).
 db.Student.belongsTo(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
   as: 'user'
 });
+// Each student also belongs to a University.
 db.Student.belongsTo(db.University, { foreignKey: 'universityId' });
 
 // Each ticket belongs to a student
