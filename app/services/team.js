@@ -13,21 +13,13 @@ exports.get = async (id) => {
 };
 
 exports.create = async (studentId, payload) => {
-  try {
-    const team = await Team.create(payload);
-    await studentService._join(team, studentId);
-    return team;
-  } catch (err) {
-    throw Boom.internal('Could not create the team');
-  }
+  const team = await Team.create(payload);
+  await studentService._join(team, studentId);
+  return team;
 };
 
 exports.onlyCreate = async (payload) => {
-  try {
-    return Team.create(payload);
-  } catch (err) {
-    throw Boom.internal('Could not create the team');
-  }
+  return Team.create(payload);
 };
 
 exports.update = async (id, payload) => {

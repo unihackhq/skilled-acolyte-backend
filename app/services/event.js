@@ -12,11 +12,7 @@ exports.get = async (id) => {
 };
 
 exports.create = async (payload) => {
-  try {
-    return Event.create(payload);
-  } catch (err) {
-    throw Boom.internal('Could not create the event');
-  }
+  return Event.create(payload);
 };
 
 exports.update = async (id, payload) => {

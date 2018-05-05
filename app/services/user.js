@@ -12,11 +12,7 @@ exports.get = async (id) => {
 };
 
 exports.create = async (payload) => {
-  try {
-    return User.create(payload);
-  } catch (err) {
-    throw Boom.internal('Could not create the user');
-  }
+  return User.create(payload);
 };
 
 exports.update = async (id, payload) => {

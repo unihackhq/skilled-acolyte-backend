@@ -12,11 +12,7 @@ exports.get = async (id) => {
 };
 
 exports.create = async (payload) => {
-  try {
-    return University.create(payload);
-  } catch (err) {
-    throw Boom.internal('Could not create the university');
-  }
+  return University.create(payload);
 };
 
 exports.update = async (id, payload) => {

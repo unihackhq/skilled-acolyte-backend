@@ -8,7 +8,6 @@ const models = require('./app/models');
 const Token = require('./app/util/token');
 
 const init = async () => {
-
   const hapiOptions = {
     host: env.API_HOST,
     port: env.API_PORT,
