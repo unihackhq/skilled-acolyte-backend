@@ -30,7 +30,7 @@ const routes = [
   { method: 'GET', path: `${prefix}/students`, options: student.list },
   { method: 'GET', path: `${prefix}/students/directory`, options: student.directory },
   { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
-  { method: 'GET', path: `${prefix}/students/{id}:uuuuuuuuuuuuuuuuu/teams`, options: student.teams },
+  { method: 'GET', path: `${prefix}/students/{id}/teams`, options: student.teams },
   { method: 'POST', path: `${prefix}/students`, options: student.create },
   { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
   { method: 'DELETE', path: `${prefix}/students/{id}`, options: student.delete },
