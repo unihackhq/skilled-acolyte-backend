@@ -35,6 +35,23 @@ exports.create = async (payload) => {
   });
 };
 
+exports.createWithoutTicket = async (payload) => {
+  const id = payload.id || uuidv4();
+  const data = {
+    id,
+    ...payload,
+    user: {
+      id,
+      ...payload.user,
+    },
+  };
+  return Student.create(data, {
+    include: [
+      { model: User, as: 'user' },
+    ]
+  });
+};
+
 exports.update = async (id, payload) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
@@ -94,4 +111,15 @@ exports.acceptInvite = async (studentId, teamId) => {
 exports.rejectInvite = async (studentId, teamId) => {
   await _removeInvite(studentId, teamId);
   return {};
+};
+
+exports.tickets = async (studentId) => {
+  const student = await Student.findById(studentId, {
+    include: [{
+      model: Ticket,
+      as: 'tickets'
+    }]
+  });
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student.tickets;
 };

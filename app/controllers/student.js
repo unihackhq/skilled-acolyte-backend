@@ -69,6 +69,19 @@ exports.delete = {
   },
 };
 
+// [GET] /students/{id}/tickets
+exports.tickets = {
+  handler: async (req) => {
+    const { id } = req.params;
+    return service.tickets(id);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+};
+
 // [GET] /students/{id}/teams
 exports.teams = {
   handler: async (req) => {

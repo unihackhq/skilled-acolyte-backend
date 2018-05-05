@@ -5,7 +5,8 @@ const {
   student,
   user,
   team,
-  prepopulate
+  prepopulate,
+  ticket,
 } = require('./controllers');
 const { API_URL_VERSION } = require('../env');
 
@@ -30,6 +31,7 @@ const routes = [
   { method: 'GET', path: `${prefix}/students`, options: student.list },
   { method: 'GET', path: `${prefix}/students/directory`, options: student.directory },
   { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
+  { method: 'GET', path: `${prefix}/students/{id}/tickets`, options: student.tickets },
   { method: 'GET', path: `${prefix}/students/{id}/teams`, options: student.teams },
   { method: 'POST', path: `${prefix}/students`, options: student.create },
   { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
@@ -38,6 +40,10 @@ const routes = [
   { method: 'GET', path: `${prefix}/students/{id}/invites`, options: student.invites },
   { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/accept`, options: student.acceptInvite },
   { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/reject`, options: student.rejectInvite },
+
+  { method: 'GET', path: `${prefix}/tickets`, options: ticket.list },
+  { method: 'GET', path: `${prefix}/tickets/{id}`, options: ticket.get },
+  { method: 'POST', path: `${prefix}/tickets/{id}/transfer`, options: ticket.transfer },
 
   { method: 'GET', path: `${prefix}/users`, options: user.list },
   { method: 'GET', path: `${prefix}/users/{id}`, options: user.get },
