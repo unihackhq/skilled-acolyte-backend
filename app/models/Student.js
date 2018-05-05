@@ -36,6 +36,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     type: DataTypes.STRING(512),
     allowNull: true,
   },
+  firstLaunch: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
 }, {
   timestamps: true,
 });

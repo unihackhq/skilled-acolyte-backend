@@ -7,13 +7,31 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  firstName: DataTypes.STRING,
-  lastName: DataTypes.STRING,
-  preferredName: DataTypes.STRING,
   email: DataTypes.STRING(512),
-  dateOfBirth: DataTypes.DATEONLY,
-  gender: DataTypes.STRING,
-  mobile: DataTypes.STRING,
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  preferredName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  dateOfBirth: {
+    type: DataTypes.DATEONLY,
+    allowNull: true,
+  },
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  mobile: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 
   // We do not delete accounts for data integrity. We deactivate accounts if no
   // longer used.
