@@ -58,11 +58,4 @@ const routes = [
   { method: 'POST', path: `${prefix}/prepopulate/attendees`, options: prepopulate.attendees },
 ];
 
-// transform the route options to include CORS access control options
-module.exports = routes.map(({ options, ...route }) => ({
-  options: {
-    cors: { origin: 'ignore' },
-    ...options
-  },
-  ...route
-}));
+module.exports = routes;

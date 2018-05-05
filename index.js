@@ -7,22 +7,24 @@ const routes = require('./app/routes');
 const models = require('./app/models');
 const Token = require('./app/util/token');
 
-const hapiOptions = {
-  host: env.API_HOST,
-  port: env.API_PORT,
-  routes: {
-    validate: {
-      failAction: async (request, h, err) => {
-        // Throw Boom errors out to the request. This handles explicit Joi validation errors
-        if (Boom.isBoom(err)) {
-          throw err;
-        }
-      },
-    },
-  },
-};
-
 const init = async () => {
+
+  const hapiOptions = {
+    host: env.API_HOST,
+    port: env.API_PORT,
+    routes: {
+      validate: {
+        failAction: async (request, h, err) => {
+          // Throw Boom errors out to the request. This handles explicit Joi validation errors
+          if (Boom.isBoom(err)) {
+            throw err;
+          }
+        },
+      },
+      cors: { origin: 'ignore' }
+    },
+  };
+
   const server = new Hapi.Server(hapiOptions);
 
   // JWT is the authentication strategy
