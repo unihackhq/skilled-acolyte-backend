@@ -1,4 +1,5 @@
 const Hapi = require('hapi');
+const Boom = require('boom');
 
 const { requestErrorScrubber } = require('./app/util/good');
 const env = require('./env');
@@ -6,8 +7,23 @@ const routes = require('./app/routes');
 const models = require('./app/models');
 const Token = require('./app/util/token');
 
+const hapiOptions = {
+  host: env.API_HOST,
+  port: env.API_PORT,
+  routes: {
+    validate: {
+      failAction: async (request, h, err) => {
+        // Throw Boom errors out to the request. This handles explicit Joi validation errors
+        if (Boom.isBoom(err)) {
+          throw err;
+        }
+      },
+    },
+  },
+};
+
 const init = async () => {
-  const server = new Hapi.Server({ host: env.API_HOST, port: env.API_PORT });
+  const server = new Hapi.Server(hapiOptions);
 
   // JWT is the authentication strategy
   await server.register(require('hapi-auth-jwt2'));
