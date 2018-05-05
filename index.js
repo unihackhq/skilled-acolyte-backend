@@ -1,58 +1,73 @@
 const Hapi = require('hapi');
-const corsHeaders = require('hapi-cors-headers');
+const Boom = require('boom');
 
+const { requestErrorScrubber } = require('./app/util/good');
 const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
-const validate = require('./app/util/Token');
+const Token = require('./app/util/token');
 
-const app = new Hapi.Server();
+const init = async () => {
+  const hapiOptions = {
+    host: env.API_HOST,
+    port: env.API_PORT,
+    routes: {
+      validate: {
+        failAction: async (request, h, err) => {
+          // Throw Boom errors out to the request. This handles explicit Joi validation errors
+          if (Boom.isBoom(err)) {
+            throw err;
+          }
+        },
+      },
+      cors: { origin: 'ignore' }
+    },
+  };
 
-// Define host and port
-app.connection({ host: env.API_HOST, port: env.API_PORT, routes: { cors: { origin: ['*'] } } });
-
-// TODO: Move to utils/
-
-// Register the JWT authentication plugin
-app.register([
-  {
-    register: require('hapi-auth-jwt2'),
-  },
-], (err) => {
-  if (err) throw err;
+  const server = new Hapi.Server(hapiOptions);
 
   // JWT is the authentication strategy
-  app.auth.strategy('jwt', 'jwt', {
+  await server.register(require('hapi-auth-jwt2'));
+  server.auth.strategy('jwt', 'jwt', {
     key: env.JWT_KEY,
-    validateFunc: validate,
-    verifyOptions: { algorithms: ['HS256'] },
+    validate: Token.validate,
+    verifyOptions: { algorithms: ['HS256'], tokenType: 'Bearer' },
   });
+  server.auth.default('jwt');
 
   // Register the routes, stored in routes.js
-  app.route(routes);
-});
+  server.route(routes);
 
-app.ext('onPreResponse', corsHeaders);
-
-// If we're not running tests, pretty print request/response
-// TODO: Use good, good-console and good-squeeze
-if (!env.TESTING) {
-  app.on('response', (request) => {
-    console.log(`Payload: ${JSON.stringify(request.payload)}`);
-    console.log(`${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ${request.response.statusCode}`);
+  // logging
+  const options = {
+    ops: env.DEV ? false : { interval: 1000 },
+    includes: {
+      response: ['payload', 'headers'],
+      request: ['payload', 'headers'],
+    },
+    reporters: {
+      raw: [{
+        module: requestErrorScrubber
+      }, {
+        module: 'good-squeeze',
+        name: 'SafeJson',
+        args: [null, { space: 2 }]
+      }, 'stdout'],
+      summary: [{
+        module: 'good-console'
+      }, 'stdout'],
+    }
+  };
+  await server.register({
+    plugin: require('good'),
+    options,
   });
-}
 
-// Start the app
-const options = {};
-if (env.DEV) {
-  options.force = true;
-}
-models.sequelize.sync(options).then(() => {
-  app.start((err) => {
-    if (err) throw err;
-    console.log(`Started. Running on http://${env.API_HOST}:${env.API_PORT}`);
-  });
-});
+  // db up
+  await models.sequelize.sync();
+  // Start the server
+  await server.start();
+  console.log(`Started. Running on ${server.info.uri}`);
+};
 
-module.exports = app;
+init().catch(err => console.log(`Unexpected error ${err.message}\n`, err));

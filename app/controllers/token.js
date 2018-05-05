@@ -3,7 +3,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 const { User, Token } = require('../models');
-const createToken = require('../util/Token').create;
+const createToken = require('../util/token').create;
 const env = require('../../env');
 
 const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);

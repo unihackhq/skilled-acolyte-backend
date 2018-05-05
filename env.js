@@ -26,6 +26,9 @@ module.exports = {
   EVENTBRITE_TOKEN: APP.EVENTBRITE_TOKEN,
 
   // ENV Information
-  TESTING: process.env.TESTING === true || process.env.TESTING === 'true',
-  DEV: process.env.DEV || false,
+  TESTING: process.env.NODE_ENV === 'test',
+  DEV: process.env.NODE_ENV === 'dev' || false,
+
+  // EVENTBRITE
+  EVENTBRITE_QUESTION_IDS: APP.eventbrite_questions,
 };

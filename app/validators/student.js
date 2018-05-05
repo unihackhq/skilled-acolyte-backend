@@ -1,9 +1,8 @@
 const Joi = require('joi');
-const UserSchema = require('./User').payload;
+const userValidator = require('./user');
 
-exports.payload = isReq => ({
+const payload = {
   id: Joi.string().guid({ version: 'uuidv4' }),
-  user: Joi.object().keys(UserSchema(isReq)),
   university: Joi.string().guid({ version: 'uuidv4' }).allow(null),
   studyLevel: Joi.string().allow(null),
   degree: Joi.string().allow(null),
@@ -11,4 +10,14 @@ exports.payload = isReq => ({
   medicalReq: Joi.string().allow(null),
   shirtSize: Joi.string().allow(null),
   photoUrl: Joi.string().uri().allow(null)
-});
+};
+
+exports.payload = {
+  ...payload,
+  user: Joi.object().keys(userValidator.payload),
+};
+
+exports.requiredPayload = {
+  ...payload,
+  user: Joi.object().keys(userValidator.requiredPayload),
+};

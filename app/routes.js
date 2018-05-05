@@ -1,47 +1,61 @@
-const controllers = require('./controllers');
+const {
+  token,
+  university,
+  event,
+  student,
+  user,
+  team,
+  prepopulate
+} = require('./controllers');
+const { API_URL_VERSION } = require('../env');
 
-module.exports = [
-  { method: 'GET', path: '/api/v1/test', config: controllers.Example.get },
+const prefix = `/api/v${API_URL_VERSION}`;
 
-  { method: 'POST', path: '/api/v1/token', config: controllers.Token.validate },
-  { method: 'GET', path: '/api/v1/token/{email}', config: controllers.Token.request },
+const routes = [
+  { method: 'POST', path: `${prefix}/token`, options: token.validate },
+  { method: 'GET', path: `${prefix}/token/{email}`, options: token.request },
 
-  { method: 'GET', path: '/api/v1/universities', config: controllers.University.getAllUniversities },
-  { method: 'POST', path: '/api/v1/universities', config: controllers.University.createUniversity },
-  { method: 'GET', path: '/api/v1/universities/{id}', config: controllers.University.getUniversityById },
-  { method: 'PUT', path: '/api/v1/universities/{id}', config: controllers.University.updateUniversityById },
-  { method: 'DELETE', path: '/api/v1/universities/{id}', config: controllers.University.deleteUniversityById },
+  { method: 'GET', path: `${prefix}/universities`, options: university.list },
+  { method: 'GET', path: `${prefix}/universities/{id}`, options: university.get },
+  { method: 'POST', path: `${prefix}/universities`, options: university.create },
+  { method: 'PUT', path: `${prefix}/universities/{id}`, options: university.update },
+  { method: 'DELETE', path: `${prefix}/universities/{id}`, options: university.delete },
 
-  { method: 'GET', path: '/api/v1/events', config: controllers.Event.getAllEvents },
-  { method: 'POST', path: '/api/v1/events', config: controllers.Event.createEvent },
-  { method: 'GET', path: '/api/v1/events/{id}', config: controllers.Event.getEventById },
-  { method: 'PUT', path: '/api/v1/events/{id}', config: controllers.Event.updateEventById },
-  { method: 'DELETE', path: '/api/v1/events/{id}', config: controllers.Event.deleteEventById },
+  { method: 'GET', path: `${prefix}/events`, options: event.list },
+  { method: 'GET', path: `${prefix}/events/{id}`, options: event.get },
+  { method: 'POST', path: `${prefix}/events`, options: event.create },
+  { method: 'PUT', path: `${prefix}/events/{id}`, options: event.update },
+  { method: 'DELETE', path: `${prefix}/events/{id}`, options: event.delete },
 
-  { method: 'GET', path: '/api/v1/student_directory', config: controllers.Student.getStudentDirectory },
-  { method: 'GET', path: '/api/v1/students', config: controllers.Student.getAllStudents },
-  { method: 'POST', path: '/api/v1/students', config: controllers.Student.createStudent },
-  { method: 'GET', path: '/api/v1/students/{id}', config: controllers.Student.getStudentById },
-  { method: 'PUT', path: '/api/v1/students/{id}', config: controllers.Student.updateStudentById },
-  { method: 'GET', path: '/api/v1/students/{id}/teams', config: controllers.Student.getStudentTeamsById },
-  { method: 'POST', path: '/api/v1/students/{id}/teams', config: controllers.Student.assignTeam },
-  { method: 'GET', path: '/api/v1/students/{id}/invites', config: controllers.Student.getStudentInvitesById },
+  { method: 'GET', path: `${prefix}/students`, options: student.list },
+  { method: 'GET', path: `${prefix}/students/directory`, options: student.directory },
+  { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
+  { method: 'GET', path: `${prefix}/students/{id}/teams`, options: student.teams },
+  { method: 'POST', path: `${prefix}/students`, options: student.create },
+  { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
+  { method: 'DELETE', path: `${prefix}/students/{id}`, options: student.delete },
 
-  { method: 'GET', path: '/api/v1/users', config: controllers.User.getAllUsers },
-  { method: 'POST', path: '/api/v1/users', config: controllers.User.createUser },
-  { method: 'GET', path: '/api/v1/users/{id}', config: controllers.User.getUserById },
-  { method: 'PUT', path: '/api/v1/users/{id}', config: controllers.User.updateUserById },
-  { method: 'DELETE', path: '/api/v1/users/{id}', config: controllers.User.deleteUserById },
+  { method: 'GET', path: `${prefix}/students/{id}/invites`, options: student.invites },
+  { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/accept`, options: student.acceptInvite },
+  { method: 'POST', path: `${prefix}/students/{studentId}/invites/{teamId}/reject`, options: student.rejectInvite },
 
-  { method: 'GET', path: '/api/v1/teams', config: controllers.Team.getAllTeams },
-  { method: 'POST', path: '/api/v1/teams', config: controllers.Team.createTeam },
-  { method: 'GET', path: '/api/v1/teams/{id}', config: controllers.Team.getTeamById },
-  { method: 'PUT', path: '/api/v1/teams/{id}', config: controllers.Team.updateTeamById },
-  { method: 'DELETE', path: '/api/v1/teams/{id}', config: controllers.Team.deleteTeamById },
-  { method: 'GET', path: '/api/v1/teams/{id}/members', config: controllers.Team.getTeamMembers },
-  { method: 'GET', path: '/api/v1/teams/{id}/invites', config: controllers.Team.getTeamInvitesById },
-  { method: 'POST', path: '/api/v1/teams/{id}/invites', config: controllers.Team.createTeamInvite },
+  { method: 'GET', path: `${prefix}/users`, options: user.list },
+  { method: 'GET', path: `${prefix}/users/{id}`, options: user.get },
+  { method: 'POST', path: `${prefix}/users`, options: user.create },
+  { method: 'PUT', path: `${prefix}/users/{id}`, options: user.update },
+  { method: 'DELETE', path: `${prefix}/users/{id}`, options: user.delete },
 
-  { method: 'POST', path: '/api/v1/prepopulate/event', config: controllers.Prepopulate.prepopulateEvent },
-  { method: 'POST', path: '/api/v1/prepopulate/attendees', config: controllers.Prepopulate.prepopulateAttendees },
+  { method: 'GET', path: `${prefix}/teams`, options: team.list },
+  { method: 'GET', path: `${prefix}/teams/{id}`, options: team.get },
+  { method: 'GET', path: `${prefix}/teams/{id}/members`, options: team.members },
+  { method: 'GET', path: `${prefix}/teams/{id}/invites`, options: team.invites },
+  { method: 'POST', path: `${prefix}/teams`, options: team.create },
+  { method: 'POST', path: `${prefix}/teams/{id}/invites`, options: team.invite },
+  { method: 'PUT', path: `${prefix}/teams/{id}`, options: team.update },
+  { method: 'DELETE', path: `${prefix}/teams/{id}`, options: team.delete },
+
+  { method: 'POST', path: `${prefix}/prepopulate/event`, options: prepopulate.event },
+  { method: 'POST', path: `${prefix}/prepopulate/attendees`, options: prepopulate.attendees },
 ];
+
+module.exports = routes;

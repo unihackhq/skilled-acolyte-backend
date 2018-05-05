@@ -9,10 +9,9 @@
   "scripts": {
     "test": "npm-run-all lint",
     "lint": "eslint .",
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0 index.js",
     "docker-start": "node index.js",
-    "docker-dev": "nodemon index.js"
+    "docker-dev": "nodemon --inspect=0.0.0.0 index.js"
   },
   "repository": {
     "type": "git",
@@ -32,12 +31,16 @@
   "dependencies": {
     "axios": "^0.18.0",
     "boom": "^7.2.0",
-    "hapi": "^16.6.2",
-    "hapi-auth-jwt2": "^7.4.1",
+    "good": "^8.1.1",
+    "good-console": "^7.1.0",
+    "good-squeeze": "^5.0.2",
+    "hapi": "^17.4.0",
+    "hapi-auth-jwt2": "^8.1.0",
     "hapi-cors-headers": "^1.0.0",
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
     "konfig": "^0.2.1",
+    "lodash": "^4.17.10",
     "npm-run-all": "^4.0.1",
     "pg": "^7.4.1",
     "postmark": "^1.3.1",

@@ -2,14 +2,17 @@ const JWT = require('jsonwebtoken');
 
 const env = require('../../env');
 
-exports.validate = (decoded, request, callback) =>
+// eslint-disable-next-line no-unused-vars
+exports.validate = async (decoded, req) => {
   // TODO:
-  // If decoded._id not in user's database, then..
+  // If decoded.id not in user's database, then..
   // Check to see if user is not deauthorised ..
   // if (false) {
   //   return callback(null, false);
   // }
-  callback(null, true);
+
+  return { isValid: true };
+};
 
 exports.create = user => JWT.sign(user, env.JWT_KEY, {
   expiresIn: '30d',
