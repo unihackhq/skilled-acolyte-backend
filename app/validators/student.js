@@ -6,7 +6,7 @@ const {
 
 const payload = {
   id: Joi.string().guid({ version: 'uuidv4' }),
-  university: Joi.string().guid({ version: 'uuidv4' }),
+  universityId: Joi.string().guid({ version: 'uuidv4' }),
   studyLevel: Joi.string(),
   degree: Joi.string(),
   dietaryReq: Joi.string(),

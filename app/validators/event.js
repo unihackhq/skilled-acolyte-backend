@@ -1,7 +1,8 @@
 const _ = require('lodash');
 const Joi = require('joi');
 
-const payload = {
+// payload is a function because we need two clones of payload (for required and non required)
+const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   name: Joi.string(),
   location: Joi.string(),
@@ -11,12 +12,12 @@ const payload = {
   eventbriteId: Joi.string().allow(null),
   eventbriteLink: Joi.string().uri().allow(null),
   logoUrl: Joi.string().uri().allow(null)
-};
+});
 
 const requiredValues = _.mapValues(
-  _.pick(payload, ['name', 'location', 'startDate', 'endDate']),
+  _.pick(payload(), ['name', 'location', 'startDate', 'endDate']),
   value => value.required()
 );
 
-exports.payload = payload;
-exports.requiredPayload = _.assign(payload, requiredValues);
+exports.payload = payload();
+exports.requiredPayload = _.assign(payload(), requiredValues);
