@@ -53,9 +53,17 @@ exports.createWithoutTicket = async (payload) => {
 };
 
 exports.update = async (id, payload) => {
+  const { user: userPayload, ...studentPayload } = payload;
+
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.updateAttributes(payload);
+
+  await student.user.updateAttributes(userPayload);
+  return student.updateAttributes({
+    // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
+    firstLaunch: false,
+    ...studentPayload
+  });
 };
 
 exports.delete = async (id) => {
