@@ -63,7 +63,7 @@ const init = async () => {
     options,
   });
 
-  // db up
+  // connect to db
   await models.sequelize.sync();
   // Start the server
   await server.start();

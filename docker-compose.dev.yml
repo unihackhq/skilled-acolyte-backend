@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: .docker/dev/Dockerfile
+    command: ["sh", "wait-for.sh", "db:5432", "--", "npm", "run", "docker-dev"]
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+    restart: always
+    volumes:
+      - .:/usr/src/app/
+      - node_modules:/usr/src/app/node_modules
+    links:
+      - db
+    environment:
+      NODE_ENV: 'dev'
+
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: 'postgres'
+      DB_PASSWORD: 'supersecret'
+
+      POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
+      EVENTBRITE_TOKEN: $EVENTBRITE_TOKEN
+
+  db:
+    image: postgres:10.3-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+       POSTGRES_PASSWORD: 'supersecret'
+       POSTGRES_USER: 'postgres'
+       POSTGRES_DB: 'skilled_acolyte_db_dev'
+
+volumes:
+  db_data:
+  node_modules:

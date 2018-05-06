@@ -9,5 +9,3 @@ COPY . ./
 RUN npm -g install nodemon --loglevel error
 
 RUN npm install --loglevel error
-
-CMD [ "npm", "run", "docker-dev" ]
