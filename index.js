@@ -39,29 +39,31 @@ const init = async () => {
   server.route(routes);
 
   // logging
-  const options = {
-    ops: env.DEV ? false : { interval: 1000 },
-    includes: {
-      response: ['payload', 'headers'],
-      request: ['payload', 'headers'],
-    },
-    reporters: {
-      raw: [{
-        module: requestErrorScrubber
-      }, {
-        module: 'good-squeeze',
-        name: 'SafeJson',
-        args: [null, { space: 2 }]
-      }, 'stdout'],
-      summary: [{
-        module: 'good-console'
-      }, 'stdout'],
-    }
-  };
-  await server.register({
-    plugin: require('good'),
-    options,
-  });
+  if (!env.TESTING) {
+    const options = {
+      ops: env.PROD ? { interval: 1000 } : false,
+      includes: {
+        response: ['payload', 'headers'],
+        request: ['payload', 'headers'],
+      },
+      reporters: {
+        raw: [{
+          module: requestErrorScrubber
+        }, {
+          module: 'good-squeeze',
+          name: 'SafeJson',
+          args: [null, { space: 2 }]
+        }, 'stdout'],
+        summary: [{
+          module: 'good-console'
+        }, 'stdout'],
+      }
+    };
+    await server.register({
+      plugin: require('good'),
+      options,
+    });
+  }
 
   // connect to db
   await models.sequelize.sync();

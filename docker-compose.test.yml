@@ -10,7 +10,7 @@ services:
     links:
       - db
     environment:
-      NODE_ENV: 'docker'
+      NODE_ENV: 'test'
 
       DB_HOST: db
       DB_PORT: 5432
