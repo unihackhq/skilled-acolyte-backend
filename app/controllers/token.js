@@ -47,11 +47,16 @@ exports.request = {
     req.log('token', token.id);
     if (env.SEND_EMAIL) {
       // Send the token
-      await emailClient.sendEmail({
-        From: 'UNIHACK Team <unihack@anonmail.ovh>',
+      await emailClient.sendEmailWithTemplate({
+        From: env.FROM_EMAIL,
         To: email,
-        Subject: 'Verify your email address to use UNIHACK',
-        TextBody: `Your token is: ${token.id}`, // TODO: This will need an email template + link to frontend
+        "TemplateId": env.POSTMARK_TEMPLATE,
+        "TemplateModel": {
+          "product_name": "Unihack",
+          "product_url": env.FRONTEND_URL,
+          "name": user.firstName,
+          "action_url": `${env.FRONTEND_URL}/entry/${token.id}`
+        }
       });
     }
     return {};
