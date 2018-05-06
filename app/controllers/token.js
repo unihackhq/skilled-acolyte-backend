@@ -50,12 +50,12 @@ exports.request = {
       await emailClient.sendEmailWithTemplate({
         From: env.FROM_EMAIL,
         To: email,
-        "TemplateId": env.POSTMARK_TEMPLATE,
-        "TemplateModel": {
-          "product_name": "Unihack",
-          "product_url": env.FRONTEND_URL,
-          "name": user.firstName,
-          "action_url": `${env.FRONTEND_URL}/entry/${token.id}`
+        TemplateId: env.POSTMARK_TEMPLATE,
+        TemplateModel: {
+          product_name: 'Unihack',
+          product_url: env.FRONTEND_URL,
+          name: user.firstName,
+          action_url: `${env.FRONTEND_URL}/entry/${token.id}`
         }
       });
     }

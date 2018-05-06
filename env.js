@@ -1,7 +1,6 @@
 const config = require('konfig')();
 
-const app = config.app;
-const db = config.db;
+const { app, db } = config;
 
 module.exports = {
   // API Information
