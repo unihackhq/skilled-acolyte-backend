@@ -8,4 +8,7 @@ init()
       process.exit(0);
     }, 2000);
   })
-  .catch((err) => { throw err; });
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
