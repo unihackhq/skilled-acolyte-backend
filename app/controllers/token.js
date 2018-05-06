@@ -9,70 +9,57 @@ const env = require('../../env');
 const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
 
 exports.validate = {
+  handler: async (req) => {
+    const { token } = req.payload;
+
+    const t = await Token.findById(token, { include: [{ model: User, as: 'user' }] });
+    if (!t) throw Boom.unauthorized();
+    if (new Date() > t.expiry) throw Boom.unauthorized('Token expired');
+    if (!t.valid) throw Boom.unauthorized('Token invalid');
+
+    // tokens are one time use
+    await t.update({ valid: false });
+
+    const jwt = createToken({ userId: t.user.id, type: 'normal' });
+    return { token: jwt };
+  },
   validate: {
     payload: {
       token: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
-  handler: (req, res) => {
-    const { token } = req.payload;
-    Token.findById(token)
-      .then((t) => {
-        if (!t) {
-          throw Boom.unauthorized();
-        }
-        if (new Date() > t.expiry) {
-          throw Boom.unauthorized('Token expired');
-        }
-        if (!t.valid) {
-          console.log('token invalid');
-          throw Boom.unauthorized('Token invalid');
-        }
-        return User.findById(token.userId);
-      })
-      .then(user =>
-        Token.update({ valid: false }, { where: { id: token } })
-          .then(() => {
-            const jwt = createToken({ userId: user.id });
-            // Create JWT here
-            return res({ token: jwt });
-          }))
-      .catch((err) => {
-        console.log(err);
-        return res(Boom.unauthorized());
-      });
-  },
+  auth: false,
 };
 
 exports.request = {
+  handler: async (req) => {
+    const { params: { email } } = req;
+
+    // Look up user by email
+    const user = await User.findOne({ where: { email } });
+    if (!user) throw Boom.notFound('Could not find the user');
+
+    // Create Token with userId
+    const token = await Token.create();
+    await user.addToken(token);
+    console.log(token);
+
+    req.log('token', token.id);
+    if (env.SEND_EMAIL) {
+      // Send the token
+      await emailClient.sendEmail({
+        From: 'UNIHACK Team <unihack@anonmail.ovh>',
+        To: email,
+        Subject: 'Verify your email address to use UNIHACK',
+        TextBody: `Your token is: ${token.id}`, // TODO: This will need an email template + link to frontend
+      });
+    }
+    return {};
+  },
   validate: {
     params: {
       email: Joi.string().email(),
     },
   },
-  handler: (req, res) => {
-    const { params: { email } } = req;
-
-    // Look up user by email
-    // Create Token with userId
-    User.findOne({ where: { email } })
-      .then(user => Token.create({ userId: user.id }))
-      .then((token) => {
-        console.log(token.id);
-        // Send the token
-        emailClient.sendEmail({
-          From: 'UNIHACK Team <unihack@anonmail.ovh>',
-          To: email,
-          Subject: 'Verify your email address to use UNIHACK',
-          TextBody: `Your token is: ${token.id}`, // TODO: This will need an email template + link to frontend
-        }, () => {
-          // TODO: Logs here
-        });
-
-        res();
-      })
-      .catch((err) => {
-        res(Boom.badRequest(err)); // TODO: Proper error
-      });
-  },
+  auth: false,
 };

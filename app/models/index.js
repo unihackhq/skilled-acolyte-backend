@@ -35,6 +35,10 @@ db.Student.belongsTo(db.User, {
 // Each student also belongs to a University.
 db.Student.belongsTo(db.University, { foreignKey: 'universityId' });
 
+// Users get tokens for login
+db.Token.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
+db.User.hasMany(db.Token, { as: 'tokens', foreignKey: 'userId' });
+
 // Each ticket belongs to a student
 db.Ticket.belongsTo(db.Student, { as: 'student', foreignKey: 'studentId' });
 db.Student.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'studentId' });

@@ -12,6 +12,7 @@ module.exports = {
 
   // JWT
   JWT_KEY: APP.JWT_KEY,
+  SEND_EMAIL: APP.send_email,
 
   // PG Information
   PG_HOST: DB.host,

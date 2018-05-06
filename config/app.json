@@ -16,9 +16,11 @@
     }
   },
   "dev": {
-    "host": "0.0.0.0"
+    "host": "0.0.0.0",
+    "send_email": false
   },
   "docker": {
-    "host": "0.0.0.0"
+    "host": "0.0.0.0",
+    "send_email": true
   }
 }

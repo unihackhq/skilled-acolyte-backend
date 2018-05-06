@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Token', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  userId: DataTypes.UUID,
   valid: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
