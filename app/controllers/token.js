@@ -42,7 +42,6 @@ exports.request = {
     // Create Token with userId
     const token = await Token.create();
     await user.addToken(token);
-    console.log(token);
 
     req.log('token', token.id);
     if (env.SEND_EMAIL) {
