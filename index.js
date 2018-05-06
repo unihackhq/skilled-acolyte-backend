@@ -7,7 +7,7 @@ const routes = require('./app/routes');
 const models = require('./app/models');
 const Token = require('./app/util/token');
 
-const init = async () => {
+exports.init = async () => {
   const hapiOptions = {
     host: env.API_HOST,
     port: env.API_PORT,
@@ -69,7 +69,5 @@ const init = async () => {
   await models.sequelize.sync();
   // Start the server
   await server.start();
-  console.log(`Started. Running on ${server.info.uri}`);
+  return server;
 };
-
-init().catch(err => console.log(`Unexpected error ${err.message}\n`, err));
