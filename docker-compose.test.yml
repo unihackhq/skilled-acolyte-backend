@@ -5,7 +5,6 @@ services:
     build: 
       context: .
       dockerfile: .docker/prod/Dockerfile
-    command: ["sh", "wait-for.sh", "db:5432", "--", "npm", "run", "test"]
     depends_on: 
       - db
     links:
