@@ -1,12 +1,18 @@
 const Joi = require('joi');
 
+const { student: strip } = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
 
 // [GET] /students
 exports.list = {
-  handler: async () => {
-    return service.list();
+  handler: async (req) => {
+    const { type } = req.auth.credentials;
+    const students = await service.list();
+    if (type === 'admin') {
+      return students;
+    }
+    return students.map(strip);
   },
   auth: {
     scope: ['admin', 'student'],
