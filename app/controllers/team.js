@@ -45,7 +45,7 @@ exports.create = {
     }
   },
   auth: {
-    scope: false,
+    scope: ['admin', 'student'],
   },
 };
 

@@ -22,7 +22,7 @@ const populateStudent = async (decoded) => {
   });
   if (!student) return { isValid: false };
 
-  let scope = [`user-${student.id}`];
+  let scope = ['user', 'student', `user-${student.id}`];
   scope = _.concat(scope, student.tickets.map(ticket => `ticket-${ticket.id}`));
   scope = _.concat(scope, student.teams.map(team => `team-${team.id}`));
 
@@ -39,7 +39,7 @@ const populateUser = async (decoded) => {
   return {
     isValid: true,
     credentials: {
-      scope: [`user-${user.id}`]
+      scope: ['user', `user-${user.id}`]
     }
   };
 };

@@ -9,7 +9,7 @@ exports.directory = {
     return service.directory();
   },
   auth: {
-    scope: false,
+    scope: ['admin', 'student'],
   },
 };
 
