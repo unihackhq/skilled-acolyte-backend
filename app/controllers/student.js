@@ -28,6 +28,9 @@ exports.get = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
 };
 
 // [POST] /students
@@ -38,6 +41,9 @@ exports.create = {
   },
   validate: {
     payload: validator.requiredPayload,
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
 

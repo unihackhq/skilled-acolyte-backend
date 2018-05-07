@@ -36,7 +36,7 @@ exports.create = async (payload) => {
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  createHelper(payload, include);
+  return createHelper(payload, include);
 };
 
 exports.createWithoutTicket = async (payload) => {
@@ -44,7 +44,7 @@ exports.createWithoutTicket = async (payload) => {
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  createHelper(payload, include);
+  return createHelper(payload, include);
 };
 
 exports.update = async (id, payload) => {

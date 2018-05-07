@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  email: DataTypes.STRING(512),
+  email: {
+    type: DataTypes.STRING(512),
+    unique: true,
+  },
   firstName: {
     type: DataTypes.STRING,
     allowNull: true,
