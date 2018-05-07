@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  university: {
-    type: DataTypes.UUID,
-    allowNull: true,
-  },
   studyLevel: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -35,6 +31,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
   photoUrl: {
     type: DataTypes.STRING(512),
     allowNull: true,
+  },
+  firstLaunch: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
   },
 }, {
   timestamps: true,

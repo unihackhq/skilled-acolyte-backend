@@ -1,8 +1,10 @@
 const Boom = require('boom');
+const uuidv4 = require('uuid/v4');
 const {
   Student,
   User,
-  Team
+  Team,
+  Ticket,
 } = require('../models');
 
 exports.list = async () => {
@@ -15,41 +17,53 @@ exports.get = async (id) => {
   return student;
 };
 
-exports.create = (data) => {
-  const createUser = async (payload) => {
-    const { id, user: userPayload } = payload;
-    if (id && !userPayload) {
-      return { id, payload };
-    }
-
-    const userInstance = await User.create({ ...userPayload, id });
-    const user = userInstance.get({ plain: true });
-    return { id: user.id, payload, user };
+exports.create = async (payload) => {
+  const id = payload.id || uuidv4();
+  const data = {
+    id,
+    ...payload,
+    user: {
+      id,
+      ...payload.user,
+    },
   };
-
-  const createStudent = async ({ id, payload, user }) => {
-    const studentPayload = { id, ...payload };
-    const studentInstance = await Student.create(studentPayload);
-    const student = studentInstance.get({ plain: true });
-    if (user) {
-      student.user = user;
-    }
-    return student;
-  };
-
-  return createUser(data).then(createStudent);
+  return Student.create(data, {
+    include: [
+      { model: Ticket, as: 'tickets' },
+      { model: User, as: 'user' },
+    ]
+  });
 };
 
-exports.bulkCreate = (payloads) => {
-  const students = payloads.map(payload => exports.create(payload));
-  return Promise.all(students);
+exports.createWithoutTicket = async (payload) => {
+  const id = payload.id || uuidv4();
+  const data = {
+    id,
+    ...payload,
+    user: {
+      id,
+      ...payload.user,
+    },
+  };
+  return Student.create(data, {
+    include: [
+      { model: User, as: 'user' },
+    ]
+  });
 };
-
 
 exports.update = async (id, payload) => {
+  const { user: userPayload, ...studentPayload } = payload;
+
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.updateAttributes(payload);
+
+  await student.user.updateAttributes(userPayload);
+  return student.updateAttributes({
+    // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
+    firstLaunch: false,
+    ...studentPayload
+  });
 };
 
 exports.delete = async (id) => {
@@ -105,4 +119,15 @@ exports.acceptInvite = async (studentId, teamId) => {
 exports.rejectInvite = async (studentId, teamId) => {
   await _removeInvite(studentId, teamId);
   return {};
+};
+
+exports.tickets = async (studentId) => {
+  const student = await Student.findById(studentId, {
+    include: [{
+      model: Ticket,
+      as: 'tickets'
+    }]
+  });
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student.tickets;
 };

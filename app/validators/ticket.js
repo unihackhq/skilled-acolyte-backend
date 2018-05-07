@@ -4,17 +4,14 @@ const Joi = require('joi');
 // payload is a function because we need two clones of payload (for required and non required)
 const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
-  firstName: Joi.string(),
-  lastName: Joi.string(),
-  preferredName: Joi.string(),
-  email: Joi.string().email(),
-  dateOfBirth: Joi.date(),
-  gender: Joi.string(),
-  mobile: Joi.number(),
+  eventbriteOrder: Joi.string(),
+  ticketType: Joi.string(),
+  cancelled: Joi.boolean(),
+  trasferred: Joi.boolean(),
 });
 
 const requiredValues = _.mapValues(
-  _.pick(payload(), ['firstName', 'lastName', 'preferredName', 'email', 'dateOfBirth', 'gender', 'mobile']),
+  _.pick(payload(), ['eventbriteOrder', 'ticketType']),
   value => value.required()
 );
 

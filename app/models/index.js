@@ -26,36 +26,30 @@ Object.keys(db).forEach((modelName) => {
 // =============================================================================
 // ASSOCIATION DEFINITIONS
 // =============================================================================
-// Each student is a user (though not every user is a student). Each student
-// also belongs to a University.
+// Each student is a user (though not every user is a student).
 db.Student.belongsTo(db.User, {
   foreignKey: 'id',
   targetKey: 'id',
   as: 'user'
 });
-db.Student.belongsTo(db.University, {
-  foreignKey: 'university',
-  targetKey: 'id'
-});
+// Each student also belongs to a University.
+db.Student.belongsTo(db.University, { foreignKey: 'universityId' });
 
-// Each ticket belongs to a student - either as the original or current ticket
-// holder
-db.Ticket.belongsTo(db.Student, { as: 'originalStudent' });
-db.Ticket.belongsTo(db.Student, { as: 'currentStudent' });
+// Each ticket belongs to a student
+db.Ticket.belongsTo(db.Student, { as: 'student', foreignKey: 'studentId' });
+db.Student.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'studentId' });
 
 // An event can have as many teams. A team can only 'belong' to an event. Hence
 // the use of a One-to-many association.
-db.Event.hasMany(db.Team, { as: 'Teams', foreignKey: 'eventId' });
+db.Event.hasMany(db.Team, { as: 'teams', foreignKey: 'eventId' });
 
-// A team can have many students. A student can be in many teams. Hene the
+// A team can have many students. A student can be in many teams. Hence the
 // Belongs to Many association.
 // PART A: Members and Teams
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
-    scope: {
-      invited: false
-    },
+    scope: { invited: false },
     unique: false
   },
   foreignKey: 'teamId',
@@ -64,9 +58,7 @@ db.Team.belongsToMany(db.Student, {
 db.Student.belongsToMany(db.Team, {
   through: {
     model: db.TeamAssignment,
-    scope: {
-      invited: false,
-    },
+    scope: { invited: false },
     unique: false
   },
   foreignKey: 'studentId',
@@ -76,9 +68,7 @@ db.Student.belongsToMany(db.Team, {
 db.Team.belongsToMany(db.Student, {
   through: {
     model: db.TeamAssignment,
-    scope: {
-      invited: true
-    },
+    scope: { invited: true },
     unique: false
   },
   foreignKey: 'teamId',
@@ -87,9 +77,7 @@ db.Team.belongsToMany(db.Student, {
 db.Student.belongsToMany(db.Team, {
   through: {
     model: db.TeamAssignment,
-    scope: {
-      invited: true
-    },
+    scope: { invited: true },
     unique: false
   },
   foreignKey: 'studentId',
@@ -99,33 +87,19 @@ db.Student.belongsToMany(db.Team, {
 // =============================================================================
 // SCOPES
 // =============================================================================
-// This reduces displaying the User Information to name and email when displaying
-// Student record.
+// Exclude deactivated students
 db.Student.addScope('defaultScope', {
-  include: [
-    {
-      model: db.User,
-      as: 'user',
-      attributes: ['firstName', 'lastName', 'preferredName', 'email'],
-      where: {
-        deactivated: false,
-      },
-    },
-  ],
+  include: [{
+    model: db.User,
+    as: 'user',
+    where: { deactivated: false },
+  }],
 }, { override: true });
 
-// This masks users who are
+// Exclude deactivated users
 db.User.addScope('defaultScope', {
-  where: {
-    deactivated: false,
-  },
-  attributes: {
-    exclude: ['authId', 'accessToken'],
-  },
+  where: { deactivated: false },
 }, { override: true });
 
-// Define Sequelize objects
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
 module.exports = db;
