@@ -29,7 +29,6 @@ const routes = [
   { method: 'DELETE', path: `${prefix}/events/{id}`, options: event.delete },
 
   { method: 'GET', path: `${prefix}/students`, options: student.list },
-  { method: 'GET', path: `${prefix}/students/directory`, options: student.directory },
   { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
   { method: 'GET', path: `${prefix}/students/{id}/tickets`, options: student.tickets },
   { method: 'GET', path: `${prefix}/students/{id}/teams`, options: student.teams },

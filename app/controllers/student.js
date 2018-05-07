@@ -3,23 +3,13 @@ const Joi = require('joi');
 const service = require('../services/student');
 const validator = require('../validators/student');
 
-// [GET] /student_directory
-exports.directory = {
-  handler: async () => {
-    return service.directory();
-  },
-  auth: {
-    scope: ['admin', 'student'],
-  },
-};
-
 // [GET] /students
 exports.list = {
   handler: async () => {
     return service.list();
   },
   auth: {
-    scope: ['admin'],
+    scope: ['admin', 'student'],
   },
 };
 

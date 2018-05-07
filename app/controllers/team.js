@@ -34,7 +34,7 @@ exports.create = {
   handler: async (req) => {
     const { addMe, ...payload } = req.payload;
     if (addMe) {
-      return service.create(req.auth.credentials.userId, payload);
+      return service.create(req.auth.credentials.id, payload);
     }
     return service.onlyCreate(payload);
   },

@@ -8,7 +8,9 @@ const {
 } = require('../models');
 
 exports.list = async () => {
-  return Student.findAll();
+  return Student.findAll({
+    include: [{ model: User, as: 'user' }]
+  });
 };
 
 exports.get = async (id) => {
@@ -69,12 +71,6 @@ exports.delete = async (id) => {
   if (!deactivated) throw Boom.internal('Could not delete the student');
 
   return {};
-};
-
-exports.directory = async () => {
-  return Student.findAll({
-    include: [{ model: User, as: 'user' }]
-  });
 };
 
 exports.teams = async (id) => {

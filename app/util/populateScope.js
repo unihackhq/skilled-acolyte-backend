@@ -7,10 +7,7 @@ const {
   Team
 } = require('../models');
 
-const populateAdmin = () => ({
-  isValid: true,
-  credentials: { scope: ['admin'] }
-});
+const populateAdmin = async () => [];
 
 const populateStudent = async (decoded) => {
   const { userId } = decoded;
@@ -20,28 +17,21 @@ const populateStudent = async (decoded) => {
       { model: Team, as: 'teams', required: false },
     ]
   });
-  if (!student) return { isValid: false };
+  if (!student) return false;
 
   let scope = ['user', 'student', `user-${student.id}`];
   scope = _.concat(scope, student.tickets.map(ticket => `ticket-${ticket.id}`));
   scope = _.concat(scope, student.teams.map(team => `team-${team.id}`));
 
-  return {
-    isValid: true,
-    credentials: { scope }
-  };
+  return scope;
 };
 
 const populateUser = async (decoded) => {
   const { userId } = decoded;
   const user = await User.findById(userId);
+  if (!user) return false;
 
-  return {
-    isValid: true,
-    credentials: {
-      scope: ['user', `user-${user.id}`]
-    }
-  };
+  return ['user', `user-${user.id}`];
 };
 
 module.exports = async (decoded) => {
@@ -54,5 +44,17 @@ module.exports = async (decoded) => {
   };
   if (!populateType[type]) return { isValid: false };
 
-  return populateType[type](decoded);
+  const scope = await populateType[type](decoded);
+  if (!scope) return { isValid: false };
+  scope.push(type);
+
+  const id = decoded.userId || '';
+
+  return {
+    isValid: true,
+    credentials: {
+      id,
+      scope
+    }
+  };
 };
