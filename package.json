@@ -7,11 +7,12 @@
     "node": ">=9.11"
   },
   "scripts": {
-    "test": "npm-run-all lint",
+    "test": "npm-run-all lint crash-test",
+    "crash-test": "node test.js",
     "lint": "eslint .",
-    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0 index.js",
-    "docker-start": "node index.js",
-    "docker-dev": "nodemon --inspect=0.0.0.0 index.js"
+    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0 run.js",
+    "docker-start": "node run.js",
+    "docker-dev": "nodemon --inspect=0.0.0.0 run.js"
   },
   "repository": {
     "type": "git",

@@ -27,7 +27,8 @@ module.exports = {
 
   // ENV Information
   TESTING: process.env.NODE_ENV === 'test',
-  DEV: process.env.NODE_ENV === 'dev' || false,
+  DEV: process.env.NODE_ENV === 'dev',
+  PROD: process.env.NODE_ENV === 'docker',
 
   // Eventbrite
   EVENTBRITE_QUESTION_IDS: app.eventbrite_questions,

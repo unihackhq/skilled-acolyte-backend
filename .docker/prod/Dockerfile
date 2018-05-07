@@ -6,5 +6,3 @@ WORKDIR /usr/src/app
 COPY . ./
 
 RUN npm install --loglevel error
-
-CMD [ "npm", "run", "docker-start" ]

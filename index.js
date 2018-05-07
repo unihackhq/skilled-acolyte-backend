@@ -7,7 +7,7 @@ const routes = require('./app/routes');
 const models = require('./app/models');
 const Token = require('./app/util/token');
 
-const init = async () => {
+exports.init = async () => {
   const hapiOptions = {
     host: env.API_HOST,
     port: env.API_PORT,
@@ -39,35 +39,35 @@ const init = async () => {
   server.route(routes);
 
   // logging
-  const options = {
-    ops: env.DEV ? false : { interval: 1000 },
-    includes: {
-      response: ['payload', 'headers'],
-      request: ['payload', 'headers'],
-    },
-    reporters: {
-      raw: [{
-        module: requestErrorScrubber
-      }, {
-        module: 'good-squeeze',
-        name: 'SafeJson',
-        args: [null, { space: 2 }]
-      }, 'stdout'],
-      summary: [{
-        module: 'good-console'
-      }, 'stdout'],
-    }
-  };
-  await server.register({
-    plugin: require('good'),
-    options,
-  });
+  if (!env.TESTING) {
+    const options = {
+      ops: env.PROD ? { interval: 1000 } : false,
+      includes: {
+        response: ['payload', 'headers'],
+        request: ['payload', 'headers'],
+      },
+      reporters: {
+        raw: [{
+          module: requestErrorScrubber
+        }, {
+          module: 'good-squeeze',
+          name: 'SafeJson',
+          args: [null, { space: 2 }]
+        }, 'stdout'],
+        summary: [{
+          module: 'good-console'
+        }, 'stdout'],
+      }
+    };
+    await server.register({
+      plugin: require('good'),
+      options,
+    });
+  }
 
-  // db up
+  // connect to db
   await models.sequelize.sync();
   // Start the server
   await server.start();
-  console.log(`Started. Running on ${server.info.uri}`);
+  return server;
 };
-
-init().catch(err => console.log(`Unexpected error ${err.message}\n`, err));

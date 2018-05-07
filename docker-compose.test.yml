@@ -7,13 +7,10 @@ services:
       dockerfile: .docker/prod/Dockerfile
     depends_on: 
       - db
-    ports:
-      - "3000:3000"
-    restart: always
     links:
       - db
     environment:
-      NODE_ENV: 'docker'
+      NODE_ENV: 'test'
 
       DB_HOST: db
       DB_PORT: 5432
@@ -26,6 +23,7 @@ services:
 
       FROM_EMAIL: 'PUT_EMAIL_FOR_SENDING_LOGINS_HERE'
       FRONTEND_URL: 'PUT_WEBAPP_URL_HERE'
+
   db:
     image: postgres:10.3-alpine
     volumes:
