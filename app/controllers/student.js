@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const { student: strip } = require('../util/strip');
+const { student: stripStudent, event: stripEvent } = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
 
@@ -12,7 +12,7 @@ exports.list = {
     if (type === 'admin') {
       return students;
     }
-    return students.map(strip);
+    return students.map(stripStudent);
   },
   auth: {
     scope: ['admin', 'student'],
@@ -102,8 +102,14 @@ exports.tickets = {
 // [GET] /students/{id}/events
 exports.events = {
   handler: async (req) => {
+    const { type } = req.auth.credentials;
     const { id } = req.params;
-    return service.events(id);
+    const events = await service.events(id);
+
+    if (type === 'admin') {
+      return events;
+    }
+    return events.map(stripEvent);
   },
   validate: {
     params: {
