@@ -24,7 +24,6 @@ services:
       NODE_ENV: 'dev'
       POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
       EVENTBRITE_TOKEN: $EVENTBRITE_TOKEN
-      JWT_KEY: 'this-is-secret'
   db:
     image: postgres:10.3-alpine
     ports:

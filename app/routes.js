@@ -14,7 +14,7 @@ const prefix = `/api/v${API_URL_VERSION}`;
 
 const routes = [
   { method: 'POST', path: `${prefix}/token`, options: token.validate },
-  { method: 'GET', path: `${prefix}/token/{email}`, options: token.request },
+  { method: 'POST', path: `${prefix}/token/{email}`, options: token.request },
 
   { method: 'GET', path: `${prefix}/universities`, options: university.list },
   { method: 'GET', path: `${prefix}/universities/{id}`, options: university.get },
