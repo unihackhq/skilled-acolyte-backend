@@ -8,6 +8,9 @@ exports.list = {
   handler: async () => {
     return service.list();
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [GET] /events/{id}
@@ -21,6 +24,9 @@ exports.get = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [POST] /events
@@ -31,6 +37,9 @@ exports.create = {
   },
   validate: {
     payload: validator.requiredPayload,
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
 
@@ -47,6 +56,9 @@ exports.update = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [DELETE] /events/{id}
@@ -59,5 +71,8 @@ exports.delete = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin'],
   },
 };

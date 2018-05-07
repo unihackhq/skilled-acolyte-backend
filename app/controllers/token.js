@@ -3,7 +3,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 const { User, Token } = require('../models');
-const createToken = require('../util/token').create;
+const { create: createJwt } = require('../util/jwt');
 const env = require('../../env');
 
 const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
@@ -20,7 +20,7 @@ exports.validate = {
     // tokens are one time use
     await t.update({ valid: false });
 
-    const jwt = createToken({ userId: t.user.id, type: 'normal' });
+    const jwt = createJwt({ userId: t.user.id, type: t.user.type });
     return { token: jwt };
   },
   validate: {

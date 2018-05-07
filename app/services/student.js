@@ -8,7 +8,9 @@ const {
 } = require('../models');
 
 exports.list = async () => {
-  return Student.findAll();
+  return Student.findAll({
+    include: [{ model: User, as: 'user' }]
+  });
 };
 
 exports.get = async (id) => {
@@ -17,39 +19,34 @@ exports.get = async (id) => {
   return student;
 };
 
-exports.create = async (payload) => {
+const createHelper = (payload, include) => {
   const id = payload.id || uuidv4();
   const data = {
     id,
     ...payload,
     user: {
       id,
+      type: 'student',
       ...payload.user,
     },
   };
-  return Student.create(data, {
-    include: [
-      { model: Ticket, as: 'tickets' },
-      { model: User, as: 'user' },
-    ]
-  });
+  return Student.create(data, { include });
+};
+
+exports.create = async (payload) => {
+  const include = [
+    { model: Ticket, as: 'tickets' },
+    { model: User, as: 'user' },
+  ];
+  return createHelper(payload, include);
 };
 
 exports.createWithoutTicket = async (payload) => {
-  const id = payload.id || uuidv4();
-  const data = {
-    id,
-    ...payload,
-    user: {
-      id,
-      ...payload.user,
-    },
-  };
-  return Student.create(data, {
-    include: [
-      { model: User, as: 'user' },
-    ]
-  });
+  const include = [
+    { model: Ticket, as: 'tickets' },
+    { model: User, as: 'user' },
+  ];
+  return createHelper(payload, include);
 };
 
 exports.update = async (id, payload) => {
@@ -74,12 +71,6 @@ exports.delete = async (id) => {
   if (!deactivated) throw Boom.internal('Could not delete the student');
 
   return {};
-};
-
-exports.directory = async () => {
-  return Student.findAll({
-    include: [{ model: User, as: 'user' }]
-  });
 };
 
 exports.teams = async (id) => {

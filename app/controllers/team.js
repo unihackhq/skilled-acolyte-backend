@@ -8,6 +8,9 @@ exports.list = {
   handler: async () => {
     return service.list();
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [GET] /teams/{id}
@@ -21,6 +24,9 @@ exports.get = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'team-{params.id}'],
+  },
 };
 
 // [POST] /teams
@@ -28,7 +34,7 @@ exports.create = {
   handler: async (req) => {
     const { addMe, ...payload } = req.payload;
     if (addMe) {
-      return service.create(req.auth.credentials.userId, payload);
+      return service.create(req.auth.credentials.id, payload);
     }
     return service.onlyCreate(payload);
   },
@@ -37,6 +43,9 @@ exports.create = {
       addMe: Joi.boolean().default(false),
       ...validator.requiredPayload,
     }
+  },
+  auth: {
+    scope: ['admin', 'student'],
   },
 };
 
@@ -53,6 +62,9 @@ exports.update = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'team-{params.id}'],
+  },
 };
 
 // [DELETE] /teams/{id}
@@ -65,6 +77,9 @@ exports.delete = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
 
@@ -79,6 +94,9 @@ exports.members = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'team-{params.id}'],
+  },
 };
 
 // [GET] /teams/{id}/invites
@@ -91,6 +109,9 @@ exports.invites = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'team-{params.id}'],
   },
 };
 
@@ -108,5 +129,8 @@ exports.invite = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'team-{params.id}'],
   },
 };

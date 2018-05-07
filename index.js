@@ -5,7 +5,7 @@ const { requestErrorScrubber } = require('./app/util/good');
 const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
-const Token = require('./app/util/token');
+const jwt = require('./app/util/jwt');
 
 exports.init = async () => {
   const hapiOptions = {
@@ -30,7 +30,7 @@ exports.init = async () => {
   await server.register(require('hapi-auth-jwt2'));
   server.auth.strategy('jwt', 'jwt', {
     key: env.JWT_KEY,
-    validate: Token.validate,
+    validate: jwt.validate,
     verifyOptions: { algorithms: ['HS256'], tokenType: 'Bearer' },
   });
   server.auth.default('jwt');
