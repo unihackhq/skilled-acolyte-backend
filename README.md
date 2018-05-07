@@ -26,14 +26,14 @@ npm run dev
 
 # Docker Development
 ```Bash
-POSTMARK_CLIENT_KEY=your-key EVENTBRITE_TOKEN=your-token docker-compose up
+POSTMARK_CLIENT_KEY=your-key EVENTBRITE_TOKEN=your-token docker-compose -f docker-compose.dev.yml up
 ```
 
 # Production (Docker)
-Edit docker-compose.prod.yml and put the correct db connection info, tokens/api keys, etc.
+Edit docker-compose.prod.yml and put in the correct db connection info, tokens/api keys, etc.
 
 ```Bash
-docker-compose -f docker-compose.prod.yml up
+docker-compose up
 ```
 
 # License
