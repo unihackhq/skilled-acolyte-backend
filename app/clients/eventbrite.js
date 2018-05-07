@@ -1,4 +1,6 @@
 const axios = require('axios');
+const _ = require('lodash');
+
 const env = require('../../env');
 
 const api = axios.create({
@@ -27,7 +29,7 @@ const moreAttendees = (eventId, data) => {
       .then(response => moreAttendees(eventId, response))
       // concat the attendees from prev call with attendees
       // from the current call (all the calls after it)
-      .then(newAttendees => data.attendees.concat(newAttendees));
+      .then(newAttendees => _.concat(data.attendees, newAttendees));
   }
   return data.attendees;
 };
