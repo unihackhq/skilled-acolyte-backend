@@ -7,6 +7,9 @@ exports.list = {
   handler: async () => {
     return service.list();
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [GET] /tickets/{id}
@@ -19,6 +22,9 @@ exports.get = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'ticket-{params.id}'],
   },
 };
 
@@ -36,5 +42,8 @@ exports.transfer = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'ticket-{params.id}'],
   },
 };

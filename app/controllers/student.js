@@ -8,12 +8,18 @@ exports.directory = {
   handler: async () => {
     return service.directory();
   },
+  auth: {
+    scope: false,
+  },
 };
 
 // [GET] /students
 exports.list = {
   handler: async () => {
     return service.list();
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
 
@@ -60,6 +66,9 @@ exports.update = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
 };
 
 // [DELETE] /students/{id}
@@ -72,6 +81,9 @@ exports.delete = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
 
@@ -86,6 +98,9 @@ exports.tickets = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
 };
 
 // [GET] /students/{id}/teams
@@ -99,6 +114,9 @@ exports.teams = {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
 };
 
 // [GET] /students/{id}/invites
@@ -111,6 +129,9 @@ exports.invites = {
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
   },
 };
 
@@ -126,6 +147,9 @@ exports.acceptInvite = {
       teamId: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
 };
 
 // [POST] /students/{studentId}/invites/{teamId}/reject
@@ -139,5 +163,8 @@ exports.rejectInvite = {
       studentId: Joi.string().guid({ version: 'uuidv4' }),
       teamId: Joi.string().guid({ version: 'uuidv4' }),
     },
+  },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
   },
 };

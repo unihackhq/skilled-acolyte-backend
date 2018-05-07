@@ -12,6 +12,9 @@ exports.event = {
       eventId: Joi.string().required(),
     },
   },
+  auth: {
+    scope: ['admin'],
+  },
 };
 
 // [POST] /prepopulate/attendees
@@ -24,5 +27,8 @@ exports.attendees = {
     payload: {
       eventId: Joi.string().required(),
     },
+  },
+  auth: {
+    scope: ['admin'],
   },
 };
