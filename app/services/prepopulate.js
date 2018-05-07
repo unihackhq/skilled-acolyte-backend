@@ -13,6 +13,6 @@ exports.attendees = async (eventId) => {
   const event = await Event.findOne({ where: { eventbriteId: eventId } });
   if (!event) throw Boom.notFound('Could not find the event');
 
-  const students = await eventbriteService.students(eventId);
+  const students = await eventbriteService.students(eventId, event.id);
   return Promise.all(students.map(student => studentService.create(student)));
 };

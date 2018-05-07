@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
   },
   eventbriteId: {
     type: DataTypes.STRING,
-    allowNull: true,
+    unique: true,
   },
   eventbriteLink: {
     type: DataTypes.STRING,
