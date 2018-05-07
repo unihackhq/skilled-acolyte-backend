@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'user'
+  },
 
   // We do not delete accounts for data integrity. We deactivate accounts if no
   // longer used.

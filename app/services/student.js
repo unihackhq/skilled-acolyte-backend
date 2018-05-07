@@ -17,39 +17,34 @@ exports.get = async (id) => {
   return student;
 };
 
-exports.create = async (payload) => {
+const createHelper = (payload, include) => {
   const id = payload.id || uuidv4();
   const data = {
     id,
     ...payload,
     user: {
       id,
+      type: 'student',
       ...payload.user,
     },
   };
-  return Student.create(data, {
-    include: [
-      { model: Ticket, as: 'tickets' },
-      { model: User, as: 'user' },
-    ]
-  });
+  return Student.create(data, { include });
+};
+
+exports.create = async (payload) => {
+  const include = [
+    { model: Ticket, as: 'tickets' },
+    { model: User, as: 'user' },
+  ];
+  createHelper(payload, include);
 };
 
 exports.createWithoutTicket = async (payload) => {
-  const id = payload.id || uuidv4();
-  const data = {
-    id,
-    ...payload,
-    user: {
-      id,
-      ...payload.user,
-    },
-  };
-  return Student.create(data, {
-    include: [
-      { model: User, as: 'user' },
-    ]
-  });
+  const include = [
+    { model: Ticket, as: 'tickets' },
+    { model: User, as: 'user' },
+  ];
+  createHelper(payload, include);
 };
 
 exports.update = async (id, payload) => {
