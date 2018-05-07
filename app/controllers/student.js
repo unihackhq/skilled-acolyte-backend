@@ -93,6 +93,22 @@ exports.tickets = {
   },
 };
 
+// [GET] /students/{id}/events
+exports.events = {
+  handler: async (req) => {
+    const { id } = req.params;
+    return service.events(id);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+  auth: {
+    scope: ['admin', 'user-{params.id}'],
+  },
+};
+
 // [GET] /students/{id}/teams
 exports.teams = {
   handler: async (req) => {

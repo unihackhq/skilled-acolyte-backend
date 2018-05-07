@@ -44,6 +44,10 @@ db.User.hasMany(db.Token, { as: 'tokens', foreignKey: 'userId' });
 db.Ticket.belongsTo(db.Student, { as: 'student', foreignKey: 'studentId' });
 db.Student.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'studentId' });
 
+// Each ticket is for an event
+db.Ticket.belongsTo(db.Event, { as: 'event', foreignKey: 'eventId' });
+db.Event.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'eventId' });
+
 // An event can have as many teams. A team can only 'belong' to an event. Hence
 // the use of a One-to-many association.
 db.Event.hasMany(db.Team, { as: 'teams', foreignKey: 'eventId' });
