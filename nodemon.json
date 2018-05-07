@@ -1,0 +1,6 @@
+{
+  "events": {
+    "restart": "npm run lint",
+    "start": "npm run lint"
+  }
+}
