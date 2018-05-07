@@ -138,7 +138,7 @@ exports.acceptInvite = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: ['admin', 'user-{params.studentId}'],
   },
 };
 
@@ -155,6 +155,6 @@ exports.rejectInvite = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: ['admin', 'user-{params.studentId}'],
   },
 };
