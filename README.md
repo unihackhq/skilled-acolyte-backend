@@ -30,7 +30,7 @@ POSTMARK_CLIENT_KEY=your-key EVENTBRITE_TOKEN=your-token docker-compose -f docke
 ```
 
 # Production (Docker)
-Edit docker-compose.prod.yml and put in the correct db connection info, tokens/api keys, etc.
+Edit `docker-compose.prod.yml` and put in the correct db connection info, tokens/api keys, etc.
 
 ```Bash
 docker-compose up
