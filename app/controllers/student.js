@@ -109,6 +109,23 @@ exports.teams = {
   },
 };
 
+// [POST] /students/{studentId}/teams/{teamId}/leave
+exports.leaveTeam = {
+  handler: async (req) => {
+    const { studentId, teamId } = req.params;
+    return service.leaveTeam(studentId, teamId);
+  },
+  validate: {
+    params: {
+      studentId: Joi.string().guid({ version: 'uuidv4' }),
+      teamId: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+  auth: {
+    scope: ['admin', 'user-{params.studentId}'],
+  },
+};
+
 // [GET] /students/{id}/invites
 exports.invites = {
   handler: async (req) => {

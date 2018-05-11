@@ -79,6 +79,17 @@ exports.teams = async (id) => {
   return student.getTeams();
 };
 
+exports.leaveTeam = async (studentId, teamId) => {
+  const team = await Team.findById(teamId);
+  if (!team) throw Boom.notFound('Could not find the team');
+
+  const isMember = await team.hasMember(studentId);
+  if (!isMember) throw Boom.badRequest('The student is not a member of the team');
+
+  await team.removeMember(studentId);
+  return {};
+};
+
 exports.invites = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
