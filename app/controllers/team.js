@@ -33,15 +33,21 @@ exports.get = {
 // [POST] /teams
 exports.create = {
   handler: async (req) => {
-    const { addMe, ...payload } = req.payload;
-    if (addMe) {
-      return service.create(req.auth.credentials.id, payload);
+    const { type, id } = req.auth.credentials;
+    const { addMembers, ...payload } = req.payload;
+    // add student's own id
+    if (type === 'student') {
+      addMembers.push(id);
     }
-    return service.onlyCreate(payload);
+
+    if (addMembers.length > 0) {
+      return service.createAndJoin(addMembers, payload);
+    }
+    return service.create(payload);
   },
   validate: {
     payload: {
-      addMe: Joi.boolean().default(false),
+      addMembers: Joi.array().items(Joi.string().guid({ version: 'uuidv4' })).default([]),
       ...validator.requiredPayload,
     }
   },
