@@ -7,6 +7,8 @@ const sequelize = new Sequelize(env.DATABASE_URL, {
   host: env.PG_HOST,
   dialect: 'postgres',
   logging: env.TESTING ? false : console.log,
+  // to get rid of the annoying message on startup
+  operatorsAliases: false,
 });
 const db = {};
 
