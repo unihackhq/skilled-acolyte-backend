@@ -29,7 +29,7 @@ const findCreateUniFromName = (name) => {
     .spread(uni => uni.get({ plain: true }));
 };
 
-const mapAttendeeToStudent = async (attendee) => {
+const mapAttendeeToStudent = async (attendee, eventId) => {
   // put questions in an id accessible object
   const questions = attendee.answers.reduce((acc, question) => {
     return Object.assign(acc, { [question.question_id]: question });
@@ -62,6 +62,7 @@ const mapAttendeeToStudent = async (attendee) => {
       mobile: attendee.profile.cell_phone
     },
     tickets: [{
+      eventId,
       eventbriteOrder: attendee.order_id,
       ticketType: attendee.ticket_class_name,
       cancelled: attendee.cancelled,
@@ -69,7 +70,7 @@ const mapAttendeeToStudent = async (attendee) => {
   };
 };
 
-exports.students = async (eventId) => {
+exports.students = async (eventId, dbEventId) => {
   const attendees = await client.attendees(eventId);
-  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee)));
+  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId)));
 };

@@ -31,6 +31,7 @@ const routes = [
   { method: 'GET', path: `${prefix}/students`, options: student.list },
   { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },
   { method: 'GET', path: `${prefix}/students/{id}/tickets`, options: student.tickets },
+  { method: 'GET', path: `${prefix}/students/{id}/events`, options: student.events },
   { method: 'POST', path: `${prefix}/students`, options: student.create },
   { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
   { method: 'DELETE', path: `${prefix}/students/{id}`, options: student.delete },

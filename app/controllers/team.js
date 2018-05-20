@@ -1,5 +1,6 @@
 const Joi = require('joi');
 
+const { student: stripStudent } = require('../util/strip');
 const service = require('../services/team');
 const validator = require('../validators/team');
 
@@ -32,15 +33,21 @@ exports.get = {
 // [POST] /teams
 exports.create = {
   handler: async (req) => {
-    const { addMe, ...payload } = req.payload;
-    if (addMe) {
-      return service.create(req.auth.credentials.id, payload);
+    const { type, id } = req.auth.credentials;
+    const { addMembers, ...payload } = req.payload;
+    // add student's own id
+    if (type === 'student') {
+      addMembers.push(id);
     }
-    return service.onlyCreate(payload);
+
+    if (addMembers.length > 0) {
+      return service.createAndJoin(addMembers, payload);
+    }
+    return service.create(payload);
   },
   validate: {
     payload: {
-      addMe: Joi.boolean().default(false),
+      addMembers: Joi.array().items(Joi.string().guid({ version: 'uuidv4' })).default([]),
       ...validator.requiredPayload,
     }
   },
@@ -86,8 +93,14 @@ exports.delete = {
 // [GET] /teams/{id}/members
 exports.members = {
   handler: async (req) => {
+    const { type } = req.auth.credentials;
     const { id } = req.params;
-    return service.members(id);
+    const members = await service.members(id);
+
+    if (type === 'admin') {
+      return members;
+    }
+    return members.map(stripStudent);
   },
   validate: {
     params: {
@@ -102,8 +115,14 @@ exports.members = {
 // [GET] /teams/{id}/invites
 exports.invites = {
   handler: async (req) => {
+    const { type } = req.auth.credentials;
     const { id } = req.params;
-    return service.invites(id);
+    const invites = await service.invites(id);
+
+    if (type === 'admin') {
+      return invites;
+    }
+    return invites.map(stripStudent);
   },
   validate: {
     params: {

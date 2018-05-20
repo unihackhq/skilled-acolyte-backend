@@ -7,6 +7,8 @@ const sequelize = new Sequelize(env.DATABASE_URL, {
   host: env.PG_HOST,
   dialect: 'postgres',
   logging: env.TESTING ? false : console.log,
+  // to get rid of the annoying message on startup
+  operatorsAliases: false,
 });
 const db = {};
 
@@ -43,6 +45,10 @@ db.User.hasMany(db.Token, { as: 'tokens', foreignKey: 'userId' });
 // Each ticket belongs to a student
 db.Ticket.belongsTo(db.Student, { as: 'student', foreignKey: 'studentId' });
 db.Student.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'studentId' });
+
+// Each ticket is for an event
+db.Ticket.belongsTo(db.Event, { as: 'event', foreignKey: 'eventId' });
+db.Event.hasMany(db.Ticket, { as: 'tickets', foreignKey: 'eventId' });
 
 // An event can have as many teams. A team can only 'belong' to an event. Hence
 // the use of a One-to-many association.

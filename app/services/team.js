@@ -12,13 +12,16 @@ exports.get = async (id) => {
   return team;
 };
 
-exports.create = async (studentId, payload) => {
+exports.createAndJoin = async (studentIds, payload) => {
   const team = await Team.create(payload);
-  await studentService._join(team, studentId);
-  return team;
+
+  const addingMembers = studentIds.map(studentId => studentService._join(team, studentId));
+  const members = await Promise.all(addingMembers);
+
+  return { team, members };
 };
 
-exports.onlyCreate = async (payload) => {
+exports.create = async (payload) => {
   return Team.create(payload);
 };
 

@@ -5,6 +5,7 @@ const {
   User,
   Team,
   Ticket,
+  Event,
 } = require('../models');
 
 exports.list = async () => {
@@ -132,4 +133,19 @@ exports.tickets = async (studentId) => {
   });
   if (!student) throw Boom.notFound('Could not find the student');
   return student.tickets;
+};
+
+exports.events = async (studentId) => {
+  const student = await Student.findById(studentId, {
+    include: [{
+      model: Ticket,
+      as: 'tickets',
+      include: [{
+        model: Event,
+        as: 'event'
+      }]
+    }]
+  });
+  if (!student) throw Boom.notFound('Could not find the student');
+  return student.tickets.map(ticket => ticket.event);
 };

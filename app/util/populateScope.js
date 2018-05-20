@@ -54,6 +54,7 @@ module.exports = async (decoded) => {
     isValid: true,
     credentials: {
       id,
+      type,
       scope
     }
   };

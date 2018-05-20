@@ -5,13 +5,14 @@ const Joi = require('joi');
 const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   eventbriteOrder: Joi.string(),
+  eventId: Joi.string().guid({ version: 'uuidv4' }),
   ticketType: Joi.string(),
   cancelled: Joi.boolean(),
   trasferred: Joi.boolean(),
 });
 
 const requiredValues = _.mapValues(
-  _.pick(payload(), ['eventbriteOrder', 'ticketType']),
+  _.pick(payload(), ['eventbriteOrder', 'eventId', 'ticketType']),
   value => value.required()
 );
 
