@@ -23,13 +23,17 @@ exports.event = async (eventId) => {
 };
 
 // find or create a university with name
-const findCreateUniFromName = (name) => {
+const findCreateUniFromName = (name, t) => {
   return University
-    .findOrCreate({ where: { name }, defaults: { country: 'Australia' } })
+    .findOrCreate({
+      where: { name },
+      defaults: { country: 'Australia' },
+      transaction: t,
+    })
     .spread(uni => uni.get({ plain: true }));
 };
 
-const mapAttendeeToStudent = async (attendee, eventId) => {
+const mapAttendeeToStudent = async (attendee, eventId, t) => {
   // put questions in an id accessible object
   const questions = attendee.answers.reduce((acc, question) => {
     return Object.assign(acc, { [question.question_id]: question });
@@ -42,7 +46,7 @@ const mapAttendeeToStudent = async (attendee, eventId) => {
   const dietaryReq = questions[qId.dietary_req].answer;
   const medicalReq = questions[qId.medical_req].answer;
 
-  const uni = await findCreateUniFromName(uniName);
+  const uni = await findCreateUniFromName(uniName, t);
   return {
     universityId: uni.id,
     studyLevel,
@@ -70,7 +74,7 @@ const mapAttendeeToStudent = async (attendee, eventId) => {
   };
 };
 
-exports.students = async (eventId, dbEventId) => {
+exports.students = async (eventId, dbEventId, t) => {
   const attendees = await client.attendees(eventId);
-  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId)));
+  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId, t)));
 };

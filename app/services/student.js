@@ -21,7 +21,7 @@ exports.get = async (id) => {
   return student;
 };
 
-const createHelper = (payload, include) => {
+const createHelper = (payload, include, transaction = null) => {
   const id = payload.id || uuidv4();
   const data = {
     id,
@@ -32,24 +32,29 @@ const createHelper = (payload, include) => {
       ...payload.user,
     },
   };
+
+  if (transaction) {
+    return Student.create(data, { include, transaction });
+  }
+
   return sequelize.transaction(t =>
     Student.create(data, { include, transaction: t }));
 };
 
-exports.create = async (payload) => {
+exports.create = async (payload, t = null) => {
   const include = [
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  return createHelper(payload, include);
+  return createHelper(payload, include, t);
 };
 
-exports.createWithoutTicket = async (payload) => {
+exports.createWithoutTicket = async (payload, t = null) => {
   const include = [
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  return createHelper(payload, include);
+  return createHelper(payload, include, t);
 };
 
 exports.update = async (id, payload) => {
