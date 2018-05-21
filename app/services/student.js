@@ -53,26 +53,21 @@ exports.createWithoutTicket = async (payload) => {
 };
 
 exports.update = async (id, payload) => {
-  const { user: userPayload, ...studentPayload } = payload;
+  const { user: userPayload, ...studentRawPayload } = payload;
+  const studentPayload = {
+    // firstLaunch is used for onboarding
+    // we need to flip it as soon as user verifies their info
+    firstLaunch: false,
+    ...studentRawPayload,
+  };
 
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
 
-  const t = await sequelize.transaction();
-  try {
+  return sequelize.transaction(async (t) => {
     await student.user.updateAttributes(userPayload, { transaction: t });
-    const updated = await student.updateAttributes({
-      // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
-      firstLaunch: false,
-      ...studentPayload
-    }, { transaction: t });
-
-    t.commit();
-    return updated;
-  } catch (error) {
-    t.rollback();
-    throw error;
-  }
+    return student.updateAttributes(studentPayload, { transaction: t });
+  });
 };
 
 exports.delete = async (id) => {
