@@ -103,8 +103,8 @@ exports.invites = async (id) => {
   return student.getInvites();
 };
 
-exports._join = async (team, studentId) => {
-  const added = await team.addMembers(studentId, { invited: false });
+exports._join = async (team, studentId, options = {}) => {
+  const added = await team.addMembers(studentId, options);
   if (added.length === 0) throw Boom.badRequest('The student is already a member of the team');
   return added[0][0];
 };

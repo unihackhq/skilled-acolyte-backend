@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const { Team } = require('../models');
+const { Team, sequelize } = require('../models');
 const studentService = require('./student');
 
 exports.list = async () => {
@@ -13,12 +13,15 @@ exports.get = async (id) => {
 };
 
 exports.createAndJoin = async (studentIds, payload) => {
-  const team = await Team.create(payload);
+  return sequelize.transaction(async (t) => {
+    const team = await Team.create(payload, { transaction: t });
 
-  const addingMembers = studentIds.map(studentId => studentService._join(team, studentId));
-  const members = await Promise.all(addingMembers);
+    const addingMembers = studentIds.map(studentId =>
+      studentService._join(team, studentId, { transaction: t }));
+    const members = await Promise.all(addingMembers);
 
-  return { team, members };
+    return { team, members };
+  });
 };
 
 exports.create = async (payload) => {
@@ -60,7 +63,7 @@ exports.invite = async (teamId, studentId) => {
   const isMember = await team.hasMembers(studentId);
   if (isMember) throw Boom.badRequest('The student is already invited to the team');
 
-  const invited = await team.addInvited(studentId, { invited: true });
+  const invited = await team.addInvited(studentId);
   if (invited.length === 0) throw Boom.badRequest('The student is already invited to the team');
 
   return invited[0][0];
