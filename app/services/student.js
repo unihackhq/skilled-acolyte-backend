@@ -6,6 +6,7 @@ const {
   Team,
   Ticket,
   Event,
+  sequelize,
 } = require('../models');
 
 exports.list = async () => {
@@ -31,7 +32,8 @@ const createHelper = (payload, include) => {
       ...payload.user,
     },
   };
-  return Student.create(data, { include });
+  return sequelize.transaction(t =>
+    Student.create(data, { include, transaction: t }));
 };
 
 exports.create = async (payload) => {
@@ -56,12 +58,21 @@ exports.update = async (id, payload) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
 
-  await student.user.updateAttributes(userPayload);
-  return student.updateAttributes({
-    // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
-    firstLaunch: false,
-    ...studentPayload
-  });
+  const t = await sequelize.transaction();
+  try {
+    await student.user.updateAttributes(userPayload, { transaction: t });
+    const updated = await student.updateAttributes({
+      // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
+      firstLaunch: false,
+      ...studentPayload
+    }, { transaction: t });
+
+    t.commit();
+    return updated;
+  } catch (error) {
+    t.rollback();
+    throw error;
+  }
 };
 
 exports.delete = async (id) => {
