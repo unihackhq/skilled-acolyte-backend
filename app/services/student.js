@@ -6,6 +6,7 @@ const {
   Team,
   Ticket,
   Event,
+  sequelize,
 } = require('../models');
 
 exports.list = async () => {
@@ -20,7 +21,7 @@ exports.get = async (id) => {
   return student;
 };
 
-const createHelper = (payload, include) => {
+const createHelper = (payload, include, transaction = null) => {
   const id = payload.id || uuidv4();
   const data = {
     id,
@@ -31,36 +32,46 @@ const createHelper = (payload, include) => {
       ...payload.user,
     },
   };
-  return Student.create(data, { include });
+
+  if (transaction) {
+    return Student.create(data, { include, transaction });
+  }
+
+  return sequelize.transaction(t =>
+    Student.create(data, { include, transaction: t }));
 };
 
-exports.create = async (payload) => {
+exports.create = async (payload, t = null) => {
   const include = [
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  return createHelper(payload, include);
+  return createHelper(payload, include, t);
 };
 
-exports.createWithoutTicket = async (payload) => {
+exports.createWithoutTicket = async (payload, t = null) => {
   const include = [
     { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
-  return createHelper(payload, include);
+  return createHelper(payload, include, t);
 };
 
 exports.update = async (id, payload) => {
-  const { user: userPayload, ...studentPayload } = payload;
+  const { user: userPayload, ...studentRawPayload } = payload;
+  const studentPayload = {
+    // firstLaunch is used for onboarding
+    // we need to flip it as soon as user verifies their info
+    firstLaunch: false,
+    ...studentRawPayload,
+  };
 
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
 
-  await student.user.updateAttributes(userPayload);
-  return student.updateAttributes({
-    // firstLaunch is used for onboarding, we need to flip it as soon as user verifies their info
-    firstLaunch: false,
-    ...studentPayload
+  return sequelize.transaction(async (t) => {
+    await student.user.updateAttributes(userPayload, { transaction: t });
+    return student.updateAttributes(studentPayload, { transaction: t });
   });
 };
 
@@ -97,8 +108,8 @@ exports.invites = async (id) => {
   return student.getInvites();
 };
 
-exports._join = async (team, studentId) => {
-  const added = await team.addMembers(studentId, { invited: false });
+exports._join = async (team, studentId, options = {}) => {
+  const added = await team.addMembers(studentId, options);
   if (added.length === 0) throw Boom.badRequest('The student is already a member of the team');
   return added[0][0];
 };

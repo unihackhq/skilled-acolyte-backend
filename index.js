@@ -6,6 +6,7 @@ const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
 const jwt = require('./app/util/jwt');
+const errorUtil = require('./app/util/error');
 
 exports.init = async () => {
   const hapiOptions = {
@@ -37,6 +38,8 @@ exports.init = async () => {
 
   // Register the routes, stored in routes.js
   server.route(routes);
+  // register our preResponse to handle internal error
+  server.ext('onPreResponse', errorUtil.preResponse);
 
   // logging
   if (!env.TESTING) {
