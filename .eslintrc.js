@@ -10,5 +10,6 @@ module.exports = {
       "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
       "comma-dangle": 0,
       "no-underscore-dangle": 0,
+      "function-paren-newline": [error, { "consistent": true }]
     }
 };

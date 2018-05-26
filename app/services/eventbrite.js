@@ -75,6 +75,10 @@ const mapAttendeeToStudent = async (attendee, eventId, t) => {
 
 exports.students = async (eventId, dbEventId, t) => {
   const attendees = await client.attendees(eventId);
-  const filteredAttendees = attendees.filter(attendee => !attendee.cancelled)
-  return Promise.all(filteredAttendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId, t)));
+  const filteredAttendees = attendees.filter(attendee => !attendee.cancelled);
+  return Promise.all(
+    filteredAttendees.map(
+      attendee => mapAttendeeToStudent(attendee, dbEventId, t)
+    )
+  );
 };
