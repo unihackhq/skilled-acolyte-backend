@@ -41,6 +41,7 @@ const mapAttendeeToStudent = async (attendee, eventId, t) => {
 
   const uniName = getAnswer(qId.uni);
   const studyLevel = getAnswer(qId.study_level);
+  const degree = getAnswer(qId.degree);
   const shirtSize = getAnswer(qId.shirt_size);
   const dietaryReq = getAnswer(qId.dietary_req);
   const medicalReq = getAnswer(qId.medical_req);
@@ -49,8 +50,7 @@ const mapAttendeeToStudent = async (attendee, eventId, t) => {
   return {
     universityId: uni.id,
     studyLevel,
-    // lol we didn't ask :P
-    degree: 'Unknown',
+    degree,
     dietaryReq,
     medicalReq,
     shirtSize,

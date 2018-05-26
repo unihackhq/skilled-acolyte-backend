@@ -11,6 +11,7 @@ default:
   eventbrite_questions:
     uni: '18862522'
     study_level: '18862613'
+    degree: '18862626'
     shirt_size: '18862933'
     dietary_req: null
     medical_req: null
