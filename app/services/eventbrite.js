@@ -1,6 +1,7 @@
 const { University } = require('../models');
 const client = require('../clients/eventbrite');
 const env = require('../../env');
+const _ = require('lodash');
 
 exports.event = async (eventId) => {
   const {
@@ -34,17 +35,15 @@ const findCreateUniFromName = (name, t) => {
 };
 
 const mapAttendeeToStudent = async (attendee, eventId, t) => {
-  // put questions in an id accessible object
-  const questions = attendee.answers.reduce((acc, question) => {
-    return Object.assign(acc, { [question.question_id]: question });
-  }, {});
-
+  const { answers } = attendee;
   const qId = env.EVENTBRITE_QUESTION_IDS;
-  const uniName = questions[qId.uni].answer;
-  const studyLevel = questions[qId.study_level].answer;
-  const shirtSize = questions[qId.shirt_size].answer;
-  const dietaryReq = questions[qId.dietary_req].answer;
-  const medicalReq = questions[qId.medical_req].answer;
+  const getAnswer = key => _.get(_.find(answers, ['question_id', key]), 'answer', null);
+
+  const uniName = getAnswer(qId.uni);
+  const studyLevel = getAnswer(qId.study_level);
+  const shirtSize = getAnswer(qId.shirt_size);
+  const dietaryReq = getAnswer(qId.dietary_req);
+  const medicalReq = getAnswer(qId.medical_req);
 
   const uni = await findCreateUniFromName(uniName, t);
   return {
@@ -76,5 +75,6 @@ const mapAttendeeToStudent = async (attendee, eventId, t) => {
 
 exports.students = async (eventId, dbEventId, t) => {
   const attendees = await client.attendees(eventId);
-  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId, t)));
+  const filteredAttendees = attendees.filter(attendee => !attendee.cancelled)
+  return Promise.all(filteredAttendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId, t)));
 };

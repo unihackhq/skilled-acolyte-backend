@@ -9,11 +9,11 @@ default:
   jwt_key: this-is-secret
 
   eventbrite_questions:
-    uni: '15299392'
-    study_level: '15299396'
-    shirt_size: '15299395'
-    dietary_req: '15299393'
-    medical_req: '15299394'
+    uni: '18862522'
+    study_level: '18862613'
+    shirt_size: '18862933'
+    dietary_req: null
+    medical_req: null
 
   send_email: true
   postmark_template: 6247221
