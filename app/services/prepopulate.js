@@ -9,14 +9,14 @@ exports.event = async (eventId) => {
   return eventService.create(data);
 };
 
-exports.attendees = async (eventId) => {
+exports.attendees = async (eventId, questions) => {
   const event = await Event.findOne({ where: { eventbriteId: eventId } });
   if (!event) throw Boom.notFound('Could not find the event');
 
 
   const t = await sequelize.transaction();
   try {
-    const students = await eventbriteService.students(eventId, event.id, t);
+    const students = await eventbriteService.students(eventId, event.id, questions, t);
     const response = await Promise.all(students.map(student => studentService.create(student, t)));
     t.commit();
     return response;
