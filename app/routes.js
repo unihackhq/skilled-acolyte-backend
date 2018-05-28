@@ -54,8 +54,6 @@ const routes = [
 
   { method: 'GET', path: `${prefix}/teams`, options: team.list },
   { method: 'GET', path: `${prefix}/teams/{id}`, options: team.get },
-  { method: 'GET', path: `${prefix}/teams/{id}/members`, options: team.members },
-  { method: 'GET', path: `${prefix}/teams/{id}/invites`, options: team.invites },
   { method: 'POST', path: `${prefix}/teams`, options: team.create },
   { method: 'POST', path: `${prefix}/teams/{id}/invites`, options: team.invite },
   { method: 'PUT', path: `${prefix}/teams/{id}`, options: team.update },

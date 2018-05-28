@@ -1,6 +1,10 @@
 const Joi = require('joi');
 
-const { student: stripStudent, event: stripEvent } = require('../util/strip');
+const {
+  student: stripStudent,
+  event: stripEvent,
+  team: stripTeam,
+} = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
 
@@ -125,7 +129,13 @@ exports.events = {
 exports.teams = {
   handler: async (req) => {
     const { id } = req.params;
-    return service.teams(id);
+    const { type } = req.auth.credentials;
+    const teams = await service.teams(id);
+
+    if (type === 'admin') {
+      return teams;
+    }
+    return teams.map(team => stripTeam(team));
   },
   validate: {
     params: {
@@ -158,7 +168,13 @@ exports.leaveTeam = {
 exports.invites = {
   handler: async (req) => {
     const { id } = req.params;
-    return service.invites(id);
+    const { type } = req.auth.credentials;
+    const teams = await service.invites(id);
+
+    if (type === 'admin') {
+      return teams;
+    }
+    return teams.map(team => stripTeam(team));
   },
   validate: {
     params: {

@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const { Team, sequelize } = require('../models');
+const { Team, Student, sequelize } = require('../models');
 const studentService = require('./student');
 
 exports.list = async () => {
@@ -7,7 +7,12 @@ exports.list = async () => {
 };
 
 exports.get = async (id) => {
-  const team = await Team.findById(id);
+  const team = await Team.findById(id, {
+    include: [
+      { as: 'members', model: Student },
+      { as: 'invited', model: Student },
+    ]
+  });
   if (!team) throw Boom.notFound('Could not find the team');
   return team;
 };
@@ -42,18 +47,6 @@ exports.delete = async (id) => {
   if (!deleted) throw Boom.internal('Could not delete the team');
 
   return {};
-};
-
-exports.members = async (id) => {
-  const team = await Team.findById(id);
-  if (!team) throw Boom.notFound('Could not find the team');
-  return team.getMembers({ joinTableAttributes: [] });
-};
-
-exports.invites = async (id) => {
-  const team = await Team.findById(id);
-  if (!team) throw Boom.notFound('Could not find the team');
-  return team.getInvited({ joinTableAttributes: [] });
 };
 
 exports.invite = async (teamId, studentId) => {
