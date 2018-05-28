@@ -25,7 +25,9 @@ exports.createAndJoin = async (studentIds, payload) => {
       studentService._join(team, studentId, { transaction: t }));
     const members = await Promise.all(addingMembers);
 
-    return { team, members };
+    // this is necessary so ...team doesn't pull in sequelize shit
+    const teamData = team.get({ plain: true });
+    return { ...teamData, members };
   });
 };
 

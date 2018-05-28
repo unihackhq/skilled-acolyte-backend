@@ -46,10 +46,22 @@ exports.create = {
       addMembers.push(id);
     }
 
+    let team;
+    // create and add members
     if (addMembers.length > 0) {
-      return service.createAndJoin(addMembers, payload);
+      const { id: teamId } = await service.createAndJoin(addMembers, payload);
+
+      // return team detail with members in proper format
+      team = await service.get(teamId);
+    } else {
+      team = await service.create(payload);
     }
-    return service.create(payload);
+
+    // maybe strip data
+    if (type === 'admin') {
+      return team;
+    }
+    return stripTeam(team);
   },
   validate: {
     payload: {
