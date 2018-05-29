@@ -3,6 +3,7 @@ const Joi = require('joi');
 const { team: stripTeam } = require('../util/strip');
 const service = require('../services/team');
 const validator = require('../validators/team');
+const constant = require('../constants');
 
 // [GET] /teams
 exports.list = {
@@ -10,7 +11,7 @@ exports.list = {
     return service.list();
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -21,7 +22,7 @@ exports.get = {
     const { id } = req.params;
     const team = await service.get(id);
 
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return team;
     }
     return stripTeam(team);
@@ -32,7 +33,7 @@ exports.get = {
     },
   },
   auth: {
-    scope: ['admin', 'team-{params.id}'],
+    scope: [constant.adminScope, `${constant.teamScope}-{params.id}`],
   },
 };
 
@@ -42,7 +43,7 @@ exports.create = {
     const { type, id } = req.auth.credentials;
     const { addMembers, ...payload } = req.payload;
     // add student's own id
-    if (type === 'student') {
+    if (type === constant.studentType) {
       addMembers.push(id);
     }
 
@@ -58,7 +59,7 @@ exports.create = {
     }
 
     // maybe strip data
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return team;
     }
     return stripTeam(team);
@@ -70,7 +71,7 @@ exports.create = {
     }
   },
   auth: {
-    scope: ['admin', 'student'],
+    scope: [constant.adminScope, constant.studentScope],
   },
 };
 
@@ -88,7 +89,7 @@ exports.update = {
     },
   },
   auth: {
-    scope: ['admin', 'team-{params.id}'],
+    scope: [constant.adminScope, `${constant.teamScope}-{params.id}`],
   },
 };
 
@@ -104,7 +105,7 @@ exports.delete = {
     },
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -124,6 +125,6 @@ exports.invite = {
     },
   },
   auth: {
-    scope: ['admin', 'team-{params.id}'],
+    scope: [constant.adminScope, `${constant.teamScope}-{params.id}`],
   },
 };

@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const service = require('../services/ticket');
+const constant = require('../constants');
 
 // [GET] /tickets
 exports.list = {
@@ -8,7 +9,7 @@ exports.list = {
     return service.list();
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -24,7 +25,7 @@ exports.get = {
     },
   },
   auth: {
-    scope: ['admin', 'ticket-{params.id}'],
+    scope: [constant.adminScope, `${constant.ticketScope}-{params.id}`],
   },
 };
 
@@ -44,6 +45,6 @@ exports.transfer = {
     },
   },
   auth: {
-    scope: ['admin', 'ticket-{params.id}'],
+    scope: [constant.adminScope, `${constant.ticketScope}-{params.id}`],
   },
 };

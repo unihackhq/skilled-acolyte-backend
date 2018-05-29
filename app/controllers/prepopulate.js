@@ -1,5 +1,7 @@
 const Joi = require('joi');
+
 const service = require('../services/prepopulate');
+const constant = require('../constants');
 
 // [POST] /prepopulate/event
 exports.event = {
@@ -13,7 +15,7 @@ exports.event = {
     },
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -37,6 +39,6 @@ exports.attendees = {
     },
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };

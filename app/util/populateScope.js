@@ -6,8 +6,9 @@ const {
   Ticket,
   Team
 } = require('../models');
+const constant = require('../constants');
 
-const populateAdmin = async () => [];
+const populateAdmin = async () => [constant.adminScope];
 
 const populateStudent = async (decoded) => {
   const { userId } = decoded;
@@ -19,9 +20,9 @@ const populateStudent = async (decoded) => {
   });
   if (!student) return false;
 
-  let scope = ['user', 'student', `user-${student.id}`];
-  scope = _.concat(scope, student.tickets.map(ticket => `ticket-${ticket.id}`));
-  scope = _.concat(scope, student.teams.map(team => `team-${team.id}`));
+  let scope = [constant.userScope, constant.studentScope, `${constant.userScope}-${student.id}`];
+  scope = _.concat(scope, student.tickets.map(ticket => `${constant.ticketScope}-${ticket.id}`));
+  scope = _.concat(scope, student.teams.map(team => `${constant.teamScope}-${team.id}`));
 
   return scope;
 };
@@ -31,22 +32,21 @@ const populateUser = async (decoded) => {
   const user = await User.findById(userId);
   if (!user) return false;
 
-  return ['user', `user-${user.id}`];
+  return [constant.userScope, `${constant.userScope}-${user.id}`];
 };
 
 module.exports = async (decoded) => {
   const { type } = decoded;
 
   const populateType = {
-    admin: populateAdmin,
-    user: populateUser,
-    student: populateStudent,
+    [constant.adminType]: populateAdmin,
+    [constant.userType]: populateUser,
+    [constant.studentType]: populateStudent,
   };
   if (!populateType[type]) return { isValid: false };
 
   const scope = await populateType[type](decoded);
   if (!scope) return { isValid: false };
-  scope.push(type);
 
   const id = decoded.userId || '';
 

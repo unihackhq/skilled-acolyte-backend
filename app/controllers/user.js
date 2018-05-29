@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const service = require('../services/user');
 const validator = require('../validators/user');
+const constant = require('../constants');
 
 // [GET] /users
 exports.list = {
@@ -9,7 +10,7 @@ exports.list = {
     return service.list();
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -25,7 +26,7 @@ exports.get = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -39,7 +40,7 @@ exports.create = {
     payload: validator.requiredPayload,
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -57,7 +58,7 @@ exports.update = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -73,6 +74,6 @@ exports.delete = {
     },
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };

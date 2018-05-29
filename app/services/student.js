@@ -8,6 +8,7 @@ const {
   Event,
   sequelize,
 } = require('../models');
+const constant = require('../constants');
 
 exports.list = async () => {
   return Student.findAll({
@@ -28,7 +29,7 @@ const createHelper = (payload, include, transaction = null) => {
     ...payload,
     user: {
       id,
-      type: 'student',
+      type: constant.studentType,
       ...payload.user,
     },
   };

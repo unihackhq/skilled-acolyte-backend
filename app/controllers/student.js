@@ -7,19 +7,20 @@ const {
 } = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
+const constant = require('../constants');
 
 // [GET] /students
 exports.list = {
   handler: async (req) => {
     const { type } = req.auth.credentials;
     const students = await service.list();
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return students;
     }
     return students.map(stripStudent);
   },
   auth: {
-    scope: ['admin', 'student'],
+    scope: [constant.adminScope, constant.studentScope],
   },
 };
 
@@ -35,7 +36,7 @@ exports.get = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -49,7 +50,7 @@ exports.create = {
     payload: validator.requiredPayload,
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -67,7 +68,7 @@ exports.update = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -83,7 +84,7 @@ exports.delete = {
     },
   },
   auth: {
-    scope: ['admin'],
+    scope: [constant.adminScope],
   },
 };
 
@@ -99,7 +100,7 @@ exports.tickets = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -110,7 +111,7 @@ exports.events = {
     const { id } = req.params;
     const events = await service.events(id);
 
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return events;
     }
     return events.map(stripEvent);
@@ -121,7 +122,7 @@ exports.events = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -132,7 +133,7 @@ exports.teams = {
     const { type } = req.auth.credentials;
     const teams = await service.teams(id);
 
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return teams;
     }
     return teams.map(team => stripTeam(team));
@@ -143,7 +144,7 @@ exports.teams = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -160,7 +161,7 @@ exports.leaveTeam = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.studentId}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.studentId}`],
   },
 };
 
@@ -171,7 +172,7 @@ exports.invites = {
     const { type } = req.auth.credentials;
     const teams = await service.invites(id);
 
-    if (type === 'admin') {
+    if (type === constant.adminType) {
       return teams;
     }
     return teams.map(team => stripTeam(team));
@@ -182,7 +183,7 @@ exports.invites = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.id}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
   },
 };
 
@@ -199,7 +200,7 @@ exports.acceptInvite = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.studentId}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.studentId}`],
   },
 };
 
@@ -216,6 +217,6 @@ exports.rejectInvite = {
     },
   },
   auth: {
-    scope: ['admin', 'user-{params.studentId}'],
+    scope: [constant.adminScope, `${constant.userScope}-{params.studentId}`],
   },
 };
