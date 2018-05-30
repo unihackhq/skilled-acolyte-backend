@@ -8,6 +8,7 @@ const {
   Event,
   sequelize,
 } = require('../models');
+const constant = require('../constants');
 
 exports.list = async () => {
   return Student.findAll({
@@ -28,7 +29,7 @@ const createHelper = (payload, include, transaction = null) => {
     ...payload,
     user: {
       id,
-      type: 'student',
+      type: constant.studentType,
       ...payload.user,
     },
   };
@@ -88,7 +89,12 @@ exports.delete = async (id) => {
 exports.teams = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.getTeams();
+  return student.getTeams({
+    include: [
+      { as: 'members', model: Student },
+      { as: 'invited', model: Student },
+    ]
+  });
 };
 
 exports.leaveTeam = async (studentId, teamId) => {
@@ -105,7 +111,11 @@ exports.leaveTeam = async (studentId, teamId) => {
 exports.invites = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.getInvites();
+  return student.getInvites({
+    include: [
+      { as: 'members', model: Student },
+    ]
+  });
 };
 
 exports._join = async (team, studentId, options = {}) => {
