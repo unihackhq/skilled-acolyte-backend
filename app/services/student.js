@@ -52,7 +52,6 @@ exports.create = async (payload, t = null) => {
 
 exports.createWithoutTicket = async (payload, t = null) => {
   const include = [
-    { model: Ticket, as: 'tickets' },
     { model: User, as: 'user' },
   ];
   return createHelper(payload, include, t);
@@ -143,6 +142,16 @@ exports.acceptInvite = async (studentId, teamId) => {
 exports.rejectInvite = async (studentId, teamId) => {
   await _removeInvite(studentId, teamId);
   return {};
+};
+
+exports.addTicket = async (studentId, payload) => {
+  const student = await Student.findById(studentId);
+  if (!student) throw Boom.notFound('Could not find the student');
+
+  return sequelize.transaction(t =>
+    Ticket.create(payload, { transaction: t })
+      .then(async ticket =>
+        ticket.setStudent(student, { transaction: t })));
 };
 
 exports.tickets = async (studentId) => {
