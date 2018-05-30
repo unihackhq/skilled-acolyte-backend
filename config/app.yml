@@ -8,13 +8,6 @@ default:
   postmark_client_key: "#{process.env.POSTMARK_CLIENT_KEY}"
   jwt_key: this-is-secret
 
-  eventbrite_questions:
-    uni: '15299392'
-    study_level: '15299396'
-    shirt_size: '15299395'
-    dietary_req: '15299393'
-    medical_req: '15299394'
-
   send_email: true
   postmark_template: 6247221
   from_email: unihack@bs.erfan.io

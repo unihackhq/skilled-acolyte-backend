@@ -20,12 +20,20 @@ exports.event = {
 // [POST] /prepopulate/attendees
 exports.attendees = {
   handler: async (req) => {
-    const { eventId } = req.payload;
-    return service.attendees(eventId);
+    const { eventId, questions } = req.payload;
+    return service.attendees(eventId, questions);
   },
   validate: {
     payload: {
       eventId: Joi.string().required(),
+      questions: Joi.object().keys({
+        uni: Joi.string(),
+        studyLevel: Joi.string(),
+        degree: Joi.string(),
+        shirtSize: Joi.string(),
+        dietaryReq: Joi.string(),
+        medicalReq: Joi.string(),
+      }),
     },
   },
   auth: {

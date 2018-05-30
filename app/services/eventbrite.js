@@ -1,6 +1,6 @@
 const { University } = require('../models');
 const client = require('../clients/eventbrite');
-const env = require('../../env');
+const _ = require('lodash');
 
 exports.event = async (eventId) => {
   const {
@@ -33,25 +33,22 @@ const findCreateUniFromName = (name, t) => {
     .spread(uni => uni.get({ plain: true }));
 };
 
-const mapAttendeeToStudent = async (attendee, eventId, t) => {
-  // put questions in an id accessible object
-  const questions = attendee.answers.reduce((acc, question) => {
-    return Object.assign(acc, { [question.question_id]: question });
-  }, {});
+const mapAttendeeToStudent = async (attendee, eventId, questions, t) => {
+  const { answers } = attendee;
+  const getAnswer = key => _.get(_.find(answers, ['question_id', key]), 'answer', null);
 
-  const qId = env.EVENTBRITE_QUESTION_IDS;
-  const uniName = questions[qId.uni].answer;
-  const studyLevel = questions[qId.study_level].answer;
-  const shirtSize = questions[qId.shirt_size].answer;
-  const dietaryReq = questions[qId.dietary_req].answer;
-  const medicalReq = questions[qId.medical_req].answer;
+  const uniName = getAnswer(questions.uni);
+  const studyLevel = getAnswer(questions.studyLevel);
+  const degree = getAnswer(questions.degree);
+  const shirtSize = getAnswer(questions.shirtSize);
+  const dietaryReq = getAnswer(questions.dietaryReq);
+  const medicalReq = getAnswer(questions.medicalReq);
 
   const uni = await findCreateUniFromName(uniName, t);
   return {
     universityId: uni.id,
     studyLevel,
-    // lol we didn't ask :P
-    degree: 'Unknown',
+    degree,
     dietaryReq,
     medicalReq,
     shirtSize,
@@ -74,7 +71,12 @@ const mapAttendeeToStudent = async (attendee, eventId, t) => {
   };
 };
 
-exports.students = async (eventId, dbEventId, t) => {
+exports.students = async (eventId, dbEventId, questions, t) => {
   const attendees = await client.attendees(eventId);
-  return Promise.all(attendees.map(attendee => mapAttendeeToStudent(attendee, dbEventId, t)));
+  const filteredAttendees = attendees.filter(attendee => !attendee.cancelled);
+  return Promise.all(
+    filteredAttendees.map(
+      attendee => mapAttendeeToStudent(attendee, dbEventId, questions, t)
+    )
+  );
 };
