@@ -9,8 +9,7 @@ const constant = require('../constants');
 // [GET] /students
 exports.list = {
   handler: async () => {
-    const students = await service.list();
-    return students;
+    return service.list();
   },
   auth: {
     scope: [constant.adminScope],
