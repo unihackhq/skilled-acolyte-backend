@@ -98,6 +98,6 @@ exports.attendees = {
     },
   },
   auth: {
-    scope: [constant.adminScope, constant.studentScope],
+    scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
   },
 };
