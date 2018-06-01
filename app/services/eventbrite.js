@@ -40,18 +40,12 @@ const mapAttendeeToStudent = async (attendee, eventId, questions, t) => {
   const uniName = getAnswer(questions.uni);
   const studyLevel = getAnswer(questions.studyLevel);
   const degree = getAnswer(questions.degree);
-  const shirtSize = getAnswer(questions.shirtSize);
-  const dietaryReq = getAnswer(questions.dietaryReq);
-  const medicalReq = getAnswer(questions.medicalReq);
 
   const uni = await findCreateUniFromName(uniName, t);
   return {
     universityId: uni.id,
     studyLevel,
     degree,
-    dietaryReq,
-    medicalReq,
-    shirtSize,
     photoUrl: null,
     user: {
       firstName: attendee.profile.first_name,
