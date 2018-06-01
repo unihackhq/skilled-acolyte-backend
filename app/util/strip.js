@@ -5,7 +5,7 @@ exports.student = student => _.pick(student, ['id', 'photoUrl', 'user.id', 'user
 exports.event = event => _.pick(event, ['id', 'photoUrl', 'name']);
 
 exports.team = (team) => {
-  const striped = _.pick(team, ['id', 'name', 'description', 'photoUrl', 'eventId']);
+  const striped = _.pick(team, ['id', 'name', 'shortDescription', 'stack', 'devpostLink', 'longDescription', 'photoUrl', 'eventId']);
 
   // add striped members and invited
   if (team.members) {
