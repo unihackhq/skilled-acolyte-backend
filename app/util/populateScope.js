@@ -22,6 +22,7 @@ const populateStudent = async (decoded) => {
 
   let scope = [constant.userScope, constant.studentScope, `${constant.userScope}-${student.id}`];
   scope = _.concat(scope, student.tickets.map(ticket => `${constant.ticketScope}-${ticket.id}`));
+  scope = _.concat(scope, student.tickets.map(ticket => `${constant.eventScope}-${ticket.eventId}`));
   scope = _.concat(scope, student.teams.map(team => `${constant.teamScope}-${team.id}`));
 
   return scope;

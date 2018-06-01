@@ -1,5 +1,6 @@
 const Joi = require('joi');
 
+const { student: stripStudent } = require('../util/strip');
 const service = require('../services/event');
 const validator = require('../validators/event');
 const constant = require('../constants');
@@ -75,5 +76,28 @@ exports.delete = {
   },
   auth: {
     scope: [constant.adminScope],
+  },
+};
+
+// [GET] /events/{id}/attendees
+exports.attendees = {
+  handler: async (req) => {
+    const { type } = req.auth.credentials;
+    const { id } = req.params;
+
+    const students = await service.attendees(id);
+
+    if (type === constant.adminType) {
+      return students;
+    }
+    return students.map(stripStudent);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+  auth: {
+    scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
   },
 };

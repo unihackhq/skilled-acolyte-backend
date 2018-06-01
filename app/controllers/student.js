@@ -1,26 +1,18 @@
 const Joi = require('joi');
 
-const {
-  student: stripStudent,
-  event: stripEvent,
-  team: stripTeam,
-} = require('../util/strip');
+const { event: stripEvent, team: stripTeam } = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
+const ticketValidator = require('../validators/ticket');
 const constant = require('../constants');
 
 // [GET] /students
 exports.list = {
-  handler: async (req) => {
-    const { type } = req.auth.credentials;
-    const students = await service.list();
-    if (type === constant.adminType) {
-      return students;
-    }
-    return students.map(stripStudent);
+  handler: async () => {
+    return service.list();
   },
   auth: {
-    scope: [constant.adminScope, constant.studentScope],
+    scope: [constant.adminScope],
   },
 };
 
@@ -101,6 +93,25 @@ exports.tickets = {
   },
   auth: {
     scope: [constant.adminScope, `${constant.userScope}-{params.id}`],
+  },
+};
+
+// [POST] /students/{id}/tickets
+exports.addTicket = {
+  handler: async (req) => {
+    const { id } = req.params;
+    const { payload } = req;
+
+    return service.addTicket(id, payload);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+    payload: ticketValidator.requiredPayload,
+  },
+  auth: {
+    scope: [constant.adminScope],
   },
 };
 

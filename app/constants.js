@@ -7,4 +7,5 @@ module.exports = {
   userScope: 'user',
   ticketScope: 'ticket',
   teamScope: 'team',
+  eventScope: 'event',
 };

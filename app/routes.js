@@ -24,6 +24,7 @@ const routes = [
 
   { method: 'GET', path: `${prefix}/events`, options: event.list },
   { method: 'GET', path: `${prefix}/events/{id}`, options: event.get },
+  { method: 'GET', path: `${prefix}/events/{id}/attendees`, options: event.attendees },
   { method: 'POST', path: `${prefix}/events`, options: event.create },
   { method: 'PUT', path: `${prefix}/events/{id}`, options: event.update },
   { method: 'DELETE', path: `${prefix}/events/{id}`, options: event.delete },
@@ -33,6 +34,7 @@ const routes = [
   { method: 'GET', path: `${prefix}/students/{id}/tickets`, options: student.tickets },
   { method: 'GET', path: `${prefix}/students/{id}/events`, options: student.events },
   { method: 'POST', path: `${prefix}/students`, options: student.create },
+  { method: 'POST', path: `${prefix}/students/{id}/tickets`, options: student.addTicket },
   { method: 'PUT', path: `${prefix}/students/{id}`, options: student.update },
   { method: 'DELETE', path: `${prefix}/students/{id}`, options: student.delete },
 
