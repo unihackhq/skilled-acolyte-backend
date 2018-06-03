@@ -16,18 +16,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     type: DataTypes.STRING(512),
     allowNull: true,
   },
-  dietaryReq: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  medicalReq: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  shirtSize: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   photoUrl: {
     type: DataTypes.STRING(512),
     allowNull: true,
