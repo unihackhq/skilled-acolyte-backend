@@ -11,7 +11,7 @@ module.exports = {
 
   // JWT
   JWT_KEY: app.jwt_key,
-  SEND_EMAIL: app.send_email,
+  SLACK_WEBHOOK_URL: app.slack_webhook_url,
 
   // PG Information
   PG_HOST: db.host,
