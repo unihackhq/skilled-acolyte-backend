@@ -1,6 +1,14 @@
 const Joi = require('joi');
 const service = require('../services/token');
+const constant = require('../constants');
 const env = require('../../env');
+
+exports.list = {
+  handler: async () => service.list(),
+  auth: {
+    scope: [constant.adminScope],
+  }
+};
 
 exports.request = {
   handler: async (req) => {

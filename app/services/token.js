@@ -8,6 +8,8 @@ const constant = require('../constants');
 
 const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
 
+exports.list = async () => Token.findAll({ where: { valid: true } });
+
 exports.create = async (email) => {
   // Look up user by email
   const user = await User.findOne({ where: { email } });
