@@ -1,68 +1,58 @@
-const Postmark = require('postmark');
 const Joi = require('joi');
-const Boom = require('boom');
-
-const { User, Token } = require('../models');
-const { create: createJwt } = require('../util/jwt');
+const service = require('../services/token');
+const constant = require('../constants');
 const env = require('../../env');
 
-const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
-
-exports.validate = {
-  handler: async (req) => {
-    const { token } = req.payload;
-
-    const t = await Token.findById(token, { include: [{ model: User, as: 'user' }] });
-    if (!t) throw Boom.unauthorized();
-    if (new Date() > t.expiry) throw Boom.unauthorized('Token expired');
-    if (!t.valid) throw Boom.unauthorized('Token invalid');
-
-    // tokens are one time use
-    await t.update({ valid: false });
-
-    const jwt = createJwt({ userId: t.user.id, type: t.user.type });
-    return { token: jwt };
-  },
-  validate: {
-    payload: {
-      token: Joi.string().guid({ version: 'uuidv4' }),
-    },
-  },
-  auth: false,
+exports.list = {
+  handler: async () => service.list(),
+  auth: {
+    scope: [constant.adminScope],
+  }
 };
 
 exports.request = {
   handler: async (req) => {
-    const { params: { email } } = req;
+    const { email } = req.params;
 
-    // Look up user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) throw Boom.notFound('Could not find the user');
+    // bypass normal auth for admin and send jwt to slack
+    if (email === env.ADMIN_EMAIL) {
+      const jwt = await service.admin();
+      await service.adminSendSlack(jwt);
 
-    // Create Token with userId
-    const token = await Token.create();
-    await user.addToken(token);
-
-    req.log('token', token.id);
-    if (env.SEND_EMAIL) {
-      // Send the token
-      await emailClient.sendEmailWithTemplate({
-        From: env.FROM_EMAIL,
-        To: email,
-        TemplateId: env.POSTMARK_TEMPLATE,
-        TemplateModel: {
-          product_name: 'Unihack',
-          product_url: env.FRONTEND_URL,
-          name: user.firstName,
-          action_url: `${env.FRONTEND_URL}/entry/${token.id}`
-        }
-      });
+      // log jwt, slack message doesn't get sent in dev environment
+      if (env.DEV) {
+        req.log('admin-jwt', jwt);
+      }
+      return {};
     }
+
+    const { token, user } = await service.create(email);
+    await service.sendAuthEmail(email, user.preferredName, token.id);
+
+    // log token in dev environment (useful since emails are turned off)
+    if (env.DEV) {
+      req.log('token', token.id);
+    }
+
     return {};
   },
   validate: {
     params: {
       email: Joi.string().email(),
+    },
+  },
+  auth: false,
+};
+
+exports.validate = {
+  handler: async (req) => {
+    const { token } = req.payload;
+    const jwt = await service.validate(token);
+    return { token: jwt };
+  },
+  validate: {
+    payload: {
+      token: Joi.string().guid({ version: 'uuidv4' }),
     },
   },
   auth: false,
