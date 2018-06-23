@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Team', {
     defaultValue: DataTypes.UUIDV4,
   },
   name: DataTypes.STRING,
-  description: DataTypes.STRING,
-  photoUrl: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
+  shortDescription: DataTypes.STRING,
+  devpostLink: DataTypes.STRING,
+  stack: DataTypes.STRING,
+  longDescription: DataTypes.STRING,
+  photoUrl: DataTypes.TEXT,
 });
