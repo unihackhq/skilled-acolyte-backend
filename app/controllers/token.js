@@ -15,7 +15,7 @@ exports.request = {
     const { email } = req.params;
 
     // bypass normal auth for admin and send jwt to slack
-    if (email === 'admin@unihack') {
+    if (email === env.ADMIN_EMAIL) {
       const jwt = await service.admin();
       await service.adminSendSlack(jwt);
 

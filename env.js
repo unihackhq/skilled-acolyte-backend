@@ -34,4 +34,5 @@ module.exports = {
   FROM_EMAIL: app.from_email,
   POSTMARK_TEMPLATE: app.postmark_template,
   FRONTEND_URL: app.frontend_url,
+  ADMIN_EMAIL: app.admin_email,
 };

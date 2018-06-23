@@ -12,6 +12,7 @@ default:
   postmark_template: 6247221
   from_email: bot@unihack.net
   frontend_url: http://localhost:3000
+  admin_email: admin@unihack
 
 dev:
   host: 0.0.0.0
