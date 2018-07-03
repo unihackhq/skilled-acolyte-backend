@@ -3,20 +3,20 @@ version: '2'
 services:
   api:
     build: 
-      context: .
-      dockerfile: .docker/prod/Dockerfile
-    command: ["sh", "wait-for.sh", "db:5432", "--", "npm", "run", "docker-start"]
+      context: '.'
+      dockerfile: '.docker/prod/Dockerfile'
+    command: ['sh', 'wait-for.sh', 'db:5432', '--', 'npm', 'run', 'docker-start']
     depends_on: 
-      - db
+      - 'db'
     ports:
-      - "3000:3000"
-    restart: always
+      - '3000:3000'
+    restart: 'always'
     links:
-      - db
+      - 'db'
     environment:
       NODE_ENV: 'docker'
 
-      DB_HOST: db
+      DB_HOST: 'db'
       DB_PORT: 5432
       DB_USERNAME: 'postgres'
       DB_PASSWORD: 'PUT_SUPER_SECRET_DB_PASSWORD_HERE'
@@ -30,10 +30,10 @@ services:
       FRONTEND_URL: 'PUT_WEBAPP_URL_HERE'
 
   db:
-    image: postgres:10.3-alpine
+    image: 'postgres:10.3-alpine'
     volumes:
-      - db_data:/var/lib/postgresql/data
-    restart: always
+      - 'db_data:/var/lib/postgresql/data'
+    restart: 'always'
     environment:
        POSTGRES_PASSWORD: 'PUT_SUPER_SECRET_DB_PASSWORD_HERE'
        POSTGRES_USER: 'postgres'
