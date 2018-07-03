@@ -95,6 +95,9 @@ db.Student.belongsToMany(db.Team, {
   as: 'invites'
 });
 
+// Events have many schedule items
+db.Event.hasMany(db.ScheduleItem, { as: 'schedule', foreignKey: 'eventId' });
+
 // =============================================================================
 // SCOPES
 // =============================================================================
