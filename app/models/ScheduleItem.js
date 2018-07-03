@@ -10,4 +10,8 @@ module.exports = (sequelize, DataTypes) => sequelize.define('ScheduleItem', {
   location: DataTypes.STRING,
   startDate: DataTypes.DATE,
   endDate: DataTypes.DATE,
+  notificationSent: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
