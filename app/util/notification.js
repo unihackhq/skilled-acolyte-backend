@@ -13,7 +13,7 @@ exports.send = async (interests, title, body) => {
   try {
     const publishResponse = await pusher.publish(interests, {
       apns: {
-        aps: { alert: title },
+        aps: { alert: { title, body } },
       },
       fcm: {
         notification: { title, body },

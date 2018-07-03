@@ -3,6 +3,9 @@ const moment = require('moment');
 const { ScheduleItem } = require('../models');
 const notificationUtil = require('../util/notification');
 
+exports.manual = (eventId, title, body) => {
+  return notificationUtil.send([eventId], title, body);
+};
 
 exports.worker = async () => {
   // find all schedule items starting in the next 15 min
@@ -17,7 +20,7 @@ exports.worker = async () => {
   });
 
   // send notification for each item
-  items.forEach(async (item) => {
+  const pending = items.map(async (item) => {
     await item.update({ notificationSent: true });
 
     const { name, location, startDate } = item;
@@ -30,4 +33,6 @@ exports.worker = async () => {
       `${name} is happening in ${location} at ${start}`,
     );
   });
+
+  return Promise.all(pending);
 };
