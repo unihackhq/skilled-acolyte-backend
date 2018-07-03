@@ -1,4 +1,4 @@
-FROM node:9.11-alpine
+FROM node:10-alpine
 
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ COPY . ./
 # Install nodemon
 RUN npm -g install nodemon --loglevel error
 
-RUN npm install --loglevel error
+RUN npm ci
