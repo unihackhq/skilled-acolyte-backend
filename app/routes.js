@@ -2,6 +2,7 @@ const {
   token,
   university,
   event,
+  handbook,
   student,
   user,
   team,
@@ -26,9 +27,15 @@ const routes = [
   { method: 'GET', path: `${prefix}/events`, options: event.list },
   { method: 'GET', path: `${prefix}/events/{id}`, options: event.get },
   { method: 'GET', path: `${prefix}/events/{id}/attendees`, options: event.attendees },
+  { method: 'GET', path: `${prefix}/events/{id}/handbook`, options: event.handbook },
   { method: 'POST', path: `${prefix}/events`, options: event.create },
   { method: 'PUT', path: `${prefix}/events/{id}`, options: event.update },
   { method: 'DELETE', path: `${prefix}/events/{id}`, options: event.delete },
+
+  { method: 'GET', path: `${prefix}/handbook/{id}`, options: handbook.get },
+  { method: 'POST', path: `${prefix}/handbook`, options: handbook.create },
+  { method: 'PUT', path: `${prefix}/handbook/{id}`, options: handbook.update },
+  { method: 'DELETE', path: `${prefix}/handbook/{id}`, options: handbook.delete },
 
   { method: 'GET', path: `${prefix}/students`, options: student.list },
   { method: 'GET', path: `${prefix}/students/{id}`, options: student.get },

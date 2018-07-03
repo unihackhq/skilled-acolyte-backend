@@ -95,6 +95,9 @@ db.Student.belongsToMany(db.Team, {
   as: 'invites'
 });
 
+// Event handbook has many pages
+db.Event.hasMany(db.HandbookPage, { as: 'handbook', foreignKey: 'eventId' });
+
 // =============================================================================
 // SCOPES
 // =============================================================================

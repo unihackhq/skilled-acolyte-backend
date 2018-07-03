@@ -101,3 +101,19 @@ exports.attendees = {
     scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
   },
 };
+
+// [GET] /events/{id}/handbook
+exports.handbook = {
+  handler: async (req) => {
+    const { id } = req.params;
+    return service.handbook(id);
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+  auth: {
+    scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
+  },
+};

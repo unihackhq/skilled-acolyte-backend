@@ -1,5 +1,10 @@
 const Boom = require('boom');
-const { Event, Ticket, Student } = require('../models');
+const {
+  Event,
+  Ticket,
+  Student,
+  HandbookPage
+} = require('../models');
 
 exports.list = async () => {
   return Event.findAll();
@@ -41,4 +46,12 @@ exports.attendees = async (id) => {
   });
   if (!event) throw Boom.notFound('Could not find the event');
   return event.tickets.map(t => t.student);
+};
+
+exports.handbook = async (id) => {
+  const event = await Event.findById(id, {
+    include: [{ model: HandbookPage, as: 'handbook' }],
+  });
+  if (!event) throw Boom.notFound('Could not find the page');
+  return event.handbook;
 };
