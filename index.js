@@ -44,7 +44,7 @@ exports.init = async () => {
   // logging
   if (!env.TESTING) {
     const options = {
-      ops: env.PROD ? { interval: 1000 } : false,
+      ops: env.PROD ? { interval: 15000 } : false,
       includes: {
         response: ['payload', 'headers'],
         request: ['payload', 'headers'],
