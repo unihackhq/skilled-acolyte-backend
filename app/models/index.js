@@ -36,7 +36,7 @@ db.Student.belongsTo(db.User, {
   as: 'user'
 });
 // Each student also belongs to a University.
-db.Student.belongsTo(db.University, { foreignKey: 'universityId' });
+db.Student.belongsTo(db.University, { as: 'university', foreignKey: 'universityId' });
 
 // Users get tokens for login
 db.Token.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
@@ -100,11 +100,14 @@ db.Student.belongsToMany(db.Team, {
 // =============================================================================
 // Exclude deactivated students
 db.Student.addScope('defaultScope', {
-  include: [{
-    model: db.User,
-    as: 'user',
-    where: { deactivated: false },
-  }],
+  include: [
+    {
+      model: db.User,
+      as: 'user',
+      where: { deactivated: false },
+    },
+    { model: db.University, as: 'university' },
+  ],
 }, { override: true });
 // Exclude deactivated users
 db.User.addScope('defaultScope', {
