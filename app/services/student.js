@@ -5,15 +5,12 @@ const {
   User,
   Team,
   Ticket,
-  Event,
   sequelize,
 } = require('../models');
 const constant = require('../constants');
 
 exports.list = async () => {
-  return Student.findAll({
-    include: [{ model: User, as: 'user' }]
-  });
+  return Student.findAll();
 };
 
 exports.get = async (id) => {
@@ -88,12 +85,7 @@ exports.delete = async (id) => {
 exports.teams = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.getTeams({
-    include: [
-      { as: 'members', model: Student },
-      { as: 'invited', model: Student },
-    ]
-  });
+  return student.getTeams();
 };
 
 exports.leaveTeam = async (studentId, teamId) => {
@@ -156,10 +148,7 @@ exports.addTicket = async (studentId, payload) => {
 
 exports.tickets = async (studentId) => {
   const student = await Student.findById(studentId, {
-    include: [{
-      model: Ticket,
-      as: 'tickets'
-    }]
+    include: [{ model: Ticket, as: 'tickets' }],
   });
   if (!student) throw Boom.notFound('Could not find the student');
   return student.tickets;
@@ -167,14 +156,7 @@ exports.tickets = async (studentId) => {
 
 exports.events = async (studentId) => {
   const student = await Student.findById(studentId, {
-    include: [{
-      model: Ticket,
-      as: 'tickets',
-      include: [{
-        model: Event,
-        as: 'event'
-      }]
-    }]
+    include: [{ model: Ticket, as: 'tickets' }],
   });
   if (!student) throw Boom.notFound('Could not find the student');
   return student.tickets.map(ticket => ticket.event);

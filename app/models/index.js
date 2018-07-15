@@ -106,10 +106,20 @@ db.Student.addScope('defaultScope', {
     where: { deactivated: false },
   }],
 }, { override: true });
-
 // Exclude deactivated users
 db.User.addScope('defaultScope', {
   where: { deactivated: false },
+}, { override: true });
+
+// Some default nestings
+db.Ticket.addScope('defaultScope', {
+  include: [{ model: db.Event, as: 'event' }],
+}, { override: true });
+db.Team.addScope('defaultScope', {
+  include: [
+    { as: 'members', model: db.Student },
+    { as: 'invited', model: db.Student },
+  ],
 }, { override: true });
 
 db.sequelize = sequelize;
