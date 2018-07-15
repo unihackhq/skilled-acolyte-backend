@@ -4,7 +4,7 @@ const { ScheduleItem } = require('../models');
 const notificationUtil = require('../util/notification');
 
 exports.manual = (eventId, title, body) => {
-  return notificationUtil.send([eventId], title, body);
+  return notificationUtil.send([`${eventId}-importantMessages`], title, body);
 };
 
 exports.worker = async () => {
@@ -28,7 +28,7 @@ exports.worker = async () => {
     const startFromNow = moment(startDate).fromNow();
 
     await notificationUtil.send(
-      [item.eventId],
+      [`${item.eventId}-${item.type}`],
       `${name} starts in ${startFromNow}`,
       `${name} is happening in ${location} at ${start}`,
     );
