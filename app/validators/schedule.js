@@ -5,6 +5,7 @@ const Joi = require('joi');
 const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   name: Joi.string(),
+  type: Joi.string().valid('session', 'techTalk', 'mealsRafflesEtc'),
   location: Joi.string(),
   startDate: Joi.date(),
   endDate: Joi.date(),
