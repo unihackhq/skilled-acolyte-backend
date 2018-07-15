@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const { event: stripEvent, team: stripTeam } = require('../util/strip');
+const strip = require('../util/strip');
 const service = require('../services/student');
 const validator = require('../validators/student');
 const ticketValidator = require('../validators/ticket');
@@ -8,8 +8,11 @@ const constant = require('../constants');
 
 // [GET] /students
 exports.list = {
-  handler: async () => {
-    return service.list();
+  handler: async (req) => {
+    const { scope } = req.auth.credentials;
+
+    const list = await service.list();
+    return list.map(student => strip.student(student, scope));
   },
   auth: {
     scope: [constant.adminScope],
@@ -19,8 +22,11 @@ exports.list = {
 // [GET] /students/{id}
 exports.get = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.get(id);
+
+    const student = await service.get(id);
+    return strip.student(student, scope);
   },
   validate: {
     params: {
@@ -35,8 +41,11 @@ exports.get = {
 // [POST] /students
 exports.create = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { payload } = req;
-    return service.create(payload);
+
+    const student = await service.create(payload);
+    return strip.student(student, scope);
   },
   validate: {
     payload: validator.requiredPayload,
@@ -49,9 +58,12 @@ exports.create = {
 // [PUT] /students/{id}
 exports.update = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
-    return service.update(id, payload);
+
+    const student = await service.update(id, payload);
+    return strip.student(student, scope);
   },
   validate: {
     payload: validator.payload,
@@ -83,8 +95,11 @@ exports.delete = {
 // [GET] /students/{id}/tickets
 exports.tickets = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.tickets(id);
+
+    const tickets = await service.tickets(id);
+    return tickets.map(ticket => strip.ticket(ticket, scope));
   },
   validate: {
     params: {
@@ -99,10 +114,12 @@ exports.tickets = {
 // [POST] /students/{id}/tickets
 exports.addTicket = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
 
-    return service.addTicket(id, payload);
+    const ticket = await service.addTicket(id, payload);
+    return strip.ticket(ticket, scope);
   },
   validate: {
     params: {
@@ -118,14 +135,11 @@ exports.addTicket = {
 // [GET] /students/{id}/events
 exports.events = {
   handler: async (req) => {
-    const { type } = req.auth.credentials;
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const events = await service.events(id);
 
-    if (type === constant.adminType) {
-      return events;
-    }
-    return events.map(stripEvent);
+    events.map(event => strip.event(event, scope));
   },
   validate: {
     params: {
@@ -140,14 +154,11 @@ exports.events = {
 // [GET] /students/{id}/teams
 exports.teams = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    const { type } = req.auth.credentials;
-    const teams = await service.teams(id);
 
-    if (type === constant.adminType) {
-      return teams;
-    }
-    return teams.map(team => stripTeam(team));
+    const teams = await service.teams(id);
+    return teams.map(team => strip.team(team, scope));
   },
   validate: {
     params: {
@@ -179,14 +190,11 @@ exports.leaveTeam = {
 // [GET] /students/{id}/invites
 exports.invites = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    const { type } = req.auth.credentials;
-    const teams = await service.invites(id);
 
-    if (type === constant.adminType) {
-      return teams;
-    }
-    return teams.map(team => stripTeam(team));
+    const teams = await service.invites(id);
+    return teams.map(team => strip.team(team, scope));
   },
   validate: {
     params: {

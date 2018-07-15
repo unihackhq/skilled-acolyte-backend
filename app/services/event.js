@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const { Event, Ticket, Student } = require('../models');
+const { Event, Ticket } = require('../models');
 
 exports.list = async () => {
   return Event.findAll();
@@ -33,11 +33,7 @@ exports.delete = async (id) => {
 
 exports.attendees = async (id) => {
   const event = await Event.findById(id, {
-    include: [{
-      model: Ticket,
-      as: 'tickets',
-      include: [{ model: Student, as: 'student' }],
-    }],
+    include: [{ model: Ticket, as: 'tickets' }],
   });
   if (!event) throw Boom.notFound('Could not find the event');
   return event.tickets.map(t => t.student);

@@ -116,7 +116,10 @@ db.User.addScope('defaultScope', {
 
 // Some default nestings
 db.Ticket.addScope('defaultScope', {
-  include: [{ model: db.Event, as: 'event' }],
+  include: [
+    { model: db.Event, as: 'event' },
+    { model: db.Student, as: 'student' },
+  ],
 }, { override: true });
 db.Team.addScope('defaultScope', {
   include: [

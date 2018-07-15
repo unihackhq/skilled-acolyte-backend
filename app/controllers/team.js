@@ -1,14 +1,17 @@
 const Joi = require('joi');
 
-const { team: stripTeam } = require('../util/strip');
+const strip = require('../util/strip');
 const service = require('../services/team');
 const validator = require('../validators/team');
 const constant = require('../constants');
 
 // [GET] /teams
 exports.list = {
-  handler: async () => {
-    return service.list();
+  handler: async (req) => {
+    const { scope } = req.auth.credentials;
+
+    const list = await service.list();
+    return list.map(team => strip.team(team, scope));
   },
   auth: {
     scope: [constant.adminScope],
@@ -18,14 +21,11 @@ exports.list = {
 // [GET] /teams/{id}
 exports.get = {
   handler: async (req) => {
-    const { type } = req.auth.credentials;
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    const team = await service.get(id);
 
-    if (type === constant.adminType) {
-      return team;
-    }
-    return stripTeam(team);
+    const team = await service.get(id);
+    return strip.team(team, scope);
   },
   validate: {
     params: {
@@ -40,8 +40,10 @@ exports.get = {
 // [POST] /teams
 exports.create = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { type, id } = req.auth.credentials;
     const { addMembers, ...payload } = req.payload;
+
     // add student's own id
     if (type === constant.studentType) {
       addMembers.push(id);
@@ -50,19 +52,12 @@ exports.create = {
     let team;
     // create and add members
     if (addMembers.length > 0) {
-      const { id: teamId } = await service.createAndJoin(addMembers, payload);
-
-      // return team detail with members in proper format
-      team = await service.get(teamId);
+      team = await service.createAndJoin(addMembers, payload);
     } else {
       team = await service.create(payload);
     }
 
-    // maybe strip data
-    if (type === constant.adminType) {
-      return team;
-    }
-    return stripTeam(team);
+    return strip.team(team, scope);
   },
   validate: {
     payload: {
@@ -78,9 +73,12 @@ exports.create = {
 // [PUT] /teams/{id}
 exports.update = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
-    return service.update(id, payload);
+
+    const team = await service.update(id, payload);
+    return strip.team(team, scope);
   },
   validate: {
     payload: validator.payload,
@@ -111,9 +109,10 @@ exports.delete = {
 
 // [POST] /teams/{id}/invites
 exports.invite = {
-  handler: (req) => {
+  handler: async (req) => {
     const { id } = req.params;
     const { userId } = req.payload;
+
     return service.invite(id, userId);
   },
   validate: {

@@ -1,13 +1,17 @@
 const Joi = require('joi');
 
+const strip = require('../util/strip');
 const service = require('../services/user');
 const validator = require('../validators/user');
 const constant = require('../constants');
 
 // [GET] /users
 exports.list = {
-  handler: async () => {
-    return service.list();
+  handler: async (req) => {
+    const { scope } = req.auth.credentials;
+
+    const list = await service.list();
+    return list.map(user => strip.user(user, scope));
   },
   auth: {
     scope: [constant.adminScope],
@@ -17,8 +21,11 @@ exports.list = {
 // [GET] /users/{id}
 exports.get = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.get(id);
+
+    const user = await service.get(id);
+    return strip.user(user, scope);
   },
   validate: {
     params: {
@@ -33,8 +40,11 @@ exports.get = {
 // [POST] /users
 exports.create = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { payload } = req;
-    return service.create(payload);
+
+    const user = await service.create(payload);
+    return strip.user(user, scope);
   },
   validate: {
     payload: validator.requiredPayload,
@@ -47,9 +57,12 @@ exports.create = {
 // [PUT] /users/{id}
 exports.update = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
-    return service.update(id, payload);
+
+    const user = await service.update(id, payload);
+    return strip.user(user, scope);
   },
   validate: {
     payload: validator.payload,

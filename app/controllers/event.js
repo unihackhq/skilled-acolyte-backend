@@ -1,14 +1,17 @@
 const Joi = require('joi');
 
-const { student: stripStudent } = require('../util/strip');
+const strip = require('../util/strip');
 const service = require('../services/event');
 const validator = require('../validators/event');
 const constant = require('../constants');
 
 // [GET] /events
 exports.list = {
-  handler: async () => {
-    return service.list();
+  handler: async (req) => {
+    const { scope } = req.auth.credentials;
+
+    const list = await service.list();
+    return list.map(event => strip.event(event, scope));
   },
   auth: {
     scope: [constant.adminScope],
@@ -18,8 +21,11 @@ exports.list = {
 // [GET] /events/{id}
 exports.get = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.get(id);
+
+    const event = await service.get(id);
+    return strip.event(event, scope);
   },
   validate: {
     params: {
@@ -27,15 +33,18 @@ exports.get = {
     },
   },
   auth: {
-    scope: [constant.adminScope],
+    scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
   },
 };
 
 // [POST] /events
 exports.create = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { payload } = req;
-    return service.create(payload);
+
+    const event = await service.create(payload);
+    return strip.event(event, scope);
   },
   validate: {
     payload: validator.requiredPayload,
@@ -48,9 +57,12 @@ exports.create = {
 // [PUT] /events/{id}
 exports.update = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
-    return service.update(id, payload);
+
+    const event = await service.update(id, payload);
+    return strip.event(event, scope);
   },
   validate: {
     payload: validator.payload,
@@ -82,15 +94,11 @@ exports.delete = {
 // [GET] /events/{id}/attendees
 exports.attendees = {
   handler: async (req) => {
-    const { type } = req.auth.credentials;
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
 
     const students = await service.attendees(id);
-
-    if (type === constant.adminType) {
-      return students;
-    }
-    return students.map(stripStudent);
+    return students.map(student => strip.student(student, scope));
   },
   validate: {
     params: {
