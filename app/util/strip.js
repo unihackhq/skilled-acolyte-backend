@@ -76,7 +76,11 @@ exports.event = (event, scope) => {
     'startDate',
     'endDate',
     'location',
-    'logoUrl',
+    'handbookUrl',
+    'logoColor',
+    'sponsors',
+    'prizes',
+    'judges',
   ]);
 };
 

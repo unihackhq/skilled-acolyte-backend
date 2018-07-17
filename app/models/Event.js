@@ -16,8 +16,12 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
     type: DataTypes.STRING,
     unique: true,
   },
-  logoUrl: {
-    type: DataTypes.STRING(512),
+  handbookUrl: DataTypes.STRING(512),
+  logoColor: {
+    type: DataTypes.STRING,
     allowNull: true,
   },
+  sponsors: DataTypes.JSON,
+  prizes: DataTypes.JSON,
+  judges: DataTypes.JSON,
 });
