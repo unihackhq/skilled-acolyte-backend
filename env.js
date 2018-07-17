@@ -24,6 +24,8 @@ module.exports = {
   // Keys
   POSTMARK_CLIENT_KEY: app.postmark_client_key,
   EVENTBRITE_TOKEN: app.eventbrite_token,
+  BEAMS_INSTANCE_ID: app.beams_instance_id,
+  BEAMS_SECRET_KEY: app.beams_secret_key,
 
   // ENV Information
   TESTING: process.env.NODE_ENV === 'test',

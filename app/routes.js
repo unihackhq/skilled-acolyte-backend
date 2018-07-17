@@ -8,6 +8,7 @@ const {
   team,
   prepopulate,
   ticket,
+  notification,
 } = require('./controllers');
 const { API_URL_VERSION } = require('../env');
 
@@ -68,6 +69,8 @@ const routes = [
   { method: 'POST', path: `${prefix}/teams/{id}/invites`, options: team.invite },
   { method: 'PUT', path: `${prefix}/teams/{id}`, options: team.update },
   { method: 'DELETE', path: `${prefix}/teams/{id}`, options: team.delete },
+
+  { method: 'POST', path: `${prefix}/notification`, options: notification.send },
 
   { method: 'POST', path: `${prefix}/prepopulate/event`, options: prepopulate.event },
   { method: 'POST', path: `${prefix}/prepopulate/attendees`, options: prepopulate.attendees },

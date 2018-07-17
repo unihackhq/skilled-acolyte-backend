@@ -1,12 +1,12 @@
 const Hapi = require('hapi');
 const Boom = require('boom');
-
 const { requestErrorScrubber } = require('./app/util/good');
 const env = require('./env');
 const routes = require('./app/routes');
 const models = require('./app/models');
 const jwt = require('./app/util/jwt');
 const errorUtil = require('./app/util/error');
+const notificationService = require('./app/services/notification');
 
 exports.init = async () => {
   const hapiOptions = {
@@ -72,5 +72,12 @@ exports.init = async () => {
   await models.sequelize.sync();
   // Start the server
   await server.start();
+
+  // call the notification worker every five minutes
+  if (env.PROD) {
+    const FIVE_MIN_MS = 5 * 60 * 1000;
+    setInterval(notificationService.worker, FIVE_MIN_MS);
+  }
+
   return server;
 };
