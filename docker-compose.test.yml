@@ -1,18 +1,18 @@
-version: '2'
+version: '3'
 
 services:
   api:
     build: 
-      context: .
-      dockerfile: .docker/prod/Dockerfile
+      context: '.'
+      dockerfile: '.docker/prod/Dockerfile'
     depends_on: 
-      - db
+      - 'db'
     links:
-      - db
+      - 'db'
     environment:
       NODE_ENV: 'test'
 
-      DB_HOST: db
+      DB_HOST: 'db'
       DB_PORT: 5432
       DB_USERNAME: 'postgres'
       DB_PASSWORD: 'PUT_SUPER_SECRET_DB_PASSWORD_HERE'
@@ -25,10 +25,10 @@ services:
       FRONTEND_URL: 'PUT_WEBAPP_URL_HERE'
 
   db:
-    image: postgres:10.3-alpine
+    image: 'postgres:10.3-alpine'
     volumes:
-      - db_data:/var/lib/postgresql/data
-    restart: always
+      - 'db_data:/var/lib/postgresql/data'
+    restart: 'always'
     environment:
        POSTGRES_PASSWORD: 'PUT_SUPER_SECRET_DB_PASSWORD_HERE'
        POSTGRES_USER: 'postgres'

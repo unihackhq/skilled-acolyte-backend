@@ -80,6 +80,27 @@ exports.event = (event, scope) => {
   ]);
 };
 
+exports.schedule = (scheduleItem, scope) => {
+  if (scope.includes(constant.adminScope)) {
+    return scheduleItem;
+  }
+
+  const stripped = _.pick(scheduleItem, [
+    'id',
+    'name',
+    'description',
+    'type',
+    'location',
+    'startDate',
+    'endDate',
+    'eventId',
+  ]);
+
+  return Object.assign(stripped, {
+    event: exports.event(scheduleItem.event, scope),
+  });
+};
+
 exports.team = (team, scope) => {
   if (scope.includes(constant.adminScope)) {
     return team;

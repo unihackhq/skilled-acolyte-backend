@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-
   },
   name: DataTypes.STRING,
   location: DataTypes.STRING,

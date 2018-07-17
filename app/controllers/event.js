@@ -109,3 +109,22 @@ exports.attendees = {
     scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
   },
 };
+
+// [GET] /events/{id}/schedule
+exports.schedule = {
+  handler: async (req) => {
+    const { scope } = req.auth.credentials;
+    const { id } = req.params;
+
+    const schedule = await service.schedule(id);
+    return schedule.map(item => strip.schedule(item, scope));
+  },
+  validate: {
+    params: {
+      id: Joi.string().guid({ version: 'uuidv4' }),
+    },
+  },
+  auth: {
+    scope: [constant.adminScope, `${constant.eventScope}-{params.id}`],
+  },
+};
