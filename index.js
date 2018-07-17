@@ -75,8 +75,8 @@ exports.init = async () => {
 
   // call the notification worker every five minutes
   if (env.PROD) {
-    const FIVE_MIN = 5 * 60;
-    setInterval(notificationService.worker, FIVE_MIN);
+    const FIVE_MIN_MS = 5 * 60 * 1000;
+    setInterval(notificationService.worker, FIVE_MIN_MS);
   }
 
   return server;
