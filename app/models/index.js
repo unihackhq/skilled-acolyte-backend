@@ -36,7 +36,7 @@ db.Student.belongsTo(db.User, {
   as: 'user'
 });
 // Each student also belongs to a University.
-db.Student.belongsTo(db.University, { foreignKey: 'universityId' });
+db.Student.belongsTo(db.University, { as: 'university', foreignKey: 'universityId' });
 
 // Users get tokens for login
 db.Token.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
@@ -100,16 +100,32 @@ db.Student.belongsToMany(db.Team, {
 // =============================================================================
 // Exclude deactivated students
 db.Student.addScope('defaultScope', {
-  include: [{
-    model: db.User,
-    as: 'user',
-    where: { deactivated: false },
-  }],
+  include: [
+    {
+      model: db.User,
+      as: 'user',
+      where: { deactivated: false },
+    },
+    { model: db.University, as: 'university' },
+  ],
 }, { override: true });
-
 // Exclude deactivated users
 db.User.addScope('defaultScope', {
   where: { deactivated: false },
+}, { override: true });
+
+// Some default nestings
+db.Ticket.addScope('defaultScope', {
+  include: [
+    { model: db.Event, as: 'event' },
+    { model: db.Student, as: 'student' },
+  ],
+}, { override: true });
+db.Team.addScope('defaultScope', {
+  include: [
+    { as: 'members', model: db.Student },
+    { as: 'invited', model: db.Student },
+  ],
 }, { override: true });
 
 db.sequelize = sequelize;

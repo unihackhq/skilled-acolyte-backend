@@ -3,17 +3,14 @@ const uuidv4 = require('uuid/v4');
 const {
   Student,
   User,
-  Team,
   Ticket,
-  Event,
   sequelize,
 } = require('../models');
+const teamService = require('./team');
 const constant = require('../constants');
 
 exports.list = async () => {
-  return Student.findAll({
-    include: [{ model: User, as: 'user' }]
-  });
+  return Student.findAll();
 };
 
 exports.get = async (id) => {
@@ -88,18 +85,11 @@ exports.delete = async (id) => {
 exports.teams = async (id) => {
   const student = await Student.findById(id);
   if (!student) throw Boom.notFound('Could not find the student');
-  return student.getTeams({
-    include: [
-      { as: 'members', model: Student },
-      { as: 'invited', model: Student },
-    ]
-  });
+  return student.getTeams();
 };
 
 exports.leaveTeam = async (studentId, teamId) => {
-  const team = await Team.findById(teamId);
-  if (!team) throw Boom.notFound('Could not find the team');
-
+  const team = await teamService.get(teamId);
   const isMember = await team.hasMember(studentId);
   if (!isMember) throw Boom.badRequest('The student is not a member of the team');
 
@@ -120,28 +110,26 @@ exports.invites = async (id) => {
 exports._join = async (team, studentId, options = {}) => {
   const added = await team.addMembers(studentId, options);
   if (added.length === 0) throw Boom.badRequest('The student is already a member of the team');
-  return added[0][0];
+  return {};
 };
 
-const _removeInvite = async (studentId, teamId) => {
-  const team = await Team.findById(teamId);
-  if (!team) throw Boom.notFound('Could not find the team');
-
+const _removeInvite = async (team, studentId) => {
   const isInvited = await team.hasInvited(studentId);
   if (!isInvited) throw Boom.badRequest('The student is not invited to the team');
 
   await team.removeInvited(studentId);
-  return team;
+  return {};
 };
 
 exports.acceptInvite = async (studentId, teamId) => {
-  const team = await _removeInvite(studentId, teamId);
+  const team = await teamService.get(teamId);
+  await _removeInvite(team, studentId);
   return exports._join(team, studentId);
 };
 
 exports.rejectInvite = async (studentId, teamId) => {
-  await _removeInvite(studentId, teamId);
-  return {};
+  const team = await teamService.get(teamId);
+  return _removeInvite(team, studentId);
 };
 
 exports.addTicket = async (studentId, payload) => {
@@ -156,10 +144,7 @@ exports.addTicket = async (studentId, payload) => {
 
 exports.tickets = async (studentId) => {
   const student = await Student.findById(studentId, {
-    include: [{
-      model: Ticket,
-      as: 'tickets'
-    }]
+    include: [{ model: Ticket, as: 'tickets' }],
   });
   if (!student) throw Boom.notFound('Could not find the student');
   return student.tickets;
@@ -167,14 +152,7 @@ exports.tickets = async (studentId) => {
 
 exports.events = async (studentId) => {
   const student = await Student.findById(studentId, {
-    include: [{
-      model: Ticket,
-      as: 'tickets',
-      include: [{
-        model: Event,
-        as: 'event'
-      }]
-    }]
+    include: [{ model: Ticket, as: 'tickets' }],
   });
   if (!student) throw Boom.notFound('Could not find the student');
   return student.tickets.map(ticket => ticket.event);
