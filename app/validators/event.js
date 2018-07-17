@@ -8,14 +8,34 @@ const payload = () => ({
   location: Joi.string(),
   startDate: Joi.date(),
   endDate: Joi.date(),
-  timezone: Joi.string().allow(null),
-  eventbriteId: Joi.string().allow(null),
-  eventbriteLink: Joi.string().uri().allow(null),
-  logoUrl: Joi.string().uri().allow(null)
+  eventbriteId: Joi.string(),
+  handbookUrl: Joi.string().uri(),
+  logoColor: Joi.string(),
+  sponsors: Joi.object().keys({
+    summary: Joi.string(),
+    url: Joi.string().uri(),
+  }),
+  prizes: Joi.object().keys({
+    summary: Joi.string(),
+    url: Joi.string().uri(),
+  }),
+  judges: Joi.object().keys({
+    summary: Joi.string(),
+    url: Joi.string().uri(),
+  }),
 });
 
 const requiredValues = _.mapValues(
-  _.pick(payload(), ['name', 'location', 'startDate', 'endDate']),
+  _.pick(payload(), [
+    'name',
+    'location',
+    'startDate',
+    'endDate',
+    'handbookUrl',
+    'sponsors',
+    'prizes',
+    'judges'
+  ]),
   value => value.required()
 );
 

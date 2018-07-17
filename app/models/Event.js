@@ -21,4 +21,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  sponsors: DataTypes.JSON,
+  prizes: DataTypes.JSON,
+  judges: DataTypes.JSON,
 });
