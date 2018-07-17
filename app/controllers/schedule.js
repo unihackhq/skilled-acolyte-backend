@@ -1,5 +1,6 @@
 const Joi = require('joi');
 
+const strip = require('../util/strip');
 const service = require('../services/schedule');
 const validator = require('../validators/schedule');
 const constant = require('../constants');
@@ -7,8 +8,11 @@ const constant = require('../constants');
 // [GET] /schedule/{id}
 exports.get = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.get(id);
+
+    const item = await service.get(id);
+    return strip.schedule(item, scope);
   },
   validate: {
     params: {
@@ -23,12 +27,17 @@ exports.get = {
 // [POST] /schedule
 exports.create = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { payload } = req;
 
+    // accept both arrays and single items
     if (payload instanceof Array) {
-      return Promise.all(payload.map(item => service.create(item)));
+      const list = await Promise.all(payload.map(item => service.create(item)));
+      return list.map(item => strip.schedule(item, scope));
     }
-    return service.create(payload);
+
+    const item = await service.create(payload);
+    return strip.schedule(item, scope);
   },
   validate: {
     payload: Joi.alternatives().try(
@@ -44,9 +53,12 @@ exports.create = {
 // [PUT] /schedule/{id}
 exports.update = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { payload } = req;
-    return service.update(id, payload);
+
+    const item = await service.update(id, payload);
+    return strip.schedule(item, scope);
   },
   validate: {
     payload: validator.payload,

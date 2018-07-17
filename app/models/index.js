@@ -97,6 +97,7 @@ db.Student.belongsToMany(db.Team, {
 
 // Events have many schedule items
 db.Event.hasMany(db.ScheduleItem, { as: 'schedule', foreignKey: 'eventId' });
+db.ScheduleItem.belongsTo(db.Event, { as: 'event', foreignKey: 'eventId' });
 
 // =============================================================================
 // SCOPES
@@ -129,6 +130,9 @@ db.Team.addScope('defaultScope', {
     { as: 'members', model: db.Student },
     { as: 'invited', model: db.Student },
   ],
+}, { override: true });
+db.ScheduleItem.addScope('defaultScope', {
+  include: [{ as: 'event', model: db.Event }],
 }, { override: true });
 
 db.sequelize = sequelize;

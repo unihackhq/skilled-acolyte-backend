@@ -113,8 +113,11 @@ exports.attendees = {
 // [GET] /events/{id}/schedule
 exports.schedule = {
   handler: async (req) => {
+    const { scope } = req.auth.credentials;
     const { id } = req.params;
-    return service.schedule(id);
+
+    const schedule = await service.schedule(id);
+    return schedule.map(item => strip.schedule(item, scope));
   },
   validate: {
     params: {

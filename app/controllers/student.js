@@ -139,7 +139,7 @@ exports.events = {
     const { id } = req.params;
     const events = await service.events(id);
 
-    events.map(event => strip.event(event, scope));
+    return events.map(event => strip.event(event, scope));
   },
   validate: {
     params: {

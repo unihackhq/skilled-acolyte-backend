@@ -5,6 +5,7 @@ const Joi = require('joi');
 const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   name: Joi.string(),
+  description: Joi.string(),
   type: Joi.string().valid('session', 'techTalk', 'mealsRafflesEtc'),
   location: Joi.string(),
   startDate: Joi.date(),
@@ -13,7 +14,7 @@ const payload = () => ({
 });
 
 const requiredValues = _.mapValues(
-  _.pick(payload(), ['name', 'location', 'startDate', 'endDate', 'eventId']),
+  _.pick(payload(), ['name', 'type', 'description', 'location', 'startDate', 'endDate', 'eventId']),
   value => value.required()
 );
 
