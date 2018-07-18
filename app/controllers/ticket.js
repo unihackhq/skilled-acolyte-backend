@@ -1,5 +1,4 @@
 const Joi = require('joi');
-
 const strip = require('../util/strip');
 const service = require('../services/ticket');
 const constant = require('../constants');
@@ -39,12 +38,10 @@ exports.get = {
 // [POST] /tickets/{id}/transfer
 exports.transfer = {
   handler: async (req) => {
-    const { scope } = req.auth.credentials;
     const { id } = req.params;
     const { email } = req.payload;
 
-    const ticket = await service.transfer(id, email);
-    return strip.ticket(ticket, scope);
+    return service.transfer(id, email);
   },
   validate: {
     payload: {

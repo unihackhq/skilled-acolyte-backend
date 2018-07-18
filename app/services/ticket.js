@@ -1,6 +1,7 @@
 const Boom = require('boom');
-const { Ticket } = require('../models');
+const { Ticket, User } = require('../models');
 const studentService = require('./student');
+const constant = require('../constants');
 
 exports.list = async () => {
   return Ticket.findAll();
@@ -16,10 +17,23 @@ exports.transfer = async (id, email) => {
   const ticket = await Ticket.findById(id);
   if (!ticket) throw Boom.notFound('Could not find the ticket');
 
-  const student = await studentService.createWithoutTicket({
-    user: { email }
+  const existingStudent = await User.findOne({
+    where: { email, type: constant.studentType }
   });
-  return ticket.updateAttributes({
-    studentId: student.id
-  });
+  if (existingStudent) {
+    // if the student already has an account
+    await ticket.updateAttributes({
+      studentId: existingStudent.id
+    });
+  } else {
+    // otherwise create a student
+    const student = await studentService.createWithoutTicket({
+      user: { email }
+    });
+    await ticket.updateAttributes({
+      studentId: student.id
+    });
+  }
+
+  return {};
 };
