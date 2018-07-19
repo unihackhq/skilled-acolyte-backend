@@ -1,7 +1,7 @@
-const _ = require('lodash');
 const Joi = require('joi');
+const util = require('../util/validator');
 
-// payload is a function because we need two clones of payload (for required and non required)
+// payload is a function because we need two clones of payload (for required and optional)
 const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   name: Joi.string(),
@@ -25,19 +25,16 @@ const payload = () => ({
   }),
 });
 
-const requiredValues = _.mapValues(
-  _.pick(payload(), [
-    'name',
-    'location',
-    'startDate',
-    'endDate',
-    'handbookUrl',
-    'sponsors',
-    'prizes',
-    'judges'
-  ]),
-  value => value.required()
-);
+const requiredKeys = [
+  'name',
+  'location',
+  'startDate',
+  'endDate',
+  'handbookUrl',
+  'sponsors',
+  'prizes',
+  'judges',
+];
 
-exports.payload = payload();
-exports.requiredPayload = _.assign(payload(), requiredValues);
+exports.payload = util.optional(payload(), requiredKeys);
+exports.requiredPayload = util.required(payload(), requiredKeys);
