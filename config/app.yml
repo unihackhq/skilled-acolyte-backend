@@ -9,10 +9,11 @@ default:
   jwt_key: this-is-secret
 
   slack_webhook_url: ''
-  postmark_template: 6247221
+  postmark_template: 7644608
   from_email: bot@unihack.net
   frontend_url: http://localhost:3000
   admin_email: admin@unihack
+  ios_prefix: unihack://
 
 dev:
   host: 0.0.0.0
