@@ -8,9 +8,9 @@ const payload = () => ({
   lastName: Joi.string(),
   preferredName: Joi.string(),
   email: Joi.string().email(),
-  dateOfBirth: Joi.date(),
+  dateOfBirth: Joi.date().iso(),
   gender: Joi.string(),
-  mobile: Joi.number(),
+  mobile: Joi.string(),
 });
 
 const requiredValues = _.mapValues(
