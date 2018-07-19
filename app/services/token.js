@@ -48,7 +48,7 @@ exports.sendAuthEmail = async (email, name, token) => {
         product_url: env.FRONTEND_URL,
         name,
         action_url: `${env.FRONTEND_URL}/entry/${token}`,
-        action_url_ios: `${env.IOS_PREFIX}/token/${token}`,
+        action_url_ios: `${env.IOS_PREFIX}token/${token}`,
       }
     });
   }
