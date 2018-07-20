@@ -1,15 +1,17 @@
 const PushNotifications = require('@pusher/push-notifications-server');
 const env = require('../../env');
 
-let pusher;
-if (env.PROD) {
-  pusher = new PushNotifications({
-    instanceId: env.BEAMS_INSTANCE_ID,
-    secretKey: env.BEAMS_SECRET_KEY,
-  });
-}
+const pusher = env.DEV ? null : new PushNotifications({
+  instanceId: env.BEAMS_INSTANCE_ID,
+  secretKey: env.BEAMS_SECRET_KEY,
+});
 
 exports.send = async (interests, title, body) => {
+  // don't want to send notifications in dev
+  if (env.DEV) {
+    return;
+  }
+
   try {
     const publishResponse = await pusher.publish(interests, {
       apns: {

@@ -25,7 +25,6 @@ services:
       DB_USERNAME: 'postgres'
       DB_PASSWORD: 'supersecret'
 
-      POSTMARK_CLIENT_KEY: $POSTMARK_CLIENT_KEY
       EVENTBRITE_TOKEN: $EVENTBRITE_TOKEN
 
   db:
