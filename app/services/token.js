@@ -24,8 +24,8 @@ exports.create = async (email) => {
 exports.validate = async (token) => {
   const t = await Token.findById(token, { include: [{ model: User, as: 'user' }] });
   if (!t) throw Boom.unauthorized();
-  if (new Date() > t.expiry) throw Boom.unauthorized('Token expired');
-  if (!t.valid) throw Boom.unauthorized('Token invalid');
+  if (new Date() > t.expiry) throw Boom.unauthorized('Token expired! You have to use the token within 15 minutes.');
+  if (!t.valid) throw Boom.unauthorized('Token has already been used! Please request another one.');
 
   // tokens are one time use
   await t.update({ valid: false });
