@@ -1,10 +1,11 @@
+const Boom = require('boom');
 const { Op } = require('sequelize');
 const moment = require('moment');
-const { ScheduleItem } = require('../models');
+const { ScheduleItem, NotificationSubscription } = require('../models');
 const notificationUtil = require('../util/notification');
 
 exports.manual = (eventId, title, body) => {
-  return notificationUtil.send([`${eventId}-importantMessages`], title, body);
+  return notificationUtil.send(eventId, 'importantMessages', title, body);
 };
 
 exports.worker = async () => {
@@ -28,11 +29,33 @@ exports.worker = async () => {
     const startFromNow = moment(startDate).fromNow();
 
     await notificationUtil.send(
-      [`${item.eventId}-${item.type}`],
+      item.eventId,
+      item.type,
       `${name} starts in ${startFromNow}`,
       `${name} is happening in ${location} at ${start}`,
     );
   });
 
   return Promise.all(pending);
+};
+
+exports.subscribe = async (studentId, eventId, endpoint, auth, p256dh) => {
+  return NotificationSubscription.create({
+    studentId,
+    eventId,
+    endpoint,
+    auth,
+    p256dh,
+  });
+};
+
+exports.unsubscribe = async (id) => {
+  const subscription = await NotificationSubscription.findOne({ where: { id } });
+  if (!subscription) throw Boom.notFound('Could not find the subscription');
+  await subscription.destroy();
+  return {};
+};
+
+exports.subscriptions = async (eventId) => {
+  return NotificationSubscription.findAll({ where: { eventId } });
 };

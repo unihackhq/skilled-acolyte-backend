@@ -8,4 +8,5 @@ module.exports = {
   ticketScope: 'ticket',
   teamScope: 'team',
   eventScope: 'event',
+  subscriptionScope: 'subscription',
 };

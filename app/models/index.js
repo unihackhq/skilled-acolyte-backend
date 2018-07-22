@@ -99,6 +99,13 @@ db.Student.belongsToMany(db.Team, {
 db.Event.hasMany(db.ScheduleItem, { as: 'schedule', foreignKey: 'eventId' });
 db.ScheduleItem.belongsTo(db.Event, { as: 'event', foreignKey: 'eventId' });
 
+// Events have notification subscriptions
+db.Event.hasMany(db.NotificationSubscription, { as: 'notificationSubscriptions', foreignKey: 'eventId' });
+db.NotificationSubscription.belongsTo(db.Event, { as: 'event', foreignKey: 'eventId' });
+// Notification subscriptions belongs to a studnet
+db.Student.hasMany(db.NotificationSubscription, { as: 'notificationSubscriptions', foreignKey: 'studentId' });
+db.NotificationSubscription.belongsTo(db.Student, { as: 'student', foreignKey: 'studentId' });
+
 // =============================================================================
 // SCOPES
 // =============================================================================

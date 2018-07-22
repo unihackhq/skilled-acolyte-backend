@@ -26,6 +26,8 @@ module.exports = {
   SLACK_WEBHOOK_URL: app.slack_webhook_url,
   BEAMS_INSTANCE_ID: app.beams_instance_id,
   BEAMS_SECRET_KEY: app.beams_secret_key,
+  VAPID_PUBLIC_KEY: app.vapid_public_key,
+  VAPID_PRIVATE_KEY: app.vapid_private_key,
 
   // ENV Information
   TESTING: process.env.NODE_ENV === 'test',
@@ -38,4 +40,5 @@ module.exports = {
   FRONTEND_URL: app.frontend_url,
   ADMIN_EMAIL: app.admin_email,
   IOS_PREFIX: app.ios_prefix,
+  VAPID_EMAIL: app.vapid_email,
 };
