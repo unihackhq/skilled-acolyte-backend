@@ -1,31 +1,30 @@
 default:
-  host: localhost
+  host: 'localhost'
   port: '3000'
-  version: 1.0.0
+  version: '1.0.0'
   url_version: '1'
 
-  eventbrite_token: "#{process.env.EVENTBRITE_TOKEN}"
-  postmark_client_key: "#{process.env.POSTMARK_CLIENT_KEY}"
-  jwt_key: this-is-secret
-
+  jwt_key: 'this-is-secret'
+  eventbrite_token: '#{process.env.EVENTBRITE_TOKEN}'
   slack_webhook_url: ''
   postmark_template: 7644608
-  from_email: bot@unihack.net
-  frontend_url: http://localhost:3000
-  admin_email: admin@unihack
-  ios_prefix: unihack://
+  from_email: 'bot@unihack.net'
+  frontend_url: 'http://localhost:3000'
+  admin_email: 'admin@unihack'
+  ios_prefix: 'unihack://'
 
 dev:
-  host: 0.0.0.0
+  host: '0.0.0.0'
 
 docker: &docker
-  host: 0.0.0.0
-  jwt_key: "#{process.env.JWT_KEY}"
-  from_email: "#{process.env.FROM_EMAIL}"
-  frontend_url: "#{process.env.FRONTEND_URL}"
-  slack_webhook_url: "#{process.env.SLACK_WEBHOOK_URL}"
-  beams_instance_id: "#{process.env.BEAMS_INSTANCE_ID}"
-  beams_secret_key: "#{process.env.BEAMS_SECRET_KEY}"
+  host: '0.0.0.0'
+  jwt_key: '#{process.env.JWT_KEY}'
+  postmark_client_key: '#{process.env.POSTMARK_CLIENT_KEY}'
+  from_email: '#{process.env.FROM_EMAIL}'
+  frontend_url: '#{process.env.FRONTEND_URL}'
+  slack_webhook_url: '#{process.env.SLACK_WEBHOOK_URL}'
+  beams_instance_id: '#{process.env.BEAMS_INSTANCE_ID}'
+  beams_secret_key: '#{process.env.BEAMS_SECRET_KEY}'
 
 test:
   <<: *docker

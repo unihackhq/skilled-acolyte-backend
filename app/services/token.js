@@ -6,7 +6,7 @@ const { create: createJwt } = require('../util/jwt');
 const env = require('../../env');
 const constant = require('../constants');
 
-const emailClient = new Postmark.Client(env.POSTMARK_CLIENT_KEY);
+const emailClient = env.DEV ? null : new Postmark.Client(env.POSTMARK_CLIENT_KEY);
 
 exports.list = async () => Token.findAll({ where: { valid: true } });
 
@@ -37,28 +37,33 @@ exports.admin = async () => createJwt({ type: constant.adminType });
 
 exports.sendAuthEmail = async (email, name, token) => {
   // we don't want random emails to go off in dev
-  if (!env.DEV) {
-    // Send the token
-    await emailClient.sendEmailWithTemplate({
-      From: env.FROM_EMAIL,
-      To: email,
-      TemplateId: env.POSTMARK_TEMPLATE,
-      TemplateModel: {
-        product_name: 'Unihack',
-        product_url: env.FRONTEND_URL,
-        name,
-        action_url: `${env.FRONTEND_URL}/entry/${token}`,
-        action_url_ios: `${env.IOS_PREFIX}token/${token}`,
-      }
-    });
+  if (env.DEV) {
+    return;
   }
+
+  // Send the token
+  await emailClient.sendEmailWithTemplate({
+    From: env.FROM_EMAIL,
+    To: email,
+    TemplateId: env.POSTMARK_TEMPLATE,
+    TemplateModel: {
+      product_name: 'Unihack',
+      product_url: env.FRONTEND_URL,
+      name,
+      action_url: `${env.FRONTEND_URL}/entry/${token}`,
+      action_url_ios: `${env.IOS_PREFIX}token/${token}`,
+    }
+  });
 };
 
 exports.adminSendSlack = async (jwt) => {
   // we don't want to spam slack with dev env jwts
   if (!env.DEV) {
-    await axios.post(env.SLACK_WEBHOOK_URL, {
-      text: `Genereted admin JWT: \`${jwt}\``,
-    });
+    return;
   }
+
+  // send jwt to slack
+  await axios.post(env.SLACK_WEBHOOK_URL, {
+    text: `Genereted admin JWT: \`${jwt}\``,
+  });
 };

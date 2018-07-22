@@ -11,7 +11,6 @@ module.exports = {
 
   // JWT
   JWT_KEY: app.jwt_key,
-  SLACK_WEBHOOK_URL: app.slack_webhook_url,
 
   // PG Information
   PG_HOST: db.host,
@@ -24,6 +23,7 @@ module.exports = {
   // Keys
   POSTMARK_CLIENT_KEY: app.postmark_client_key,
   EVENTBRITE_TOKEN: app.eventbrite_token,
+  SLACK_WEBHOOK_URL: app.slack_webhook_url,
   BEAMS_INSTANCE_ID: app.beams_instance_id,
   BEAMS_SECRET_KEY: app.beams_secret_key,
 

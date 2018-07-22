@@ -1,22 +1,22 @@
 default:
-  host: localhost
+  host: 'localhost'
   port: '5432'
   username: ''
   password: ''
-  database: skilled_acolyte_db
+  database: 'skilled_acolyte_db'
 
 dev:
-  host: "#{process.env.DB_HOST}"
-  port: "#{process.env.DB_PORT}"
-  username: "#{process.env.DB_USERNAME}"
-  password: "#{process.env.DB_PASSWORD}"
-  database: skilled_acolyte_db_dev
+  host: '#{process.env.DB_HOST}'
+  port: '#{process.env.DB_PORT}'
+  username: '#{process.env.DB_USERNAME}'
+  password: '#{process.env.DB_PASSWORD}'
+  database: 'skilled_acolyte_db_dev'
 
 docker: &docker
-  host: "#{process.env.DB_HOST}"
-  port: "#{process.env.DB_PORT}"
-  username: "#{process.env.DB_USERNAME}"
-  password: "#{process.env.DB_PASSWORD}"
+  host: '#{process.env.DB_HOST}'
+  port: '#{process.env.DB_PORT}'
+  username: '#{process.env.DB_USERNAME}'
+  password: '#{process.env.DB_PASSWORD}'
 
 test:
   <<: *docker
