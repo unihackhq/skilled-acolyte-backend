@@ -26,11 +26,12 @@ npm run dev
 
 # Docker Development
 ```Bash
-POSTMARK_CLIENT_KEY=your-key EVENTBRITE_TOKEN=your-token docker-compose -f docker-compose.dev.yml up
+docker-compose -f docker-compose.dev.yml up
 ```
 
 # Production (Docker)
-Edit `docker-compose.prod.yml` and put in the correct db connection info, tokens/api keys, etc.
+Edit `docker-compose.prod.yml` and put in the correct db connection info, tokens/api keys, etc.  
+You can use the `web-push` package to generate vapid public/private key pair: `web-push generate-vapid-keys`.
 
 ```Bash
 docker-compose up
