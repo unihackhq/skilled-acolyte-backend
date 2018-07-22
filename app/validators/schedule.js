@@ -6,7 +6,7 @@ const payload = () => ({
   id: Joi.string().guid({ version: 'uuidv4' }),
   name: Joi.string(),
   description: Joi.string(),
-  type: Joi.string().valid('session', 'techTalk', 'mealsRafflesEtc'),
+  type: Joi.string().valid('session', 'techTalk', 'mealsRafflesEtc', 'event'),
   location: Joi.string(),
   startDate: Joi.date(),
   endDate: Joi.date(),
