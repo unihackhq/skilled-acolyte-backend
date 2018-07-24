@@ -38,7 +38,7 @@ exports.request = {
   },
   validate: {
     params: {
-      email: Joi.string().email(),
+      email: Joi.string().email().lowercase().options({ convert: true }),
     },
   },
   auth: false,

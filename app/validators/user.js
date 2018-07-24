@@ -7,7 +7,7 @@ const payload = () => ({
   firstName: Joi.string(),
   lastName: Joi.string(),
   preferredName: Joi.string(),
-  email: Joi.string().email(),
+  email: Joi.string().email().lowercase().options({ convert: true }),
   dateOfBirth: Joi.date().iso(),
   gender: Joi.string(),
   mobile: Joi.string(),
