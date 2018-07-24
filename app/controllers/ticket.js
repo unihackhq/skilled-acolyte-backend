@@ -45,7 +45,7 @@ exports.transfer = {
   },
   validate: {
     payload: {
-      email: Joi.string().email(),
+      email: Joi.string().email().lowercase().options({ convert: true }),
     },
     params: {
       id: Joi.string().guid({ version: 'uuidv4' }),
