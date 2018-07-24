@@ -58,7 +58,7 @@ exports.sendAuthEmail = async (email, name, token) => {
 
 exports.adminSendSlack = async (jwt) => {
   // we don't want to spam slack with dev env jwts
-  if (!env.DEV) {
+  if (env.DEV) {
     return;
   }
 
