@@ -12,6 +12,7 @@ default:
   frontend_url: 'http://localhost:3000'
   admin_email: 'admin@unihack'
   ios_prefix: 'unihack://'
+  vapid_email: 'team@unihack.net'
 
 dev:
   host: '0.0.0.0'
@@ -25,6 +26,8 @@ docker: &docker
   slack_webhook_url: '#{process.env.SLACK_WEBHOOK_URL}'
   beams_instance_id: '#{process.env.BEAMS_INSTANCE_ID}'
   beams_secret_key: '#{process.env.BEAMS_SECRET_KEY}'
+  vapid_public_key: '#{process.env.VAPID_PUBLIC_KEY}'
+  vapid_private_key: '#{process.env.VAPID_PRIVATE_KEY}'
 
 test:
   <<: *docker

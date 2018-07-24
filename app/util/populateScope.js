@@ -4,7 +4,8 @@ const {
   User,
   Student,
   Ticket,
-  Team
+  Team,
+  NotificationSubscription,
 } = require('../models');
 const constant = require('../constants');
 
@@ -16,6 +17,7 @@ const populateStudent = async (decoded) => {
     include: [
       { model: Ticket, as: 'tickets' },
       { model: Team, as: 'teams', required: false },
+      { model: NotificationSubscription, as: 'notificationSubscriptions', required: false },
     ]
   });
   if (!student) return false;
@@ -24,6 +26,7 @@ const populateStudent = async (decoded) => {
   scope = _.concat(scope, student.tickets.map(ticket => `${constant.ticketScope}-${ticket.id}`));
   scope = _.concat(scope, student.tickets.map(ticket => `${constant.eventScope}-${ticket.eventId}`));
   scope = _.concat(scope, student.teams.map(team => `${constant.teamScope}-${team.id}`));
+  scope = _.concat(scope, student.notificationSubscriptions.map(sub => `${constant.subscriptionScope}-${sub.id}`));
 
   return scope;
 };

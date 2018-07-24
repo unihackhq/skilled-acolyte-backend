@@ -70,7 +70,10 @@ const routes = [
   { method: 'PUT', path: `${prefix}/teams/{id}`, options: team.update },
   { method: 'DELETE', path: `${prefix}/teams/{id}`, options: team.delete },
 
-  { method: 'POST', path: `${prefix}/notification`, options: notification.send },
+  { method: 'GET', path: `${prefix}/notifications/vapid-key`, options: notification.key },
+  { method: 'POST', path: `${prefix}/notifications`, options: notification.send },
+  { method: 'POST', path: `${prefix}/notifications/subscriptions`, options: notification.subscribe },
+  { method: 'DELETE', path: `${prefix}/notifications/subscriptions/{id}`, options: notification.unsubscribe },
 
   { method: 'POST', path: `${prefix}/prepopulate/event`, options: prepopulate.event },
   { method: 'POST', path: `${prefix}/prepopulate/attendees`, options: prepopulate.attendees },
