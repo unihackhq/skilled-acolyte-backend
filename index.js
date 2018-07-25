@@ -43,25 +43,49 @@ exports.init = async () => {
 
   // logging
   if (!env.TESTING) {
-    const options = {
-      ops: env.PROD ? { interval: 15000 } : false,
-      includes: {
-        response: ['payload', 'headers'],
-        request: ['payload', 'headers'],
-      },
-      reporters: {
-        raw: [{
-          module: requestErrorScrubber
-        }, {
-          module: 'good-squeeze',
-          name: 'SafeJson',
-          args: [null, { space: 2 }]
-        }, 'stdout'],
-        summary: [{
-          module: 'good-console'
-        }, 'stdout'],
-      }
-    };
+    let options;
+    if (env.PROD) {
+      options = {
+        ops: { interval: 15000 },
+        reporters: {
+          file: [{
+            module: 'good-squeeze',
+            name: 'Squeeze',
+            args: [{ error: '*' }]
+          }, {
+            module: 'good-squeeze',
+            name: 'SafeJson'
+          }, {
+            module: 'good-file',
+            args: ['/var/log/unihack/app.log']
+          }],
+          summary: [{
+            module: 'good-console'
+          }, 'stdout'],
+        },
+      };
+    } else {
+      options = {
+        ops: false,
+        includes: {
+          response: ['payload', 'headers'],
+          request: ['payload', 'headers'],
+        },
+        reporters: {
+          raw: [{
+            module: requestErrorScrubber
+          }, {
+            module: 'good-squeeze',
+            name: 'SafeJson',
+            args: [null, { space: 2 }]
+          }, 'stdout'],
+          summary: [{
+            module: 'good-console'
+          }, 'stdout'],
+        }
+      };
+    }
+
     await server.register({
       plugin: require('good'),
       options,
