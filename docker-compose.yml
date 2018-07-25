@@ -13,6 +13,8 @@ services:
     restart: 'always'
     links:
       - 'db'
+    volumes:
+      - 'api_logs:/var/log/unihack'
     environment:
       NODE_ENV: 'docker'
 
@@ -43,5 +45,13 @@ services:
        POSTGRES_USER: 'postgres'
        POSTGRES_DB: 'skilled_acolyte_db'
 
+  logger:
+    image: 'andyshinn/remote_syslog2:v0.17'
+    restart: 'always'
+    entrypoint: ['/remote_syslog/remote_syslog', '-D', '-p', 'PUT_PAPERTRAIL_PORT_HERE', '-d', 'PUT_PAPERTRAIL_SERVER_HERE', '/mnt/logs/*.log']
+    volumes:
+      - 'api_logs:/mnt/logs'
+
 volumes:
   db_data:
+  api_logs:
