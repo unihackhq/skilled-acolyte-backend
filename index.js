@@ -48,7 +48,7 @@ exports.init = async () => {
       options = {
         ops: { interval: 15000 },
         reporters: {
-          file: [{
+          errorFile: [{
             module: 'good-squeeze',
             name: 'Squeeze',
             args: [{ error: '*' }]
@@ -57,10 +57,29 @@ exports.init = async () => {
           }, {
             module: 'good-squeeze',
             name: 'SafeJson',
-            args: [null, { space: 2 }]
           }, {
             module: 'good-file',
-            args: ['/var/log/unihack/app.log']
+            args: ['/var/log/unihack/error.log']
+          }],
+          logFile: [{
+            module: 'good-squeeze',
+            name: 'Squeeze',
+            args: [{ error: '*', request: '*', response: '*' }],
+          }, {
+            module: 'good-console',
+          }, {
+            module: 'good-file',
+            args: ['/var/log/unihack/general.log']
+          }],
+          opsFile: [{
+            module: 'good-squeeze',
+            name: 'Squeeze',
+            args: [{ ops: '*' }],
+          }, {
+            module: 'good-console',
+          }, {
+            module: 'good-file',
+            args: ['/var/log/unihack/ops.log']
           }],
           summary: [{
             module: 'good-console'
