@@ -53,8 +53,11 @@ exports.init = async () => {
             name: 'Squeeze',
             args: [{ error: '*' }]
           }, {
+            module: requestErrorScrubber
+          }, {
             module: 'good-squeeze',
-            name: 'SafeJson'
+            name: 'SafeJson',
+            args: [null, { space: 2 }]
           }, {
             module: 'good-file',
             args: ['/var/log/unihack/app.log']
