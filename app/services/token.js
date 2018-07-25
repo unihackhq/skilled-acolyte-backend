@@ -47,11 +47,10 @@ exports.sendAuthEmail = async (email, name, token) => {
     To: email,
     TemplateId: env.POSTMARK_TEMPLATE,
     TemplateModel: {
-      product_name: 'Unihack',
+      product_name: 'UNIHACK',
       product_url: env.FRONTEND_URL,
       name,
-      action_url: `${env.FRONTEND_URL}/entry/${token}`,
-      action_url_ios: `${env.IOS_PREFIX}token/${token}`,
+      action_url: `${env.FRONTEND_URL}/login/${token}`,
     }
   });
 };
