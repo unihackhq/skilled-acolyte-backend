@@ -39,6 +39,5 @@ module.exports = {
   POSTMARK_TEMPLATE: app.postmark_template,
   FRONTEND_URL: app.frontend_url,
   ADMIN_EMAIL: app.admin_email,
-  IOS_PREFIX: app.ios_prefix,
   VAPID_EMAIL: app.vapid_email,
 };

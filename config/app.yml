@@ -10,7 +10,6 @@ default:
   from_email: 'bot@unihack.net'
   frontend_url: 'http://localhost:3000'
   admin_email: 'admin@unihack'
-  ios_prefix: 'unihack://'
   vapid_email: 'team@unihack.net'
 
 dev:
