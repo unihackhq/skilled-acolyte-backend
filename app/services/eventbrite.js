@@ -8,16 +8,13 @@ exports.event = async (eventId) => {
     start,
     end,
     id,
-    url,
     venue
   } = await client.event(eventId);
   return {
     name: name.text,
     startDate: start.utc,
     endDate: end.utc,
-    timezone: start.timezone,
     eventbriteId: id,
-    eventbriteLink: url,
     location: venue.address.localized_address_display,
   };
 };
