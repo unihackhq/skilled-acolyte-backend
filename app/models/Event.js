@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Event', {
     type: DataTypes.STRING,
     unique: true,
   },
-  handbookUrl: DataTypes.STRING(512),
+  handbookUrl: DataTypes.TEXT,
   logoColor: {
     type: DataTypes.STRING,
     allowNull: true,

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
     defaultValue: DataTypes.UUIDV4,
   },
   email: {
-    type: DataTypes.STRING(512),
+    type: DataTypes.TEXT,
     unique: true,
   },
   firstName: {
@@ -36,11 +36,10 @@ module.exports = (sequelize, DataTypes) => sequelize.define('User', {
     allowNull: true,
   },
   type: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('user', 'student'),
     allowNull: false,
     defaultValue: 'user'
   },
-
   // We do not delete accounts for data integrity. We deactivate accounts if no
   // longer used.
   deactivated: {

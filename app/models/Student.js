@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Student', {
     allowNull: true,
   },
   degree: {
-    type: DataTypes.STRING(512),
+    type: DataTypes.STRING,
     allowNull: true,
   },
   photoUrl: {
-    type: DataTypes.STRING(512),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   firstLaunch: {
