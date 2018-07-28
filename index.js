@@ -123,6 +123,7 @@ exports.init = async () => {
   if (env.PROD) {
     const FIVE_MIN_MS = 5 * 60 * 1000;
     setInterval(notificationService.worker, FIVE_MIN_MS);
+    notificationService.worker();
   }
 
   return server;

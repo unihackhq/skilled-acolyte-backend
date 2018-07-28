@@ -1,6 +1,6 @@
 const Boom = require('boom');
 const { Op } = require('sequelize');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const { ScheduleItem, NotificationSubscription } = require('../models');
 const notificationUtil = require('../util/notification');
 
@@ -25,13 +25,13 @@ exports.worker = async () => {
     await item.update({ notificationSent: true });
 
     const { name, location, startDate } = item;
-    const start = moment(startDate).format('h:mma');
+    const start = moment(startDate).tz('Australia/Sydney').format('h:mma');
     const startFromNow = moment(startDate).fromNow();
 
     await notificationUtil.send(
       item.eventId,
       item.type,
-      `${name} starts in ${startFromNow}`,
+      `${name} starts ${startFromNow}`,
       `${name} is happening in ${location} at ${start}`,
     );
   });
