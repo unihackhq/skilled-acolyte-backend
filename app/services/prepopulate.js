@@ -4,9 +4,11 @@ const studentService = require('../services/student');
 const eventService = require('../services/event');
 const eventbriteService = require('../services/eventbrite');
 
-exports.event = async (eventId) => {
-  const data = await eventbriteService.event(eventId);
-  return eventService.create(data);
+exports.event = async (eventId, data) => {
+  const eventbriteData = await eventbriteService.event(eventId);
+  // combine eventbrite's data and the original payload's data
+  const event = Object.assign({}, eventbriteData, data);
+  return eventService.create(event);
 };
 
 exports.attendees = async (eventId, questions) => {
