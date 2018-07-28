@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Team', {
   },
   name: DataTypes.STRING,
   shortDescription: DataTypes.STRING,
-  devpostLink: DataTypes.STRING,
-  stack: DataTypes.STRING,
-  longDescription: DataTypes.STRING,
+  devpostLink: DataTypes.TEXT,
+  stack: DataTypes.TEXT,
+  longDescription: DataTypes.TEXT,
   photoUrl: DataTypes.TEXT,
 });

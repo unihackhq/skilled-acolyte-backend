@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Ticket', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  cancelled: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 }, {
   timestamps: true,
 });

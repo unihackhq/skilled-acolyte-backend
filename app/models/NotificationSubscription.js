@@ -5,9 +5,9 @@ module.exports = (sequelize, DataTypes) => sequelize.define('NotificationSubscri
     defaultValue: DataTypes.UUIDV4,
   },
   endpoint: {
-    type: DataTypes.STRING(1024),
+    type: DataTypes.TEXT,
     unique: true,
   },
-  auth: DataTypes.STRING(1024),
-  p256dh: DataTypes.STRING(1024),
+  auth: DataTypes.TEXT,
+  p256dh: DataTypes.TEXT,
 });
