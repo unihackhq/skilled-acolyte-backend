@@ -37,7 +37,7 @@
     "good-console": "^7.1.0",
     "good-file": "^6.0.1",
     "good-squeeze": "^5.1.0",
-    "hapi": "^17.4.0",
+    "hapi": "^17.6.0",
     "hapi-auth-jwt2": "^8.1.0",
     "hapi-cors-headers": "^1.0.0",
     "joi": "^13.2.0",
